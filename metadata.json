@@ -1,0 +1,6 @@
+{
+  "name": "LocalMart",
+  "description": "Hyperlocal e-marketplace with 1-day delivery, store admin dashboard, order tracking, and Haversine delivery navigation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
