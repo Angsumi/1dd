@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -80,6 +81,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import com.example.util.LocationHelper
 import androidx.compose.runtime.Composable
@@ -160,83 +163,58 @@ fun CustomerHomeScreen(
                 .testTag("customer_store_list"),
             contentPadding = PaddingValues(bottom = if (cartCount > 0) 100.dp else 24.dp)
         ) {
-            // Storefront Header Banner
+            // Single Sleek Search Bar
             item {
-                StoreHeroBanner(
-                    onTrackOrdersClick = {
-                        val activeOrder = allOrders.firstOrNull { it.status != OrderStatus.DELIVERED && it.status != OrderStatus.CANCELLED }
-                            ?: allOrders.firstOrNull()
-                        if (activeOrder != null) {
-                            showOrderTrackingModal = activeOrder
-                        } else {
-                            Toast.makeText(context, "No active orders found to track", Toast.LENGTH_SHORT).show()
-                        }
-                    },
-                    hasActiveOrders = allOrders.any { it.status != OrderStatus.DELIVERED && it.status != OrderStatus.CANCELLED }
-                )
-            }
-
-            // Search Bar & Delivery Radius Pill
-            item {
-                Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                    OutlinedTextField(
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                    shape = RoundedCornerShape(24.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                ) {
+                    TextField(
                         value = searchQuery,
                         onValueChange = { viewModel.setSearchQuery(it) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("product_search_bar"),
-                        placeholder = { Text("Search fresh organic veggies, milk, rice...") },
+                        placeholder = {
+                            Text(
+                                "Search fresh produce, groceries & essentials...",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                            )
+                        },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Search,
                                 contentDescription = "Search",
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(22.dp)
                             )
                         },
                         trailingIcon = {
                             if (searchQuery.isNotEmpty()) {
                                 IconButton(onClick = { viewModel.setSearchQuery("") }) {
-                                    Icon(Icons.Default.Clear, contentDescription = "Clear")
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = "Clear",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
                                 }
                             }
                         },
-                        shape = RoundedCornerShape(16.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
                         singleLine = true
                     )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    // Local origin & 1-day delivery indicator bar
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.LocationOn,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(16.dp),
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                                Text(
-                                    text = "Store House: 26.838775, 92.910579",
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
-                            ExpressDeliveryBadge(text = "1-Day Delivery")
-                        }
-                    }
                 }
             }
 
@@ -271,7 +249,7 @@ fun CustomerHomeScreen(
                 }
             }
 
-            // Section Title
+            // Section Title & Counter
             item {
                 Row(
                     modifier = Modifier
@@ -281,13 +259,13 @@ fun CustomerHomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if (selectedCategory == ProductCategory.ALL) "Fresh Local Catalog" else selectedCategory.displayName,
+                        text = if (selectedCategory == ProductCategory.ALL) "Catalog" else selectedCategory.displayName,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
-                        text = "${products.size} items available",
+                        text = "${products.size} items",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -335,27 +313,6 @@ fun CustomerHomeScreen(
                             Spacer(modifier = Modifier.weight(1f))
                         }
                     }
-                }
-            }
-
-            // Active / Recent Orders Quick Track Card
-            if (allOrders.isNotEmpty()) {
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Recent Local Orders",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-                    )
-                }
-
-                items(allOrders.take(3)) { order ->
-                    OrderSummaryCard(
-                        order = order,
-                        onTrackClick = { showOrderTrackingModal = order },
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-                    )
                 }
             }
         }
