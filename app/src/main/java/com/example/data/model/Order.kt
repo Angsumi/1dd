@@ -6,7 +6,7 @@ import java.util.Locale
 import java.util.UUID
 
 enum class OrderStatus(val label: String, val stepIndex: Int, val description: String) {
-    PLACED("Placed", 0, "Order received at LocalMart Depot"),
+    PLACED("Placed", 0, "Order received at 1DD Store House Depot"),
     PACKED("Packed", 1, "Package sorted & sealed at Depot"),
     OUT_FOR_DELIVERY("Out for Delivery", 2, "Driver dispatched on route"),
     DELIVERED("Delivered", 3, "Handed over to customer"),

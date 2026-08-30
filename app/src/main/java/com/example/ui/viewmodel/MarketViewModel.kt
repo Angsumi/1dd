@@ -29,6 +29,13 @@ enum class AppRole(val title: String, val subtitle: String) {
     CLOUD_HOSTING("Free Cloud Hosting", "Vercel / Netlify & Firebase")
 }
 
+data class OwnerProfile(
+    val email: String = "angsudas62@gmail.com",
+    val displayName: String = "Store House Owner",
+    val photoUrl: String = "",
+    val isVerified: Boolean = true
+)
+
 data class CartItemState(
     val product: Product,
     val quantity: Int
@@ -45,6 +52,52 @@ class MarketViewModel(application: Application) : AndroidViewModel(application) 
         repository = MarketRepository(db.marketDao())
         viewModelScope.launch {
             repository.initializeSeedDataIfEmpty()
+        }
+    }
+
+    // Owner Google Authentication state
+    private val _isOwnerLoggedIn = MutableStateFlow(false)
+    val isOwnerLoggedIn: StateFlow<Boolean> = _isOwnerLoggedIn.asStateFlow()
+
+    private val _ownerProfile = MutableStateFlow<OwnerProfile?>(null)
+    val ownerProfile: StateFlow<OwnerProfile?> = _ownerProfile.asStateFlow()
+
+    private val _isOwnerViewActive = MutableStateFlow(false)
+    val isOwnerViewActive: StateFlow<Boolean> = _isOwnerViewActive.asStateFlow()
+
+    // Immediate real-time alert for Owner when any new order arrives
+    private val _newOrderNotification = MutableStateFlow<Order?>(null)
+    val newOrderNotification: StateFlow<Order?> = _newOrderNotification.asStateFlow()
+
+    fun loginAsOwnerWithGoogle(
+        email: String = "angsudas62@gmail.com",
+        name: String = "Store House Owner"
+    ) {
+        _ownerProfile.value = OwnerProfile(
+            email = email.ifBlank { "angsudas62@gmail.com" },
+            displayName = name.ifBlank { "Store House Owner" }
+        )
+        _isOwnerLoggedIn.value = true
+        _isOwnerViewActive.value = true
+    }
+
+    fun logoutOwner() {
+        _ownerProfile.value = null
+        _isOwnerLoggedIn.value = false
+        _isOwnerViewActive.value = false
+    }
+
+    fun setOwnerViewActive(active: Boolean) {
+        _isOwnerViewActive.value = active
+    }
+
+    fun dismissNewOrderNotification() {
+        _newOrderNotification.value = null
+    }
+
+    fun seedSampleOwnerItems() {
+        viewModelScope.launch {
+            repository.seedSampleOwnerItems()
         }
     }
 
@@ -201,6 +254,7 @@ class MarketViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             val created = repository.createOrder(newOrder)
             _lastPlacedOrder.value = created
+            _newOrderNotification.value = created
             clearCart()
         }
 

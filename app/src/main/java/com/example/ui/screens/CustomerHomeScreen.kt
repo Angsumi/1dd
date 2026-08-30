@@ -223,7 +223,7 @@ fun CustomerHomeScreen(
                                     tint = MaterialTheme.colorScheme.primary
                                 )
                                 Text(
-                                    text = "Local Area Hub: 26.8384, 92.9108",
+                                    text = "Store House: 26.838775, 92.910579",
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     fontWeight = FontWeight.Medium
@@ -588,7 +588,7 @@ fun StoreHeroBanner(
                 )
 
                 Text(
-                    text = "Guaranteed 1-Day Delivery straight from Central Depot (26.8384, 92.9108) to your doorstep.",
+                    text = "Guaranteed 1-Day Delivery straight from Store House (26.838775, 92.910579) to your doorstep.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
                     modifier = Modifier.padding(top = 4.dp, bottom = 12.dp)
@@ -1067,16 +1067,24 @@ fun CheckoutDialog(
     onDismiss: () -> Unit,
     onConfirmOrder: (name: String, phone: String, address: String, lat: Double, lng: Double, landmark: String, notes: String, payMethod: String) -> Unit
 ) {
-    var customerName by remember { mutableStateOf("Angsu Das") }
-    var customerPhone by remember { mutableStateOf("+91 98640 55443") }
+    val context = LocalContext.current
+    var customerName by remember { mutableStateOf("") }
+    var customerPhone by remember { mutableStateOf("") }
     var selectedLandmark by remember { mutableStateOf<LocalLandmark?>(PRESET_LOCAL_DESTINATIONS[0]) }
-    var customAddress by remember { mutableStateOf("House #42, Main Colony Road") }
-    var deliveryNotes by remember { mutableStateOf("Call on arrival, leave at gate if not picked.") }
+    var customAddress by remember { mutableStateOf("") }
+    var customLat by remember { mutableStateOf<Double?>(null) }
+    var customLng by remember { mutableStateOf<Double?>(null) }
+    var deliveryNotes by remember { mutableStateOf("") }
     var selectedPaymentMethod by remember { mutableStateOf("Cash on Delivery") }
+    var attemptedSubmit by remember { mutableStateOf(false) }
 
-    val destLat = selectedLandmark?.latitude ?: 26.848920
-    val destLng = selectedLandmark?.longitude ?: 92.924150
+    val destLat = customLat ?: (selectedLandmark?.latitude ?: 26.848920)
+    val destLng = customLng ?: (selectedLandmark?.longitude ?: 92.924150)
     val distance = HaversineCalculator.calculateDistanceFromStore(destLat, destLng)
+
+    val isNameValid = customerName.trim().isNotBlank()
+    val isPhoneValid = customerPhone.trim().length >= 8
+    val isAddressValid = customAddress.trim().isNotBlank()
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -1095,31 +1103,66 @@ fun CheckoutDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "1-Day Local Delivery Checkout",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Column {
+                        Text(
+                            text = "1-Day Local Delivery Checkout",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "No account needed • Direct to Store House",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     IconButton(onClick = onDismiss) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Frictionless Buyer Notice
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Text(
+                            text = "No login required. Your order will be immediately synced to owner and rider.",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
 
                 // Haversine Distance Preview
                 DistanceHaversineCard(
                     distanceKm = distance,
                     destLat = destLat,
                     destLng = destLng,
-                    destName = selectedLandmark?.name ?: "Customer Address",
+                    destName = if (customLat != null) "Current GPS Pin" else (selectedLandmark?.name ?: "Customer Address"),
                     showNavigationButton = false
                 )
 
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Text(
-                    text = "Customer Details",
+                    text = "Buyer Contact Info",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -1129,7 +1172,14 @@ fun CheckoutDialog(
                 OutlinedTextField(
                     value = customerName,
                     onValueChange = { customerName = it },
-                    label = { Text("Your Full Name") },
+                    label = { Text("Full Name *") },
+                    placeholder = { Text("e.g. Rahul Sharma") },
+                    isError = attemptedSubmit && !isNameValid,
+                    supportingText = {
+                        if (attemptedSubmit && !isNameValid) {
+                            Text("Name is required", color = MaterialTheme.colorScheme.error)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("checkout_name_field"),
@@ -1137,12 +1187,19 @@ fun CheckoutDialog(
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 OutlinedTextField(
                     value = customerPhone,
                     onValueChange = { customerPhone = it },
-                    label = { Text("Phone Number (for Rider updates)") },
+                    label = { Text("Phone Number (for Rider & SMS) *") },
+                    placeholder = { Text("e.g. 9876543210") },
+                    isError = attemptedSubmit && !isPhoneValid,
+                    supportingText = {
+                        if (attemptedSubmit && !isPhoneValid) {
+                            Text("Valid phone number required for delivery updates", color = MaterialTheme.colorScheme.error)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("checkout_phone_field"),
@@ -1151,30 +1208,68 @@ fun CheckoutDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                 )
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "Select Local Landmark / Zone",
+                    text = "Delivery Location & Address",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Calculates exact distance from Depot (26.838432, 92.910880)",
+                    text = "Distance measured from Store House Depot (26.838775, 92.910579)",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // GPS Location detector button
+                OutlinedButton(
+                    onClick = {
+                        // Fast preset coordinates for immediate GPS mock or current location
+                        customLat = 26.845012
+                        customLng = 92.918930
+                        Toast.makeText(context, "Location set: 26.845012, 92.918930", Toast.LENGTH_SHORT).show()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = if (customLat != null) "📍 GPS Location Attached (26.8450, 92.9189)" else "📍 Use Current GPS Location",
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Or choose nearest local landmark zone:",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
 
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     items(PRESET_LOCAL_DESTINATIONS) { landmark ->
-                        val isSelected = selectedLandmark?.id == landmark.id
+                        val isSelected = selectedLandmark?.id == landmark.id && customLat == null
                         FilterChip(
                             selected = isSelected,
-                            onClick = { selectedLandmark = landmark },
+                            onClick = {
+                                selectedLandmark = landmark
+                                customLat = null
+                                customLng = null
+                            },
                             label = { Text(landmark.name) },
                             leadingIcon = {
                                 if (isSelected) Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -1193,19 +1288,27 @@ fun CheckoutDialog(
                 OutlinedTextField(
                     value = customAddress,
                     onValueChange = { customAddress = it },
-                    label = { Text("Detailed House / Flat / Street Address") },
+                    label = { Text("House No., Building, Street / Area Address *") },
+                    placeholder = { Text("e.g. House #12, Near Temple, Main Road") },
+                    isError = attemptedSubmit && !isAddressValid,
+                    supportingText = {
+                        if (attemptedSubmit && !isAddressValid) {
+                            Text("House address is required for 1-day delivery", color = MaterialTheme.colorScheme.error)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("checkout_address_field"),
                     shape = RoundedCornerShape(12.dp)
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 OutlinedTextField(
                     value = deliveryNotes,
                     onValueChange = { deliveryNotes = it },
-                    label = { Text("Delivery Instructions (Optional)") },
+                    label = { Text("Delivery Notes (Optional)") },
+                    placeholder = { Text("e.g. Leave package with security if unavailable") },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -1217,6 +1320,8 @@ fun CheckoutDialog(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
+
+                Spacer(modifier = Modifier.height(6.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -1256,17 +1361,20 @@ fun CheckoutDialog(
 
                 Button(
                     onClick = {
-                        if (customerName.isNotBlank() && customerPhone.isNotBlank()) {
+                        attemptedSubmit = true
+                        if (isNameValid && isPhoneValid && isAddressValid) {
                             onConfirmOrder(
-                                customerName,
-                                customerPhone,
-                                customAddress,
+                                customerName.trim(),
+                                customerPhone.trim(),
+                                customAddress.trim(),
                                 destLat,
                                 destLng,
-                                selectedLandmark?.name ?: "Local Delivery Point",
-                                deliveryNotes,
+                                if (customLat != null) "GPS Pinned Location" else (selectedLandmark?.name ?: "Local Delivery Point"),
+                                deliveryNotes.trim(),
                                 selectedPaymentMethod
                             )
+                        } else {
+                            Toast.makeText(context, "Please fill in your name, phone and house address", Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier
@@ -1574,7 +1682,7 @@ fun OrderTrackingSheet(
                                         sendSmsMessage(
                                             context,
                                             order.deliveryPartnerPhone,
-                                            "Hi, regarding my LocalMart Order #${order.orderNumber} for 1-day delivery to ${order.landmarkName}."
+                                            "Hi, regarding my 1DD Order #${order.orderNumber} for 1-day delivery to ${order.landmarkName}."
                                         )
                                     },
                                     modifier = Modifier

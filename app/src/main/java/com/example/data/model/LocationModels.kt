@@ -6,14 +6,14 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
- * Fixed origin hub specified in prompt:
- * Lat: 26.838432, Lng: 92.910880 (Local Depot / Assam Zone)
+ * Single Store House coordinates specified:
+ * Lat: 26.838775, Lng: 92.910579
  */
 object LocationConstants {
-    const val STORE_ORIGIN_LAT = 26.838432
-    const val STORE_ORIGIN_LNG = 92.910880
-    const val STORE_HUB_NAME = "LocalMart Central Depot (Hub #1)"
-    const val STORE_HUB_ADDRESS = "Station Road Logistics Point, 26.8384, 92.9108"
+    const val STORE_ORIGIN_LAT = 26.838775
+    const val STORE_ORIGIN_LNG = 92.910579
+    const val STORE_HUB_NAME = "Store House"
+    const val STORE_HUB_ADDRESS = "Central Store House, 26.838775, 92.910579"
     const val STORE_PHONE = "+91 98640 12345"
     const val MAX_LOCAL_DELIVERY_RADIUS_KM = 35.0
 }

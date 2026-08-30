@@ -257,7 +257,7 @@ fun DistanceHaversineCard(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
-                            text = "${String.format("%.2f", distanceKm)} km from Depot",
+                            text = "${String.format("%.2f", distanceKm)} km from Store House",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
@@ -288,7 +288,7 @@ fun DistanceHaversineCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Hub Origin: 26.838432, 92.910880",
+                        text = "Store House: ${LocationConstants.STORE_ORIGIN_LAT}, ${LocationConstants.STORE_ORIGIN_LNG}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 11.sp

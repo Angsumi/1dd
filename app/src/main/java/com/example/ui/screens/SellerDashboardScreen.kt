@@ -1,6 +1,10 @@
 package com.example.ui.screens
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,9 +31,12 @@ import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.CloudDone
+import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.Inventory2
@@ -91,9 +98,11 @@ import com.example.data.model.Order
 import com.example.data.model.OrderStatus
 import com.example.data.model.Product
 import com.example.data.model.ProductCategory
+import com.example.data.remote.CloudSyncState
 import com.example.ui.components.ExpressDeliveryBadge
 import com.example.ui.components.OrderStatusBadge
 import com.example.ui.components.dialPhoneNumber
+import com.example.ui.components.launchGoogleMapsNavigation
 import com.example.ui.viewmodel.MarketViewModel
 
 // Preset sample photo choices for easy admin catalog uploading
@@ -226,10 +235,16 @@ fun SellerDashboardScreen(
 
                     if (products.isEmpty()) {
                         item {
-                            EmptyAdminInventory {
-                                productToEdit = null
-                                showAddEditSheet = true
-                            }
+                            EmptyAdminInventory(
+                                onAddClick = {
+                                    productToEdit = null
+                                    showAddEditSheet = true
+                                },
+                                onLoadStarterItems = {
+                                    viewModel.seedSampleOwnerItems()
+                                    Toast.makeText(context, "Loaded 3 starter items for Store House", Toast.LENGTH_SHORT).show()
+                                }
+                            )
                         }
                     } else {
                         items(products, key = { it.id }) { product ->
@@ -370,7 +385,7 @@ fun AdminMetricsHeader(
                         fontWeight = FontWeight.ExtraBold
                     )
                     Text(
-                        text = "Depot: 26.838432, 92.910880 • 1-Day Logistics",
+                        text = "Store House: 26.838775, 92.910579 • 1-Day Logistics",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 11.sp
@@ -633,17 +648,60 @@ fun AdminOrderItemCard(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "📍 Delivery: ${order.landmarkName.ifBlank { order.deliveryAddress }}",
+                text = "📍 Buyer Location: ${order.landmarkName.ifBlank { order.deliveryAddress }}",
                 style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = "GPS Coordinates: ${String.format("%.6f", order.deliveryLat)}, ${String.format("%.6f", order.deliveryLng)}",
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
-                text = "📏 Haversine Distance: ${String.format("%.2f", order.distanceKm)} km from Depot",
+                text = "📏 Haversine Distance: ${String.format("%.2f", order.distanceKm)} km from Store House (26.838775, 92.910579)",
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.primary
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Direct 1-Tap Google Maps Navigation Action
+            val context = LocalContext.current
+            Button(
+                onClick = {
+                    launchGoogleMapsNavigation(
+                        context = context,
+                        destLat = order.deliveryLat,
+                        destLng = order.deliveryLng,
+                        destName = order.landmarkName.ifBlank { order.deliveryAddress }
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(38.dp)
+                    .testTag("admin_order_navigate_maps_${order.id}"),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.DirectionsBike,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "Navigate to Buyer via Google Maps (${String.format("%.1f", order.distanceKm)} km)",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -806,19 +864,50 @@ fun AddEditProductSheet(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 // Photo Preview & Preset Picker
-                Text(
-                    text = "Product Photo",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Product Photo *",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = MaterialTheme.colorScheme.secondaryContainer
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.CloudUpload,
+                                contentDescription = null,
+                                modifier = Modifier.size(13.dp),
+                                tint = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                            Text(
+                                text = "Firestore Cloud Sync",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(130.dp)
-                        .clip(RoundedCornerShape(12.dp))
+                        .height(150.dp)
+                        .clip(RoundedCornerShape(14.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                 ) {
                     if (imageUrl.isNotBlank()) {
@@ -831,13 +920,85 @@ fun AddEditProductSheet(
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
                         )
+                    } else {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon(
+                                    imageVector = Icons.Default.Image,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(40.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = "No photo selected yet",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Gallery / File Photo Picker Launcher
+                val photoPickerLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.PickVisualMedia()
+                ) { uri: Uri? ->
+                    uri?.let {
+                        imageUrl = it.toString()
+                    }
+                }
+
+                val filePickerLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.GetContent()
+                ) { uri: Uri? ->
+                    uri?.let {
+                        imageUrl = it.toString()
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            try {
+                                photoPickerLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                            } catch (e: Exception) {
+                                filePickerLauncher.launch("image/*")
+                            }
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .testTag("admin_upload_photo_button"),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.FileUpload,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("Upload from Device", fontWeight = FontWeight.Bold)
                     }
                 }
 
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = "Quick photo preset pickers:",
+                    text = "Or choose instant stock photo preset:",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1022,7 +1183,10 @@ fun AddEditProductSheet(
 }
 
 @Composable
-fun EmptyAdminInventory(onAddClick: () -> Unit) {
+fun EmptyAdminInventory(
+    onAddClick: () -> Unit,
+    onLoadStarterItems: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -1044,16 +1208,25 @@ fun EmptyAdminInventory(onAddClick: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = "Add photos, descriptions and set stock levels to start selling locally with 1-day delivery.",
+            text = "Add photos, descriptions and set stock levels to start selling locally from Store House (26.838775, 92.910579) with 1-day delivery.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(14.dp))
-        Button(onClick = onAddClick) {
-            Icon(Icons.Default.Add, contentDescription = null)
-            Spacer(modifier = Modifier.width(6.dp))
-            Text("Add First Item")
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Button(onClick = onAddClick) {
+                Icon(Icons.Default.Add, contentDescription = null)
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("Add Item")
+            }
+            OutlinedButton(onClick = onLoadStarterItems) {
+                Icon(Icons.Default.Refresh, contentDescription = null)
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("Load 3 Starter Items")
+            }
         }
     }
 }

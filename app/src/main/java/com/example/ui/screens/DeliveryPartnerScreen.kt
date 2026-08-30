@@ -201,7 +201,7 @@ fun DeliveryPartnerScreen(
                         sendSmsMessage(
                             context = context,
                             phoneNumber = order.customerPhone,
-                            messageText = "Hello ${order.customerName}, your LocalMart package #${order.orderNumber} is on the way for 1-day delivery. Will reach in ~${order.estimatedMinutes} mins!"
+                            messageText = "Hello ${order.customerName}, your 1DD package #${order.orderNumber} is on the way for 1-day delivery. Will reach in ~${order.estimatedMinutes} mins!"
                         )
                     },
                     onAdvanceStatus = { nextStatus ->
