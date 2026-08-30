@@ -136,6 +136,7 @@ fun SellerDashboardScreen(
 
     val lowStockCount = products.count { it.stockQuantity in 1..5 }
     val totalRevenue = orders.filter { it.status != OrderStatus.CANCELLED }.sumOf { it.totalAmount }
+    val syncState by viewModel.syncState.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -165,7 +166,12 @@ fun SellerDashboardScreen(
                 totalProducts = products.size,
                 lowStockCount = lowStockCount,
                 totalOrders = orders.size,
-                revenue = totalRevenue
+                revenue = totalRevenue,
+                syncState = syncState,
+                onTriggerSync = {
+                    viewModel.triggerManualSync()
+                    Toast.makeText(context, "Syncing catalog and orders with cloud...", Toast.LENGTH_SHORT).show()
+                }
             )
 
             // Tab Navigation (Inventory vs Orders)
@@ -362,7 +368,9 @@ fun AdminMetricsHeader(
     totalProducts: Int,
     lowStockCount: Int,
     totalOrders: Int,
-    revenue: Double
+    revenue: Double,
+    syncState: CloudSyncState = CloudSyncState.IDLE,
+    onTriggerSync: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
@@ -392,17 +400,34 @@ fun AdminMetricsHeader(
                     )
                 }
 
-                Surface(
-                    shape = RoundedCornerShape(8.dp),
-                    color = MaterialTheme.colorScheme.primaryContainer
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text(
-                        text = "Local Seller",
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = if (syncState == CloudSyncState.SYNCED_ONLINE) Color(0xFFDCFCE7) else MaterialTheme.colorScheme.primaryContainer,
+                        modifier = Modifier.clickable { onTriggerSync() }
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (syncState == CloudSyncState.SYNCING) Icons.Default.Refresh else Icons.Default.CloudDone,
+                                contentDescription = null,
+                                tint = if (syncState == CloudSyncState.SYNCED_ONLINE) Color(0xFF166534) else MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(14.dp)
+                            )
+                            Text(
+                                text = if (syncState == CloudSyncState.SYNCING) "Syncing..." else "Live Cloud",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = if (syncState == CloudSyncState.SYNCED_ONLINE) Color(0xFF166534) else MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                    }
                 }
             }
 

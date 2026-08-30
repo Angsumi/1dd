@@ -13,6 +13,9 @@ interface MarketDao {
     @Query("SELECT * FROM products ORDER BY isAvailable DESC, title ASC")
     fun getAllProducts(): Flow<List<ProductEntity>>
 
+    @Query("SELECT * FROM products ORDER BY isAvailable DESC, title ASC")
+    suspend fun getAllProductsOnce(): List<ProductEntity>
+
     @Query("SELECT * FROM products WHERE id = :id LIMIT 1")
     suspend fun getProductById(id: String): ProductEntity?
 
@@ -37,6 +40,9 @@ interface MarketDao {
     // Orders
     @Query("SELECT * FROM orders ORDER BY orderTimestamp DESC")
     fun getAllOrders(): Flow<List<OrderEntity>>
+
+    @Query("SELECT * FROM orders ORDER BY orderTimestamp DESC")
+    suspend fun getAllOrdersOnce(): List<OrderEntity>
 
     @Query("SELECT * FROM orders WHERE id = :id LIMIT 1")
     suspend fun getOrderById(id: String): OrderEntity?

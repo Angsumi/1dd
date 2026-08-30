@@ -46,6 +46,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.ElectricBolt
 import androidx.compose.material.icons.filled.ExpandMore
@@ -55,6 +56,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -148,6 +150,7 @@ fun CustomerHomeScreen(
     val cartGrandTotal by viewModel.cartGrandTotal.collectAsStateWithLifecycle()
     val lastOrder by viewModel.lastPlacedOrder.collectAsStateWithLifecycle()
     val allOrders by viewModel.allOrders.collectAsStateWithLifecycle()
+    val syncState by viewModel.syncState.collectAsStateWithLifecycle()
 
     var showCartSheet by remember { mutableStateOf(false) }
     var showCheckoutDialog by remember { mutableStateOf(false) }
@@ -195,12 +198,25 @@ fun CustomerHomeScreen(
                             )
                         },
                         trailingIcon = {
-                            if (searchQuery.isNotEmpty()) {
-                                IconButton(onClick = { viewModel.setSearchQuery("") }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                if (searchQuery.isNotEmpty()) {
+                                    IconButton(onClick = { viewModel.setSearchQuery("") }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Clear,
+                                            contentDescription = "Clear",
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                                IconButton(
+                                    onClick = { viewModel.triggerManualSync() },
+                                    modifier = Modifier.size(36.dp)
+                                ) {
                                     Icon(
-                                        imageVector = Icons.Default.Clear,
-                                        contentDescription = "Clear",
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        imageVector = if (syncState == com.example.data.remote.CloudSyncState.SYNCING) Icons.Default.CloudSync else Icons.Default.Refresh,
+                                        contentDescription = "Refresh & Cloud Sync",
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(20.dp)
                                     )
                                 }
                             }
@@ -281,6 +297,10 @@ fun CustomerHomeScreen(
                         onClearSearch = {
                             viewModel.setSearchQuery("")
                             viewModel.setSelectedCategory(ProductCategory.ALL)
+                            viewModel.triggerManualSync()
+                        },
+                        onRefreshSync = {
+                            viewModel.triggerManualSync()
                         }
                     )
                 }
@@ -1930,7 +1950,8 @@ fun OrderStepTracker(currentStatus: OrderStatus) {
 @Composable
 fun EmptyProductsView(
     query: String,
-    onClearSearch: () -> Unit
+    onClearSearch: () -> Unit,
+    onRefreshSync: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -1953,14 +1974,24 @@ fun EmptyProductsView(
         )
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = "Try searching for spinach, rice, milk, chili, or clear filters.",
+            text = "Try searching for spinach, rice, milk, chili, or refresh to sync latest items from store.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(14.dp))
-        OutlinedButton(onClick = onClearSearch) {
-            Text("Reset Filters")
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            OutlinedButton(onClick = onClearSearch) {
+                Text("Reset Filters")
+            }
+            Button(
+                onClick = onRefreshSync,
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.width(4.dp))
+                Text("Sync Catalog")
+            }
         }
     }
 }

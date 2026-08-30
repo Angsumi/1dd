@@ -12,6 +12,7 @@ import com.example.data.model.OrderStatus
 import com.example.data.model.PRESET_LOCAL_DESTINATIONS
 import com.example.data.model.Product
 import com.example.data.model.ProductCategory
+import com.example.data.remote.CloudSyncState
 import com.example.data.repository.MarketRepository
 import com.example.util.NotificationHelper
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -360,6 +361,14 @@ class MarketViewModel(application: Application) : AndroidViewModel(application) 
                 _lastPlacedOrder.value = null
             }
         }
+    }
+
+    // Cloud sync state
+    val syncState: StateFlow<CloudSyncState> = repository.syncState
+    val lastSyncedTime: StateFlow<Long> = repository.lastSyncedTime
+
+    fun triggerManualSync() {
+        repository.triggerManualSync()
     }
 
     // Cloud export string

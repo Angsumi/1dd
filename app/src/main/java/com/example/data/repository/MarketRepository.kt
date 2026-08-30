@@ -156,6 +156,11 @@ class MarketRepository(
 
     suspend fun deleteOrder(orderId: String) {
         dao.deleteOrder(orderId)
+        syncManager.triggerManualSync()
+    }
+
+    fun triggerManualSync() {
+        syncManager.triggerManualSync()
     }
 
     /**
