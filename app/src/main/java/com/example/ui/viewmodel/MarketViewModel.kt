@@ -13,6 +13,7 @@ import com.example.data.model.PRESET_LOCAL_DESTINATIONS
 import com.example.data.model.Product
 import com.example.data.model.ProductCategory
 import com.example.data.repository.MarketRepository
+import com.example.util.NotificationHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -46,14 +47,7 @@ data class CartItemState(
 class MarketViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: MarketRepository
-
-    init {
-        val db = AppDatabase.getInstance(application)
-        repository = MarketRepository(db.marketDao())
-        viewModelScope.launch {
-            repository.initializeSeedDataIfEmpty()
-        }
-    }
+    private val notifiedOrderIds = mutableSetOf<String>()
 
     // Owner Google Authentication state
     private val _isOwnerLoggedIn = MutableStateFlow(false)
@@ -68,6 +62,40 @@ class MarketViewModel(application: Application) : AndroidViewModel(application) 
     // Immediate real-time alert for Owner when any new order arrives
     private val _newOrderNotification = MutableStateFlow<Order?>(null)
     val newOrderNotification: StateFlow<Order?> = _newOrderNotification.asStateFlow()
+
+    init {
+        NotificationHelper.createNotificationChannel(application)
+        val db = AppDatabase.getInstance(application)
+        repository = MarketRepository(db.marketDao())
+        viewModelScope.launch {
+            repository.initializeSeedDataIfEmpty()
+        }
+
+        // Live observation of orders: only alert if authenticated as Store Owner
+        viewModelScope.launch {
+            var isInitialLoad = true
+            repository.allOrders.collect { orders ->
+                if (isInitialLoad) {
+                    orders.forEach { notifiedOrderIds.add(it.id) }
+                    isInitialLoad = false
+                    return@collect
+                }
+                if (_isOwnerLoggedIn.value) {
+                    val freshOrders = orders.filter { order ->
+                        order.status == OrderStatus.PLACED && !notifiedOrderIds.contains(order.id)
+                    }
+                    for (newOrder in freshOrders) {
+                        notifiedOrderIds.add(newOrder.id)
+                        _newOrderNotification.value = newOrder
+                        NotificationHelper.sendOwnerOrderNotification(getApplication(), newOrder)
+                    }
+                } else {
+                    // Normal buyer mode: mark orders as seen without sending push notification
+                    orders.forEach { notifiedOrderIds.add(it.id) }
+                }
+            }
+        }
+    }
 
     fun loginAsOwnerWithGoogle(
         email: String = "angsudas62@gmail.com",
@@ -85,6 +113,7 @@ class MarketViewModel(application: Application) : AndroidViewModel(application) 
         _ownerProfile.value = null
         _isOwnerLoggedIn.value = false
         _isOwnerViewActive.value = false
+        _newOrderNotification.value = null
     }
 
     fun setOwnerViewActive(active: Boolean) {
@@ -254,7 +283,12 @@ class MarketViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             val created = repository.createOrder(newOrder)
             _lastPlacedOrder.value = created
-            _newOrderNotification.value = created
+            notifiedOrderIds.add(created.id)
+            // Push alert to owner ONLY if owner is logged in
+            if (_isOwnerLoggedIn.value) {
+                _newOrderNotification.value = created
+                NotificationHelper.sendOwnerOrderNotification(getApplication(), created)
+            }
             clearCart()
         }
 

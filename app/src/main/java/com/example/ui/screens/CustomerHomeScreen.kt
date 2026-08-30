@@ -1,6 +1,9 @@
 package com.example.ui.screens
 
+import android.Manifest
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
@@ -62,6 +65,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -77,6 +81,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
+import com.example.util.LocationHelper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -1068,15 +1073,58 @@ fun CheckoutDialog(
     onConfirmOrder: (name: String, phone: String, address: String, lat: Double, lng: Double, landmark: String, notes: String, payMethod: String) -> Unit
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var customerName by remember { mutableStateOf("") }
     var customerPhone by remember { mutableStateOf("") }
     var selectedLandmark by remember { mutableStateOf<LocalLandmark?>(PRESET_LOCAL_DESTINATIONS[0]) }
     var customAddress by remember { mutableStateOf("") }
     var customLat by remember { mutableStateOf<Double?>(null) }
     var customLng by remember { mutableStateOf<Double?>(null) }
+    var isFetchingLocation by remember { mutableStateOf(false) }
     var deliveryNotes by remember { mutableStateOf("") }
     var selectedPaymentMethod by remember { mutableStateOf("Cash on Delivery") }
     var attemptedSubmit by remember { mutableStateOf(false) }
+
+    fun startLiveGpsFetch() {
+        isFetchingLocation = true
+        LocationHelper.fetchRealtimeGpsLocation(
+            context = context,
+            scope = scope,
+            onSuccess = { lat, lng, addressPreview ->
+                customLat = lat
+                customLng = lng
+                isFetchingLocation = false
+                if (!addressPreview.isNullOrBlank() && customAddress.isBlank()) {
+                    customAddress = addressPreview
+                }
+                Toast.makeText(
+                    context,
+                    "📍 Live GPS Location Attached (${String.format("%.5f", lat)}, ${String.format("%.5f", lng)})",
+                    Toast.LENGTH_SHORT
+                ).show()
+            },
+            onError = { err ->
+                isFetchingLocation = false
+                Toast.makeText(context, err, Toast.LENGTH_LONG).show()
+            }
+        )
+    }
+
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val fineGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
+        val coarseGranted = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
+        if (fineGranted || coarseGranted) {
+            startLiveGpsFetch()
+        } else {
+            Toast.makeText(
+                context,
+                "Location permission is needed to attach your exact live delivery GPS location.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
     val destLat = customLat ?: (selectedLandmark?.latitude ?: 26.848920)
     val destLng = customLng ?: (selectedLandmark?.longitude ?: 92.924150)
@@ -1223,28 +1271,83 @@ fun CheckoutDialog(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // GPS Location detector button
+                // Real-time GPS Location detector button
                 OutlinedButton(
                     onClick = {
-                        // Fast preset coordinates for immediate GPS mock or current location
-                        customLat = 26.845012
-                        customLng = 92.918930
-                        Toast.makeText(context, "Location set: 26.845012, 92.918930", Toast.LENGTH_SHORT).show()
+                        if (LocationHelper.hasLocationPermission(context)) {
+                            startLiveGpsFetch()
+                        } else {
+                            locationPermissionLauncher.launch(
+                                arrayOf(
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                                )
+                            )
+                        }
                     },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp)
+                    enabled = !isFetchingLocation,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("checkout_use_gps_button"),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = if (customLat != null) ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                    ) else ButtonDefaults.outlinedButtonColors()
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = if (customLat != null) "📍 GPS Location Attached (26.8450, 92.9189)" else "📍 Use Current GPS Location",
-                        fontWeight = FontWeight.Bold
-                    )
+                    if (isFetchingLocation) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(18.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "📡 Fetching Live Real-time GPS...",
+                            fontWeight = FontWeight.Bold
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                            tint = if (customLat != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = if (customLat != null && customLng != null)
+                                "📍 Live GPS: ${String.format("%.4f", customLat)}, ${String.format("%.4f", customLng)} (Tap to Refresh)"
+                            else
+                                "📍 Use Current GPS Location",
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                if (customLat != null) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 4.dp, start = 4.dp, end = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "✓ Live buyer coordinates pinned for delivery rider",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "Reset GPS",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.error,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.clickable {
+                                customLat = null
+                                customLng = null
+                            }
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
