@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Rangachakua Store - 1-Day Local Delivery Marketplace">
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Rangachakua Store">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Rangachakua Store - 1DD Marketplace</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <script>
+    // 1. Force unregister any legacy/stuck service workers so browsers never serve outdated cache
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (var i = 0; i < registrations.length; i++) {
+          registrations[i].unregister();
+        }
+      });
+    }
+
+    // 2. Clear browser CacheStorage to eliminate stale JS/Wasm bundles
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        for (var i = 0; i < names.length; i++) {
+          caches.delete(names[i]);
+        }
+      });
+    }
+
+    // 3. Dynamic cache-busting loader for flutter_bootstrap.js
+    var script = document.createElement('script');
+    script.src = 'flutter_bootstrap.js?v=' + Date.now();
+    script.async = true;
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>

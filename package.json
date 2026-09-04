@@ -1,0 +1,15 @@
+{
+  "name": "onedaydelivery-marketplace",
+  "version": "1.0.0",
+  "description": "1DD Marketplace Unified Cross-Platform Application",
+  "scripts": {
+    "build": "./build_all.sh",
+    "build:web": "./build_web.sh",
+    "build:apk": "./build_apk.sh",
+    "deploy": "./deploy.sh",
+    "deploy:hosting": "./deploy.sh"
+  },
+  "keywords": ["flutter", "firebase", "marketplace", "1dd"],
+  "author": "",
+  "license": "ISC"
+}

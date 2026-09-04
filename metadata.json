@@ -1,6 +1,0 @@
-{
-  "name": "1DD",
-  "description": "1DD - Rangachakua Store 1-day delivery local marketplace with Store House GPS logistics, owner inventory manager, and cloud sync.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
