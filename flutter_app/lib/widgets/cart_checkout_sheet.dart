@@ -4,6 +4,7 @@ import '../config/location_constants.dart';
 import '../models/order.dart';
 import '../providers/cart_provider.dart';
 import '../services/firestore_service.dart';
+import '../services/meta_catalog_service.dart';
 import '../screens/order_tracker_dialog.dart';
 
 class CartCheckoutSheet extends StatefulWidget {
@@ -29,7 +30,7 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
     super.dispose();
   }
 
-  Future<void> _handlePlaceOrder(CartProvider cart) async {
+  Future<void> _handlePlaceOrder(CartProvider cart, {required bool sendViaWhatsApp}) async {
     final name = _nameController.text.trim();
     final phone = _phoneController.text.trim();
     final address = _addressController.text.trim();
@@ -75,7 +76,7 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
         orderTimestamp: DateTime.now().millisecondsSinceEpoch,
         deliveryPromise: "1-Day Express Local Delivery",
         deliveryNotes: notes,
-        paymentMethod: "Cash on Delivery",
+        paymentMethod: sendViaWhatsApp ? "WhatsApp Order / COD" : "Cash on Delivery",
         paymentStatus: "Pending on Delivery",
         distanceKm: distance,
         estimatedMinutes: eta,
@@ -86,6 +87,14 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
 
       final firestore = FirestoreService();
       await firestore.placeOrder(storeOrder);
+
+      if (sendViaWhatsApp) {
+        final message = MetaCatalogService.formatWhatsAppOrderMessage(storeOrder);
+        await MetaCatalogService.launchWhatsApp(
+          phone: LocationConstants.storePhone,
+          message: message,
+        );
+      }
 
       cart.clear();
       if (!mounted) return;
@@ -116,7 +125,7 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
 
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.88,
+        maxHeight: MediaQuery.of(context).size.height * 0.90,
         maxWidth: 600,
       ),
       padding: EdgeInsets.only(
@@ -297,7 +306,7 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
                     controller: _nameController,
                     decoration: InputDecoration(
                       labelText: "Your Name *",
-                      hintText: "e.g. Rahul Sharma",
+                      hintText: "e.g. Rahul Das",
                       prefixIcon: const Icon(Icons.person_outline),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                     ),
@@ -307,7 +316,7 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
-                      labelText: "Phone Number *",
+                      labelText: "WhatsApp Phone Number *",
                       hintText: "+91 98765 43210",
                       prefixIcon: const Icon(Icons.phone_outlined),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -364,7 +373,7 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text("Total Payable (Cash on Delivery):", style: TextStyle(fontWeight: FontWeight.w900)),
+                            const Text("Total Payable (COD / WhatsApp UPI):", style: TextStyle(fontWeight: FontWeight.w900)),
                             Text(
                               "₹${cart.totalAmount.toStringAsFixed(0)}",
                               style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: Color(0xFF15803D)),
@@ -380,27 +389,49 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
           ),
           const SizedBox(height: 16),
 
-          // Confirm Order Button
-          ElevatedButton(
+          // Primary WhatsApp Order Button
+          ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF15803D),
+              backgroundColor: const Color(0xFF25D366), // WhatsApp Brand Green
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              elevation: 2,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
-            onPressed: _isPlacingOrder || cart.items.isEmpty
-                ? null
-                : () => _handlePlaceOrder(cart),
-            child: _isPlacingOrder
+            icon: _isPlacingOrder
+                ? const SizedBox.shrink()
+                : const Icon(Icons.chat, size: 20),
+            label: _isPlacingOrder
                 ? const SizedBox(
                     width: 20,
                     height: 20,
                     child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                   )
                 : const Text(
-                    "Confirm 1-Day Order (Cash on Delivery)",
+                    "⚡ Order via WhatsApp (Instant COD / UPI)",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
+            onPressed: _isPlacingOrder || cart.items.isEmpty
+                ? null
+                : () => _handlePlaceOrder(cart, sendViaWhatsApp: true),
+          ),
+          const SizedBox(height: 8),
+
+          // Secondary App-only Order Button
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              foregroundColor: const Color(0xFF0F172A),
+              side: const BorderSide(color: Color(0xFFCBD5E1)),
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: _isPlacingOrder || cart.items.isEmpty
+                ? null
+                : () => _handlePlaceOrder(cart, sendViaWhatsApp: false),
+            child: const Text(
+              "Place Order in App Only (Without WhatsApp)",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+            ),
           ),
         ],
       ),

@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>1DD Grocery Products Review (125 Items)</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f4f6f8; margin: 0; padding: 20px; }
+    .header { background: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; position: sticky; top: 10px; z-index: 10; }
+    h1 { margin: 0; font-size: 20px; color: #111; }
+    .search-box { flex: 1; max-width: 400px; }
+    .search-box input { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+    .count { font-size: 14px; color: #555; font-weight: bold; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .card { background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.15s, box-shadow 0.15s; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
+    .img-wrap { width: 100%; height: 180px; background: #fafafa; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid #edf2f7; }
+    .img-wrap img { max-width: 90%; max-height: 90%; object-fit: contain; }
+    .variant-tag { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.75); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 7px; border-radius: 4px; }
+    .info { padding: 12px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+    .badge { font-size: 11px; font-weight: 600; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .brand { font-size: 12px; color: #64748b; font-weight: 500; margin-bottom: 4px; }
+    .title { font-size: 13px; font-weight: 600; color: #1e293b; line-height: 1.35; margin-bottom: 10px; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .prices { display: flex; align-items: baseline; gap: 8px; font-size: 13px; }
+    .mrp { font-weight: 700; color: #0f172a; }
+    .cost { font-size: 12px; color: #94a3b8; text-decoration: line-through; }
+    .profit { font-size: 11px; font-weight: 700; color: #16a34a; background: #dcfce7; padding: 2px 5px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>1DD Grocery Visual Review (125 Items)</h1>
+      <span class="count" id="countDisplay">Showing 125 Products</span>
+    </div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search by name, brand, variant, or category..." autofocus>
+    </div>
+  </div>
+
+  <div class="grid" id="productGrid">
+
+      <div class="card" data-text="aata | aashirvaad | 1 kg aashirvaad atta & flour 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Aata%20%7C%20Aashirvaad%20%7C%201%20kg.jpg" alt="Aata | Aashirvaad | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Atta & Flour</span>
+          <span class="brand">Aashirvaad • 1 kg</span>
+          <div class="title">Aata | Aashirvaad | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹60</span>
+            <span class="cost">Cost: ₹55</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="aata | aashirvaad | 2kg aashirvaad atta & flour 2kg">
+        <div class="img-wrap">
+          <span class="variant-tag">2kg</span>
+          <img src="https://1dd.web.app/images/products/Aata%20%7C%20Aashirvaad%20%7C%202kg.jpg" alt="Aata | Aashirvaad | 2kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Atta & Flour</span>
+          <span class="brand">Aashirvaad • 2kg</span>
+          <div class="title">Aata | Aashirvaad | 2kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹120</span>
+            <span class="cost">Cost: ₹105</span>
+            <span class="profit">+₹15</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="aata | fortune chakki fresh | 1 kg fortune atta & flour 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Aata%20%7C%20Fortune%20Chakki%20Fresh%20%7C%201%20kg.jpg" alt="Aata | Fortune Chakki Fresh | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Atta & Flour</span>
+          <span class="brand">Fortune • 1 kg</span>
+          <div class="title">Aata | Fortune Chakki Fresh | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹50</span>
+            <span class="cost">Cost: ₹45</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="aata | loose atta | 1 kg local chakki atta & flour 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Aata%20%7C%20Loose%20Atta%20%7C%201%20kg.jpeg" alt="Aata | Loose Atta | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Atta & Flour</span>
+          <span class="brand">Local Chakki • 1 kg</span>
+          <div class="title">Aata | Loose Atta | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹35</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="battery | eveready aa (big) | 2 pieces eveready batteries & electricals 2 pieces">
+        <div class="img-wrap">
+          <span class="variant-tag">2 pieces</span>
+          <img src="https://1dd.web.app/images/products/Battery%20%7C%20Eveready%20AA%20(Big)%20%7C%202%20pieces.jpg" alt="Battery | Eveready AA (Big) | 2 pieces" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Batteries & Electricals</span>
+          <span class="brand">Eveready • 2 pieces</span>
+          <div class="title">Battery | Eveready AA (Big) | 2 pieces</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹15</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="battery | eveready aaa (small) | 1packet eveready batteries & electricals 1packet">
+        <div class="img-wrap">
+          <span class="variant-tag">1packet</span>
+          <img src="https://1dd.web.app/images/products/Battery%20%7C%20Eveready%20AAA%20(Small)%20%7C%201packet.jpg" alt="Battery | Eveready AAA (Small) | 1packet" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Batteries & Electricals</span>
+          <span class="brand">Eveready • 1packet</span>
+          <div class="title">Battery | Eveready AAA (Small) | 1packet</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹15</span>
+            <span class="cost">Cost: ₹12</span>
+            <span class="profit">+₹3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="besan | fortune | 500g fortune breakfast & staples 500g">
+        <div class="img-wrap">
+          <span class="variant-tag">500g</span>
+          <img src="https://1dd.web.app/images/products/Besan%20%7C%20Fortune%20%7C%20500g.png" alt="Besan | Fortune | 500g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Breakfast & Staples</span>
+          <span class="brand">Fortune • 500g</span>
+          <div class="title">Besan | Fortune | 500g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹50</span>
+            <span class="cost">Cost: ₹45</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="bikaji | aloo bhujia | 200g bikaji namkeen & snacks 200g">
+        <div class="img-wrap">
+          <span class="variant-tag">200g</span>
+          <img src="https://1dd.web.app/images/products/Bikaji%20%7C%20Aloo%20Bhujia%20%7C%20200g.jpg" alt="Bikaji | Aloo Bhujia | 200g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Namkeen & Snacks</span>
+          <span class="brand">Bikaji • 200g</span>
+          <div class="title">Bikaji | Aloo Bhujia | 200g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹60</span>
+            <span class="cost">Cost: ₹50</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="bikaji | bhujia | 200g bikaji namkeen & snacks 200g">
+        <div class="img-wrap">
+          <span class="variant-tag">200g</span>
+          <img src="https://1dd.web.app/images/products/Bikaji%20%7C%20Bhujia%20%7C%20200g.jpg" alt="Bikaji | Bhujia | 200g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Namkeen & Snacks</span>
+          <span class="brand">Bikaji • 200g</span>
+          <div class="title">Bikaji | Bhujia | 200g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹60</span>
+            <span class="cost">Cost: ₹50</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="bikaji | kolkata jhal | 200g bikaji namkeen & snacks 200g">
+        <div class="img-wrap">
+          <span class="variant-tag">200g</span>
+          <img src="https://1dd.web.app/images/products/Bikaji%20%7C%20Kolkata%20Jhal%20%7C%20200g.jpg" alt="Bikaji | Kolkata Jhal | 200g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Namkeen & Snacks</span>
+          <span class="brand">Bikaji • 200g</span>
+          <div class="title">Bikaji | Kolkata Jhal | 200g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹60</span>
+            <span class="cost">Cost: ₹50</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="bikaji | kuch kuch | 200g bikaji namkeen & snacks 200g">
+        <div class="img-wrap">
+          <span class="variant-tag">200g</span>
+          <img src="https://1dd.web.app/images/products/Bikaji%20%7C%20Kuch%20Kuch%20%7C%20200g.jpg" alt="Bikaji | Kuch Kuch | 200g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Namkeen & Snacks</span>
+          <span class="brand">Bikaji • 200g</span>
+          <div class="title">Bikaji | Kuch Kuch | 200g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹60</span>
+            <span class="cost">Cost: ₹50</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="bikaji | sab kuch | 200g bikaji namkeen & snacks 200g">
+        <div class="img-wrap">
+          <span class="variant-tag">200g</span>
+          <img src="https://1dd.web.app/images/products/Bikaji%20%7C%20Sab%20Kuch%20%7C%20200g.png" alt="Bikaji | Sab Kuch | 200g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Namkeen & Snacks</span>
+          <span class="brand">Bikaji • 200g</span>
+          <div class="title">Bikaji | Sab Kuch | 200g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹60</span>
+            <span class="cost">Cost: ₹50</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | anmol (khasta) | standard anmol biscuits & bakery khasta">
+        <div class="img-wrap">
+          <span class="variant-tag">Khasta</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Anmol%20(Khasta)%20%7C%20Standard.jpg" alt="Biscuit | Anmol (Khasta) | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Anmol • Khasta</span>
+          <div class="title">Biscuit | Anmol (Khasta) | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹18</span>
+            <span class="profit">+₹2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | anmol (salty) | standard anmol biscuits & bakery salty">
+        <div class="img-wrap">
+          <span class="variant-tag">Salty</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Anmol%20(Salty)%20%7C%20Standard.png" alt="Biscuit | Anmol (Salty) | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Anmol • Salty</span>
+          <div class="title">Biscuit | Anmol (Salty) | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹18</span>
+            <span class="profit">+₹2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | anmol (sugarfree) | standard anmol biscuits & bakery sugarfree">
+        <div class="img-wrap">
+          <span class="variant-tag">SugarFree</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Anmol%20(SugarFree)%20%7C%20Standard.jpg" alt="Biscuit | Anmol (SugarFree) | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Anmol • SugarFree</span>
+          <div class="title">Biscuit | Anmol (SugarFree) | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹18</span>
+            <span class="profit">+₹2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | anmol (sweet) | standard anmol biscuits & bakery sweet">
+        <div class="img-wrap">
+          <span class="variant-tag">Sweet</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Anmol%20(Sweet)%20%7C%20Standard.jpg" alt="Biscuit | Anmol (Sweet) | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Anmol • Sweet</span>
+          <div class="title">Biscuit | Anmol (Sweet) | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹18</span>
+            <span class="profit">+₹2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | britannia good day | standard britannia biscuits & bakery standard">
+        <div class="img-wrap">
+          <span class="variant-tag">Standard</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Good%20Day%20%7C%20Standard.jpg" alt="Biscuit | Britannia Good Day | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Britannia • Standard</span>
+          <div class="title">Biscuit | Britannia Good Day | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹36</span>
+            <span class="profit">+₹4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | britannia marie gold | big britannia biscuits & bakery big">
+        <div class="img-wrap">
+          <span class="variant-tag">Big</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Marie%20Gold%20%7C%20Big.png" alt="Biscuit | Britannia Marie Gold | Big" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Britannia • Big</span>
+          <div class="title">Biscuit | Britannia Marie Gold | Big</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹36</span>
+            <span class="profit">+₹4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | britannia marie gold | small britannia biscuits & bakery small">
+        <div class="img-wrap">
+          <span class="variant-tag">Small</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Marie%20Gold%20%7C%20Small.webp" alt="Biscuit | Britannia Marie Gold | Small" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Britannia • Small</span>
+          <div class="title">Biscuit | Britannia Marie Gold | Small</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | britannia nutrichoice | big britannia biscuits & bakery big">
+        <div class="img-wrap">
+          <span class="variant-tag">Big</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20NutriChoice%20%7C%20Big.jpg" alt="Biscuit | Britannia NutriChoice | Big" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Britannia • Big</span>
+          <div class="title">Biscuit | Britannia NutriChoice | Big</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹50</span>
+            <span class="cost">Cost: ₹45</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | britannia nutrichoice | small britannia biscuits & bakery small">
+        <div class="img-wrap">
+          <span class="variant-tag">Small</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20NutriChoice%20%7C%20Small.png" alt="Biscuit | Britannia NutriChoice | Small" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Britannia • Small</span>
+          <div class="title">Biscuit | Britannia NutriChoice | Small</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹18</span>
+            <span class="profit">+₹2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | britannia premium rusk | standard britannia biscuits & bakery standard">
+        <div class="img-wrap">
+          <span class="variant-tag">Standard</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Premium%20Rusk%20%7C%20Standard.jpg" alt="Biscuit | Britannia Premium Rusk | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Britannia • Standard</span>
+          <div class="title">Biscuit | Britannia Premium Rusk | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹36</span>
+            <span class="profit">+₹4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | britannia top gold | standard britannia biscuits & bakery standard">
+        <div class="img-wrap">
+          <span class="variant-tag">Standard</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Top%20Gold%20%7C%20Standard.jpg" alt="Biscuit | Britannia Top Gold | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Britannia • Standard</span>
+          <div class="title">Biscuit | Britannia Top Gold | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹30</span>
+            <span class="cost">Cost: ₹27</span>
+            <span class="profit">+₹3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | malkist | standard malkist biscuits & bakery standard">
+        <div class="img-wrap">
+          <span class="variant-tag">Standard</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Malkist%20%7C%20Standard.jpg" alt="Biscuit | Malkist | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Malkist • Standard</span>
+          <div class="title">Biscuit | Malkist | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹55</span>
+            <span class="cost">Cost: ₹50</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | parle-g | standard parle biscuits & bakery standard">
+        <div class="img-wrap">
+          <span class="variant-tag">Standard</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Parle-G%20%7C%20Standard.jpg" alt="Biscuit | Parle-G | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Parle • Standard</span>
+          <div class="title">Biscuit | Parle-G | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="biscuit | sweet toast rusk | standard bakery fresh biscuits & bakery sweet">
+        <div class="img-wrap">
+          <span class="variant-tag">Sweet</span>
+          <img src="https://1dd.web.app/images/products/Biscuit%20%7C%20Sweet%20Toast%20Rusk%20%7C%20Standard.jpg" alt="Biscuit | Sweet Toast Rusk | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Biscuits & Bakery</span>
+          <span class="brand">Bakery Fresh • Sweet</span>
+          <div class="title">Biscuit | Sweet Toast Rusk | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹50</span>
+            <span class="cost">Cost: ₹45</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="dhup | cycle pure | 1 dozen cycle incense & agarbatti 1 dozen">
+        <div class="img-wrap">
+          <span class="variant-tag">1 dozen</span>
+          <img src="https://1dd.web.app/images/products/Dhup%20%7C%20Cycle%20Pure%20%7C%201%20Dozen.jpeg" alt="Dhup | Cycle Pure | 1 Dozen" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Incense & Agarbatti</span>
+          <span class="brand">Cycle • 1 dozen</span>
+          <div class="title">Dhup | Cycle Pure | 1 Dozen</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹100</span>
+            <span class="cost">Cost: ₹90</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="dhup | zed black | 1 packet zed black incense & agarbatti 1 packet">
+        <div class="img-wrap">
+          <span class="variant-tag">1 packet</span>
+          <img src="https://1dd.web.app/images/products/Dhup%20%7C%20Zed%20Black%20%7C%201%20Packet.jpeg" alt="Dhup | Zed Black | 1 Packet" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Incense & Agarbatti</span>
+          <span class="brand">Zed Black • 1 packet</span>
+          <div class="title">Dhup | Zed Black | 1 Packet</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="disposable | bati | 25 pieces party choice disposable tableware 25 pieces">
+        <div class="img-wrap">
+          <span class="variant-tag">25 pieces</span>
+          <img src="https://1dd.web.app/images/products/Disposable%20%7C%20Bati%20%7C%2025%20pieces.jpg" alt="Disposable | Bati | 25 pieces" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Disposable Tableware</span>
+          <span class="brand">Party Choice • 25 pieces</span>
+          <div class="title">Disposable | Bati | 25 pieces</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹30</span>
+            <span class="cost">Cost: ₹25</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="disposable | coffee cup | 50 pieces party choice disposable tableware 50 pieces">
+        <div class="img-wrap">
+          <span class="variant-tag">50 pieces</span>
+          <img src="https://1dd.web.app/images/products/Disposable%20%7C%20Coffee%20Cup%20%7C%2050%20pieces.jpg" alt="Disposable | Coffee Cup | 50 pieces" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Disposable Tableware</span>
+          <span class="brand">Party Choice • 50 pieces</span>
+          <div class="title">Disposable | Coffee Cup | 50 pieces</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹25</span>
+            <span class="cost">Cost: ₹18</span>
+            <span class="profit">+₹7</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="disposable | dish | 16p party choice disposable tableware 16p">
+        <div class="img-wrap">
+          <span class="variant-tag">16p</span>
+          <img src="https://1dd.web.app/images/products/Disposable%20%7C%20Dish%20%7C%2016p.jpg" alt="Disposable | Dish | 16p" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Disposable Tableware</span>
+          <span class="brand">Party Choice • 16p</span>
+          <div class="title">Disposable | Dish | 16p</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹25</span>
+            <span class="cost">Cost: ₹20</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="disposable | glass | 70p party choice disposable tableware 70p">
+        <div class="img-wrap">
+          <span class="variant-tag">70p</span>
+          <img src="https://1dd.web.app/images/products/Disposable%20%7C%20Glass%20%7C%2070p.jpg" alt="Disposable | Glass | 70p" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Disposable Tableware</span>
+          <span class="brand">Party Choice • 70p</span>
+          <div class="title">Disposable | Glass | 70p</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹30</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="distilled water | battery water | 750ml batterycare home & hygiene 750ml">
+        <div class="img-wrap">
+          <span class="variant-tag">750ml</span>
+          <img src="https://1dd.web.app/images/products/Distilled%20Water%20%7C%20Battery%20Water%20%7C%20750ml.jpg" alt="Distilled Water | Battery Water | 750ml" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Home & Hygiene</span>
+          <span class="brand">BatteryCare • 750ml</span>
+          <div class="title">Distilled Water | Battery Water | 750ml</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹15</span>
+            <span class="cost">Cost: ₹10</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="egg | farm fresh | 1plate farm fresh dairy & eggs 1plate">
+        <div class="img-wrap">
+          <span class="variant-tag">1Plate</span>
+          <img src="https://1dd.web.app/images/products/Egg%20%7C%20Farm%20Fresh%20%7C%201Plate.jpg" alt="Egg | Farm Fresh | 1Plate" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Dairy & Eggs</span>
+          <span class="brand">Farm Fresh • 1Plate</span>
+          <div class="title">Egg | Farm Fresh | 1Plate</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹210</span>
+            <span class="cost">Cost: ₹200</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="egg | farm fresh | 4 pieces (১ হাল) farm fresh dairy & eggs 2 pairs">
+        <div class="img-wrap">
+          <span class="variant-tag">2 Pairs</span>
+          <img src="https://1dd.web.app/images/products/Egg%20%7C%20Farm%20Fresh%20%7C%204%20Pieces%20(%E0%A7%A7%20%E0%A6%B9%E0%A6%BE%E0%A6%B2).jpg" alt="Egg | Farm Fresh | 4 Pieces (১ হাল)" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Dairy & Eggs</span>
+          <span class="brand">Farm Fresh • 2 Pairs</span>
+          <div class="title">Egg | Farm Fresh | 4 Pieces (১ হাল)</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹15</span>
+            <span class="cost">Cost: ₹15</span>
+            <span class="profit">+₹</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="ghee | annapurna | 100g annapurna pure ghee 100g">
+        <div class="img-wrap">
+          <span class="variant-tag">100g</span>
+          <img src="https://1dd.web.app/images/products/Ghee%20%7C%20Annapurna%20%7C%20100g.jpg" alt="Ghee | Annapurna | 100g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pure Ghee</span>
+          <span class="brand">Annapurna • 100g</span>
+          <div class="title">Ghee | Annapurna | 100g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹90</span>
+            <span class="cost">Cost: ₹85</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="ghee | annapurna | 250 g annapurna pure ghee 250 g">
+        <div class="img-wrap">
+          <span class="variant-tag">250 g</span>
+          <img src="https://1dd.web.app/images/products/Ghee%20%7C%20Annapurna%20%7C%20250%20g.jpg" alt="Ghee | Annapurna | 250 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pure Ghee</span>
+          <span class="brand">Annapurna • 250 g</span>
+          <div class="title">Ghee | Annapurna | 250 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹200</span>
+            <span class="cost">Cost: ₹190</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="ghee | annapurna | 500g annapurna pure ghee 500g">
+        <div class="img-wrap">
+          <span class="variant-tag">500g</span>
+          <img src="https://1dd.web.app/images/products/Ghee%20%7C%20Annapurna%20%7C%20500g.jpg" alt="Ghee | Annapurna | 500g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pure Ghee</span>
+          <span class="brand">Annapurna • 500g</span>
+          <div class="title">Ghee | Annapurna | 500g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹400</span>
+            <span class="cost">Cost: ₹380</span>
+            <span class="profit">+₹20</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="ghee | annapurna | 50g annapurna pure ghee 50g">
+        <div class="img-wrap">
+          <span class="variant-tag">50g</span>
+          <img src="https://1dd.web.app/images/products/Ghee%20%7C%20Annapurna%20%7C%2050g.jpg" alt="Ghee | Annapurna | 50g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pure Ghee</span>
+          <span class="brand">Annapurna • 50g</span>
+          <div class="title">Ghee | Annapurna | 50g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹50</span>
+            <span class="cost">Cost: ₹45</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="grams | kabuli chana | 1 kg daily fresh grams & whole pulses 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Grams%20%7C%20Kabuli%20Chana%20%7C%201%20kg.jpg" alt="Grams | Kabuli Chana | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Grams & Whole Pulses</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Grams | Kabuli Chana | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹120</span>
+            <span class="cost">Cost: ₹110</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="grams | kala chana (কলা বুট) | 1 kg daily fresh grams & whole pulses 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Grams%20%7C%20Kala%20Chana%20(%E0%A6%95%E0%A6%B2%E0%A6%BE%20%E0%A6%AC%E0%A7%81%E0%A6%9F)%20%7C%201%20kg.jpeg" alt="Grams | Kala Chana (কলা বুট) | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Grams & Whole Pulses</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Grams | Kala Chana (কলা বুট) | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹85</span>
+            <span class="cost">Cost: ₹80</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="grams | kashmiri rajma | 1 kg daily fresh grams & whole pulses 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Grams%20%7C%20Kashmiri%20Rajma%20%7C%201%20kg.jpg" alt="Grams | Kashmiri Rajma | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Grams & Whole Pulses</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Grams | Kashmiri Rajma | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹150</span>
+            <span class="cost">Cost: ₹135</span>
+            <span class="profit">+₹15</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="grams | lobia (লবিয়া) | 1 kg daily fresh grams & whole pulses 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Grams%20%7C%20Lobia%20(%E0%A6%B2%E0%A6%AC%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE)%20%7C%201%20kg.jpeg" alt="Grams | Lobia (লবিয়া) | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Grams & Whole Pulses</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Grams | Lobia (লবিয়া) | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹120</span>
+            <span class="cost">Cost: ₹110</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="grams | sabut moong (গোটা মগু) | 1 kg daily fresh grams & whole pulses 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Grams%20%7C%20Sabut%20Moong%20(%E0%A6%97%E0%A7%8B%E0%A6%9F%E0%A6%BE%20%E0%A6%AE%E0%A6%97%E0%A7%81)%20%7C%201%20kg.jpeg" alt="Grams | Sabut Moong (গোটা মগু) | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Grams & Whole Pulses</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Grams | Sabut Moong (গোটা মগু) | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹120</span>
+            <span class="cost">Cost: ₹110</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="grams | white peas (বগা মটৰ) | 1 kg daily fresh grams & whole pulses 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Grams%20%7C%20White%20Peas%20(%E0%A6%AC%E0%A6%97%E0%A6%BE%20%E0%A6%AE%E0%A6%9F%E0%A7%B0)%20%7C%201%20kg.jpg" alt="Grams | White Peas (বগা মটৰ) | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Grams & Whole Pulses</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Grams | White Peas (বগা মটৰ) | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹60</span>
+            <span class="cost">Cost: ₹55</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="guta masala | ajwain | 100 g daily fresh whole spices (guta masala) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Ajwain%20%7C%20100%20g.jpg" alt="Guta Masala | Ajwain | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Whole Spices (Guta Masala)</span>
+          <span class="brand">Daily Fresh • 100 g</span>
+          <div class="title">Guta Masala | Ajwain | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹30</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="guta masala | dhania | 100 g daily fresh whole spices (guta masala) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Dhania%20%7C%20100%20g.webp" alt="Guta Masala | Dhania | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Whole Spices (Guta Masala)</span>
+          <span class="brand">Daily Fresh • 100 g</span>
+          <div class="title">Guta Masala | Dhania | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹25</span>
+            <span class="cost">Cost: ₹20</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="guta masala | garam masala | 20g daily fresh whole spices (guta masala) 20g">
+        <div class="img-wrap">
+          <span class="variant-tag">20g</span>
+          <img src="https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Garam%20Masala%20%7C%2020g.jpg" alt="Guta Masala | Garam Masala | 20g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Whole Spices (Guta Masala)</span>
+          <span class="brand">Daily Fresh • 20g</span>
+          <div class="title">Guta Masala | Garam Masala | 20g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹8</span>
+            <span class="profit">+₹2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="guta masala | jeera | 100 g daily fresh whole spices (guta masala) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Jeera%20%7C%20100%20g.jpeg" alt="Guta Masala | Jeera | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Whole Spices (Guta Masala)</span>
+          <span class="brand">Daily Fresh • 100 g</span>
+          <div class="title">Guta Masala | Jeera | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹35</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="guta masala | kala jeera | 100 g daily fresh whole spices (guta masala) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Kala%20Jeera%20%7C%20100%20g.jpg" alt="Guta Masala | Kala Jeera | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Whole Spices (Guta Masala)</span>
+          <span class="brand">Daily Fresh • 100 g</span>
+          <div class="title">Guta Masala | Kala Jeera | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹35</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="guta masala | methi | 100 g daily fresh whole spices (guta masala) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Methi%20%7C%20100%20g.jpg" alt="Guta Masala | Methi | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Whole Spices (Guta Masala)</span>
+          <span class="brand">Daily Fresh • 100 g</span>
+          <div class="title">Guta Masala | Methi | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹15</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="guta masala | mouri | 100 g daily fresh whole spices (guta masala) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Mouri%20%7C%20100%20g.jpg" alt="Guta Masala | Mouri | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Whole Spices (Guta Masala)</span>
+          <span class="brand">Daily Fresh • 100 g</span>
+          <div class="title">Guta Masala | Mouri | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹25</span>
+            <span class="cost">Cost: ₹20</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="guta masala | panchphoron | 100 g daily fresh whole spices (guta masala) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Panchphoron%20%7C%20100%20g.jpg" alt="Guta Masala | Panchphoron | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Whole Spices (Guta Masala)</span>
+          <span class="brand">Daily Fresh • 100 g</span>
+          <div class="title">Guta Masala | Panchphoron | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹15</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="hair colour | godrej | 1 pack godrej hair colour 1 pack">
+        <div class="img-wrap">
+          <span class="variant-tag">1 pack</span>
+          <img src="https://1dd.web.app/images/products/Hair%20Colour%20%7C%20Godrej%20%7C%201%20pack.jpg" alt="Hair Colour | Godrej | 1 pack" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Hair Colour</span>
+          <span class="brand">Godrej • 1 pack</span>
+          <div class="title">Hair Colour | Godrej | 1 pack</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹18</span>
+            <span class="profit">+₹2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="hair colour | indica | 1 pack indica hair colour 1 pack">
+        <div class="img-wrap">
+          <span class="variant-tag">1 pack</span>
+          <img src="https://1dd.web.app/images/products/Hair%20Colour%20%7C%20Indica%20%7C%201%20pack.jpg" alt="Hair Colour | Indica | 1 pack" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Hair Colour</span>
+          <span class="brand">Indica • 1 pack</span>
+          <div class="title">Hair Colour | Indica | 1 pack</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹20</span>
+            <span class="cost">Cost: ₹18</span>
+            <span class="profit">+₹2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="hair oil | nihar | 100 ml nihar hair care 100 ml">
+        <div class="img-wrap">
+          <span class="variant-tag">100 ml</span>
+          <img src="https://1dd.web.app/images/products/Hair%20Oil%20%7C%20Nihar%20%7C%20100%20ml.jpg" alt="Hair Oil | Nihar | 100 ml" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Hair Care</span>
+          <span class="brand">Nihar • 100 ml</span>
+          <div class="title">Hair Oil | Nihar | 100 ml</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹80</span>
+            <span class="cost">Cost: ₹70</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="hair oil | parachute coconut | 200 ml parachute hair care 200 ml">
+        <div class="img-wrap">
+          <span class="variant-tag">200 ml</span>
+          <img src="https://1dd.web.app/images/products/Hair%20Oil%20%7C%20Parachute%20Coconut%20%7C%20200%20ml.jpg" alt="Hair Oil | Parachute Coconut | 200 ml" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Hair Care</span>
+          <span class="brand">Parachute • 200 ml</span>
+          <div class="title">Hair Oil | Parachute Coconut | 200 ml</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹100</span>
+            <span class="cost">Cost: ₹85</span>
+            <span class="profit">+₹15</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="harpic | harpic original | 250ml harpic home & hygiene 250ml">
+        <div class="img-wrap">
+          <span class="variant-tag">250ml</span>
+          <img src="https://1dd.web.app/images/products/Harpic%20%7C%20Harpic%20Original%20%7C%20250ml.jpg" alt="Harpic | Harpic Original | 250ml" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Home & Hygiene</span>
+          <span class="brand">Harpic • 250ml</span>
+          <div class="title">Harpic | Harpic Original | 250ml</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹35</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest chicken masala | 10g everest spices & masala (powder) 10g">
+        <div class="img-wrap">
+          <span class="variant-tag">10g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Chicken%20Masala%20%7C%2010g.jpg" alt="Masala | Everest Chicken Masala | 10g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 10g</span>
+          <div class="title">Masala | Everest Chicken Masala | 10g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest dhania | 100 g everest spices & masala (powder) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Dhania%20%7C%20100%20g.png" alt="Masala | Everest Dhania | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 100 g</span>
+          <div class="title">Masala | Everest Dhania | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹35</span>
+            <span class="cost">Cost: ₹30</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest dhania | 10g everest spices & masala (powder) 10g">
+        <div class="img-wrap">
+          <span class="variant-tag">10g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Dhania%20%7C%2010g.jpg" alt="Masala | Everest Dhania | 10g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 10g</span>
+          <div class="title">Masala | Everest Dhania | 10g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest garam masala | 10g everest spices & masala (powder) 10g">
+        <div class="img-wrap">
+          <span class="variant-tag">10g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Garam%20Masala%20%7C%2010g.jpg" alt="Masala | Everest Garam Masala | 10g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 10g</span>
+          <div class="title">Masala | Everest Garam Masala | 10g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest garam masala | 50 g everest spices & masala (powder) 50 g">
+        <div class="img-wrap">
+          <span class="variant-tag">50 g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Garam%20Masala%20%7C%2050%20g.jpg" alt="Masala | Everest Garam Masala | 50 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 50 g</span>
+          <div class="title">Masala | Everest Garam Masala | 50 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹50</span>
+            <span class="cost">Cost: ₹45</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest haldi | 100 g everest spices & masala (powder) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Haldi%20%7C%20100%20g.webp" alt="Masala | Everest Haldi | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 100 g</span>
+          <div class="title">Masala | Everest Haldi | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹30</span>
+            <span class="cost">Cost: ₹25</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest haldi | 10g everest spices & masala (powder) 10g">
+        <div class="img-wrap">
+          <span class="variant-tag">10g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Haldi%20%7C%2010g.jpg" alt="Masala | Everest Haldi | 10g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 10g</span>
+          <div class="title">Masala | Everest Haldi | 10g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest jeera | 10 g everest spices & masala (powder) 10 g">
+        <div class="img-wrap">
+          <span class="variant-tag">10 g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Jeera%20%7C%2010%20g.jpg" alt="Masala | Everest Jeera | 10 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 10 g</span>
+          <div class="title">Masala | Everest Jeera | 10 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest jeera | 100 g everest spices & masala (powder) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Jeera%20%7C%20100%20g.png" alt="Masala | Everest Jeera | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 100 g</span>
+          <div class="title">Masala | Everest Jeera | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹80</span>
+            <span class="cost">Cost: ₹60</span>
+            <span class="profit">+₹20</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest kashmiri mirch | 20g everest spices & masala (powder) 20g">
+        <div class="img-wrap">
+          <span class="variant-tag">20g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Kashmiri%20Mirch%20%7C%2020g.jpg" alt="Masala | Everest Kashmiri Mirch | 20g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 20g</span>
+          <div class="title">Masala | Everest Kashmiri Mirch | 20g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest kashmiri mirch | 50g everest spices & masala (powder) 50g">
+        <div class="img-wrap">
+          <span class="variant-tag">50g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Kashmiri%20Mirch%20%7C%2050g.png" alt="Masala | Everest Kashmiri Mirch | 50g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 50g</span>
+          <div class="title">Masala | Everest Kashmiri Mirch | 50g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹55</span>
+            <span class="cost">Cost: ₹50</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest kitchen king | 20g everest spices & masala (powder) 20g">
+        <div class="img-wrap">
+          <span class="variant-tag">20g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Kitchen%20King%20%7C%2020g.jpg" alt="Masala | Everest Kitchen King | 20g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 20g</span>
+          <div class="title">Masala | Everest Kitchen King | 20g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest kitchen king | 50g everest spices & masala (powder) 50g">
+        <div class="img-wrap">
+          <span class="variant-tag">50g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Kitchen%20King%20%7C%2050g.png" alt="Masala | Everest Kitchen King | 50g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 50g</span>
+          <div class="title">Masala | Everest Kitchen King | 50g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹55</span>
+            <span class="cost">Cost: ₹50</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest lal mirch | 100 g everest spices & masala (powder) 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Lal%20Mirch%20%7C%20100%20g.jpg" alt="Masala | Everest Lal Mirch | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 100 g</span>
+          <div class="title">Masala | Everest Lal Mirch | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹55</span>
+            <span class="cost">Cost: ₹45</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest lal mirch | 10g everest spices & masala (powder) 10g">
+        <div class="img-wrap">
+          <span class="variant-tag">10g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Lal%20Mirch%20%7C%2010g.jpg" alt="Masala | Everest Lal Mirch | 10g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 10g</span>
+          <div class="title">Masala | Everest Lal Mirch | 10g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest meat masala | 10g everest spices & masala (powder) 10g">
+        <div class="img-wrap">
+          <span class="variant-tag">10g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Meat%20Masala%20%7C%2010g.jpg" alt="Masala | Everest Meat Masala | 10g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 10g</span>
+          <div class="title">Masala | Everest Meat Masala | 10g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest meat masala | 50g everest spices & masala (powder) 50g">
+        <div class="img-wrap">
+          <span class="variant-tag">50g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Meat%20Masala%20%7C%2050g.jpg" alt="Masala | Everest Meat Masala | 50g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 50g</span>
+          <div class="title">Masala | Everest Meat Masala | 50g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹55</span>
+            <span class="cost">Cost: ₹50</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | everest shahi paneer | 20g everest spices & masala (powder) 20g">
+        <div class="img-wrap">
+          <span class="variant-tag">20g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Shahi%20Paneer%20%7C%2020g.jpg" alt="Masala | Everest Shahi Paneer | 20g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Everest • 20g</span>
+          <div class="title">Masala | Everest Shahi Paneer | 20g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="masala | maggi masala-e-magic | 10g maggi spices & masala (powder) 10g">
+        <div class="img-wrap">
+          <span class="variant-tag">10g</span>
+          <img src="https://1dd.web.app/images/products/Masala%20%7C%20Maggi%20Masala-e-Magic%20%7C%2010g.jpg" alt="Masala | Maggi Masala-e-Magic | 10g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Spices & Masala (Powder)</span>
+          <span class="brand">Maggi • 10g</span>
+          <div class="title">Masala | Maggi Masala-e-Magic | 10g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4.5</span>
+            <span class="profit">+₹0.5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="matches | aim safety matches | bundle aim matches & household standard">
+        <div class="img-wrap">
+          <span class="variant-tag">Standard</span>
+          <img src="https://1dd.web.app/images/products/Matches%20%7C%20Aim%20Safety%20Matches%20%7C%20Bundle.jpg" alt="Matches | Aim Safety Matches | Bundle" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Matches & Household</span>
+          <span class="brand">Aim • Standard</span>
+          <div class="title">Matches | Aim Safety Matches | Bundle</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="milk | namaste india | 1 l namaste india fresh milk 1 l">
+        <div class="img-wrap">
+          <span class="variant-tag">1 L</span>
+          <img src="https://1dd.web.app/images/products/Milk%20%7C%20Namaste%20India%20%7C%201%20L.png" alt="Milk | Namaste India | 1 L" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Fresh Milk</span>
+          <span class="brand">Namaste India • 1 L</span>
+          <div class="title">Milk | Namaste India | 1 L</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹75</span>
+            <span class="cost">Cost: ₹70</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="milk | namaste india | 200ml namaste india fresh milk 200ml">
+        <div class="img-wrap">
+          <span class="variant-tag">200ml</span>
+          <img src="https://1dd.web.app/images/products/Milk%20%7C%20Namaste%20India%20%7C%20200ml.jpg" alt="Milk | Namaste India | 200ml" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Fresh Milk</span>
+          <span class="brand">Namaste India • 200ml</span>
+          <div class="title">Milk | Namaste India | 200ml</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹15</span>
+            <span class="cost">Cost: ₹14</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="muri | daily fresh | 500g daily fresh breakfast & staples 500g">
+        <div class="img-wrap">
+          <span class="variant-tag">500g</span>
+          <img src="https://1dd.web.app/images/products/Muri%20%7C%20Daily%20Fresh%20%7C%20500g.jpg" alt="Muri | Daily Fresh | 500g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Breakfast & Staples</span>
+          <span class="brand">Daily Fresh • 500g</span>
+          <div class="title">Muri | Daily Fresh | 500g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹30</span>
+            <span class="cost">Cost: ₹25</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="noodles | korean spicy shin ramyun | standard nongshim noodles & instant food standard">
+        <div class="img-wrap">
+          <span class="variant-tag">Standard</span>
+          <img src="https://1dd.web.app/images/products/Noodles%20%7C%20Korean%20Spicy%20Shin%20Ramyun%20%7C%20Standard.jpg" alt="Noodles | Korean Spicy Shin Ramyun | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Noodles & Instant Food</span>
+          <span class="brand">Nongshim • Standard</span>
+          <div class="title">Noodles | Korean Spicy Shin Ramyun | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="noodles | maggi 2-minute | standard maggi noodles & instant food standard">
+        <div class="img-wrap">
+          <span class="variant-tag">Standard</span>
+          <img src="https://1dd.web.app/images/products/Noodles%20%7C%20Maggi%202-Minute%20%7C%20Standard.jpg" alt="Noodles | Maggi 2-Minute | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Noodles & Instant Food</span>
+          <span class="brand">Maggi • Standard</span>
+          <div class="title">Noodles | Maggi 2-Minute | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="noodles | mimi ready-to-eat | standard mimi noodles & instant food standard">
+        <div class="img-wrap">
+          <span class="variant-tag">Standard</span>
+          <img src="https://1dd.web.app/images/products/Noodles%20%7C%20Mimi%20Ready-to-Eat%20%7C%20Standard.png" alt="Noodles | Mimi Ready-to-Eat | Standard" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Noodles & Instant Food</span>
+          <span class="brand">Mimi • Standard</span>
+          <div class="title">Noodles | Mimi Ready-to-Eat | Standard</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4.5</span>
+            <span class="profit">+₹0.5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="oil | dhara | 1 l dhara cooking oil 1 l">
+        <div class="img-wrap">
+          <span class="variant-tag">1 L</span>
+          <img src="https://1dd.web.app/images/products/Oil%20%7C%20Dhara%20%7C%201%20L.jpg" alt="Oil | Dhara | 1 L" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Cooking Oil</span>
+          <span class="brand">Dhara • 1 L</span>
+          <div class="title">Oil | Dhara | 1 L</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹200</span>
+            <span class="cost">Cost: ₹196</span>
+            <span class="profit">+₹4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="oil | fortune | 1 l fortune cooking oil 1 l">
+        <div class="img-wrap">
+          <span class="variant-tag">1 L</span>
+          <img src="https://1dd.web.app/images/products/Oil%20%7C%20Fortune%20%7C%201%20L.jpg" alt="Oil | Fortune | 1 L" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Cooking Oil</span>
+          <span class="brand">Fortune • 1 L</span>
+          <div class="title">Oil | Fortune | 1 L</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹200</span>
+            <span class="cost">Cost: ₹196</span>
+            <span class="profit">+₹4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="oil | fortune refined | 1 l fortune cooking oil 1 l">
+        <div class="img-wrap">
+          <span class="variant-tag">1 L</span>
+          <img src="https://1dd.web.app/images/products/Oil%20%7C%20Fortune%20Refined%20%7C%201%20L.png" alt="Oil | Fortune Refined | 1 L" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Cooking Oil</span>
+          <span class="brand">Fortune • 1 L</span>
+          <div class="title">Oil | Fortune Refined | 1 L</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹140</span>
+            <span class="cost">Cost: ₹135</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="oil | hanuman mustard | 1/2l hanuman cooking oil 1/2l">
+        <div class="img-wrap">
+          <span class="variant-tag">1/2L</span>
+          <img src="https://1dd.web.app/images/products/Oil%20%7C%20Hanuman%20Mustard%20%7C%201-2L.jpg" alt="Oil | Hanuman Mustard | 1/2L" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Cooking Oil</span>
+          <span class="brand">Hanuman • 1/2L</span>
+          <div class="title">Oil | Hanuman Mustard | 1/2L</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹70</span>
+            <span class="cost">Cost: ₹65</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="phenyle | white phenyle | 250ml cleanhome home & hygiene 250ml">
+        <div class="img-wrap">
+          <span class="variant-tag">250ml</span>
+          <img src="https://1dd.web.app/images/products/Phenyle%20%7C%20White%20Phenyle%20%7C%20250ml.png" alt="Phenyle | White Phenyle | 250ml" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Home & Hygiene</span>
+          <span class="brand">CleanHome • 250ml</span>
+          <div class="title">Phenyle | White Phenyle | 250ml</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹35</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="pulses | arhar (ৰহৰ দাইল) | 1 kg daily fresh pulses & dals 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Pulses%20%7C%20Arhar%20(%E0%A7%B0%E0%A6%B9%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2)%20%7C%201%20kg.jpg" alt="Pulses | Arhar (ৰহৰ দাইল) | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pulses & Dals</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Pulses | Arhar (ৰহৰ দাইল) | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹130</span>
+            <span class="cost">Cost: ₹125</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="pulses | but dal (বুটৰ দাইল) | 1 kg daily fresh pulses & dals 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Pulses%20%7C%20But%20Dal%20(%E0%A6%AC%E0%A7%81%E0%A6%9F%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2)%20%7C%201%20kg.jpeg" alt="Pulses | But Dal (বুটৰ দাইল) | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pulses & Dals</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Pulses | But Dal (বুটৰ দাইল) | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹90</span>
+            <span class="cost">Cost: ₹85</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="pulses | fola mogu (ফলা মগু) | 1kg daily fresh pulses & dals 1kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1kg</span>
+          <img src="https://1dd.web.app/images/products/Pulses%20%7C%20Fola%20Mogu%20(%E0%A6%AB%E0%A6%B2%E0%A6%BE%20%E0%A6%AE%E0%A6%97%E0%A7%81)%20%7C%201kg.jpg" alt="Pulses | Fola Mogu (ফলা মগু) | 1kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pulses & Dals</span>
+          <span class="brand">Daily Fresh • 1kg</span>
+          <div class="title">Pulses | Fola Mogu (ফলা মগু) | 1kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹90</span>
+            <span class="cost">Cost: ₹85</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="pulses | masoor (মচুৰ দাইল - premium) | 1 kg daily fresh pulses & dals 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Pulses%20%7C%20Masoor%20(%E0%A6%AE%E0%A6%9A%E0%A7%81%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%20-%20Premium)%20%7C%201%20kg.jpeg" alt="Pulses | Masoor (মচুৰ দাইল - Premium) | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pulses & Dals</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Pulses | Masoor (মচুৰ দাইল - Premium) | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹100</span>
+            <span class="cost">Cost: ₹95</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="pulses | masoor (মচুৰ দাইল - standard) | 1 kg daily fresh pulses & dals 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Pulses%20%7C%20Masoor%20(%E0%A6%AE%E0%A6%9A%E0%A7%81%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%20-%20Standard)%20%7C%201%20kg.jpeg" alt="Pulses | Masoor (মচুৰ দাইল - Standard) | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pulses & Dals</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Pulses | Masoor (মচুৰ দাইল - Standard) | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹90</span>
+            <span class="cost">Cost: ₹85</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="pulses | moong dal (মগু দাইল) | 1 kg daily fresh pulses & dals 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Pulses%20%7C%20Moong%20Dal%20(%E0%A6%AE%E0%A6%97%E0%A7%81%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2)%20%7C%201%20kg.jpeg" alt="Pulses | Moong Dal (মগু দাইল) | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pulses & Dals</span>
+          <span class="brand">Daily Fresh • 1 kg</span>
+          <div class="title">Pulses | Moong Dal (মগু দাইল) | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹120</span>
+            <span class="cost">Cost: ₹110</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="pulses | moong dal (মগু দাইল) | 500 g daily fresh pulses & dals 500 g">
+        <div class="img-wrap">
+          <span class="variant-tag">500 g</span>
+          <img src="https://1dd.web.app/images/products/Pulses%20%7C%20Moong%20Dal%20(%E0%A6%AE%E0%A6%97%E0%A7%81%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2)%20%7C%20500%20g.jpg" alt="Pulses | Moong Dal (মগু দাইল) | 500 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Pulses & Dals</span>
+          <span class="brand">Daily Fresh • 500 g</span>
+          <div class="title">Pulses | Moong Dal (মগু দাইল) | 500 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹60</span>
+            <span class="cost">Cost: ₹55</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="salt | everyday | 1 kg everyday iodised salt 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Salt%20%7C%20Everyday%20%7C%201%20kg.jpeg" alt="Salt | Everyday | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Iodised Salt</span>
+          <span class="brand">Everyday • 1 kg</span>
+          <div class="title">Salt | Everyday | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="salt | taza | 1kg taza iodised salt 1kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1kg</span>
+          <img src="https://1dd.web.app/images/products/Salt%20%7C%20Taza%20%7C%201kg.jpg" alt="Salt | Taza | 1kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Iodised Salt</span>
+          <span class="brand">Taza • 1kg</span>
+          <div class="title">Salt | Taza | 1kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹8</span>
+            <span class="profit">+₹2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="salt | z + | 1 kg z+ iodised salt 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Salt%20%7C%20Z%20%2B%20%7C%201%20kg.jpg" alt="Salt | Z + | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Iodised Salt</span>
+          <span class="brand">Z+ • 1 kg</span>
+          <div class="title">Salt | Z + | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹15</span>
+            <span class="cost">Cost: ₹10</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="sira (চিৰা) | daily fresh | 1kg daily fresh breakfast & staples 1kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1kg</span>
+          <img src="https://1dd.web.app/images/products/Sira%20(%E0%A6%9A%E0%A6%BF%E0%A7%B0%E0%A6%BE)%20%7C%20Daily%20Fresh%20%7C%201kg.jpg" alt="Sira (চিৰা) | Daily Fresh | 1kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Breakfast & Staples</span>
+          <span class="brand">Daily Fresh • 1kg</span>
+          <div class="title">Sira (চিৰা) | Daily Fresh | 1kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹45</span>
+            <span class="cost">Cost: ₹40</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | astha | 1 pc astha soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Astha%20%7C%201%20pc.jpg" alt="Soap | Astha | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Astha • 1</span>
+          <div class="title">Soap | Astha | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹35</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | detol | 1 pc dettol soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Detol%20%7C%201%20pc.jpg" alt="Soap | Detol | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Dettol • 1</span>
+          <div class="title">Soap | Detol | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | exo | 1 pc exo soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Exo%20%7C%201%20pc.jpg" alt="Soap | Exo | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Exo • 1</span>
+          <div class="title">Soap | Exo | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹5</span>
+            <span class="cost">Cost: ₹4.5</span>
+            <span class="profit">+₹0.5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | goodluck | 1 pc goodluck soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Goodluck%20%7C%201%20pc.jpg" alt="Soap | Goodluck | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Goodluck • 1</span>
+          <div class="title">Soap | Goodluck | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹30</span>
+            <span class="cost">Cost: ₹25</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | lifebuoy | 1 pc lifebuoy soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Lifebuoy%20%7C%201%20pc.png" alt="Soap | Lifebuoy | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Lifebuoy • 1</span>
+          <div class="title">Soap | Lifebuoy | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹30</span>
+            <span class="cost">Cost: ₹25</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | lux | 1 pc lux soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Lux%20%7C%201%20pc.jpg" alt="Soap | Lux | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Lux • 1</span>
+          <div class="title">Soap | Lux | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹30</span>
+            <span class="cost">Cost: ₹25</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | lux international | 1 pc lux soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Lux%20International%20%7C%201%20pc.jpg" alt="Soap | Lux International | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Lux • 1</span>
+          <div class="title">Soap | Lux International | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹35</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | pari | 1 pc pari soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Pari%20%7C%201%20pc.jpg" alt="Soap | Pari | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Pari • 1</span>
+          <div class="title">Soap | Pari | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | patanjali bar | 1 pc patanjali soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Patanjali%20Bar%20%7C%201%20pc.jpg" alt="Soap | Patanjali Bar | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Patanjali • 1</span>
+          <div class="title">Soap | Patanjali Bar | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | snowball | 1 pc snowball soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20SnowBall%20%7C%201%20pc.jpg" alt="Soap | SnowBall | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Snowball • 1</span>
+          <div class="title">Soap | SnowBall | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹40</span>
+            <span class="cost">Cost: ₹35</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="soap | vivel | 1 pc vivel soaps & cleansing 1">
+        <div class="img-wrap">
+          <span class="variant-tag">1</span>
+          <img src="https://1dd.web.app/images/products/Soap%20%7C%20Vivel%20%7C%201%20pc.png" alt="Soap | Vivel | 1 pc" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Soaps & Cleansing</span>
+          <span class="brand">Vivel • 1</span>
+          <div class="title">Soap | Vivel | 1 pc</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="sugar | madhur | 1 kg madhur sugar 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Sugar%20%7C%20Madhur%20%7C%201%20kg.jpg" alt="Sugar | Madhur | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Sugar</span>
+          <span class="brand">Madhur • 1 kg</span>
+          <div class="title">Sugar | Madhur | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹65</span>
+            <span class="cost">Cost: ₹62</span>
+            <span class="profit">+₹3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="suji | normal | 500g normal breakfast & staples 500g">
+        <div class="img-wrap">
+          <span class="variant-tag">500g</span>
+          <img src="https://1dd.web.app/images/products/Suji%20%7C%20Normal%20%7C%20500g.jpeg" alt="Suji | Normal | 500g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Breakfast & Staples</span>
+          <span class="brand">Normal • 500g</span>
+          <div class="title">Suji | Normal | 500g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹30</span>
+            <span class="cost">Cost: ₹25</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="surf | surf excel | ₹10 packet surf excel laundry & detergents ₹10 packet">
+        <div class="img-wrap">
+          <span class="variant-tag">₹10 packet</span>
+          <img src="https://1dd.web.app/images/products/Surf%20%7C%20Surf%20Excel%20%7C%20%E2%82%B910%20packet.jpg" alt="Surf | Surf Excel | ₹10 packet" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Laundry & Detergents</span>
+          <span class="brand">Surf Excel • ₹10 packet</span>
+          <div class="title">Surf | Surf Excel | ₹10 packet</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹10</span>
+            <span class="cost">Cost: ₹9</span>
+            <span class="profit">+₹1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="surf | surf excel | 1 kg surf excel laundry & detergents 1 kg">
+        <div class="img-wrap">
+          <span class="variant-tag">1 kg</span>
+          <img src="https://1dd.web.app/images/products/Surf%20%7C%20Surf%20Excel%20%7C%201%20kg.jpg" alt="Surf | Surf Excel | 1 kg" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Laundry & Detergents</span>
+          <span class="brand">Surf Excel • 1 kg</span>
+          <div class="title">Surf | Surf Excel | 1 kg</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹140</span>
+            <span class="cost">Cost: ₹130</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="surf | surf excel | 500 g surf excel laundry & detergents 500 g">
+        <div class="img-wrap">
+          <span class="variant-tag">500 g</span>
+          <img src="https://1dd.web.app/images/products/Surf%20%7C%20Surf%20Excel%20%7C%20500%20g.png" alt="Surf | Surf Excel | 500 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Laundry & Detergents</span>
+          <span class="brand">Surf Excel • 500 g</span>
+          <div class="title">Surf | Surf Excel | 500 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹70</span>
+            <span class="cost">Cost: ₹65</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="surf | tide (chandan) | 500 g tide laundry & detergents chandan/500">
+        <div class="img-wrap">
+          <span class="variant-tag">Chandan/500</span>
+          <img src="https://1dd.web.app/images/products/Surf%20%7C%20Tide%20(Chandan)%20%7C%20500%20g.jpg" alt="Surf | Tide (Chandan) | 500 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Laundry & Detergents</span>
+          <span class="brand">Tide • Chandan/500</span>
+          <div class="title">Surf | Tide (Chandan) | 500 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹80</span>
+            <span class="cost">Cost: ₹75</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="surf | tide (lemon) | 500 g tide laundry & detergents lemon/500">
+        <div class="img-wrap">
+          <span class="variant-tag">Lemon/500</span>
+          <img src="https://1dd.web.app/images/products/Surf%20%7C%20Tide%20(Lemon)%20%7C%20500%20g.jpg" alt="Surf | Tide (Lemon) | 500 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Laundry & Detergents</span>
+          <span class="brand">Tide • Lemon/500</span>
+          <div class="title">Surf | Tide (Lemon) | 500 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹70</span>
+            <span class="cost">Cost: ₹65</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="tea (চাহ) | archana | 250 g archana tea & beverages 250 g">
+        <div class="img-wrap">
+          <span class="variant-tag">250 g</span>
+          <img src="https://1dd.web.app/images/products/Tea%20(%E0%A6%9A%E0%A6%BE%E0%A6%B9)%20%7C%20Archana%20%7C%20250%20g.jpg" alt="Tea (চাহ) | Archana | 250 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Tea & Beverages</span>
+          <span class="brand">Archana • 250 g</span>
+          <div class="title">Tea (চাহ) | Archana | 250 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹60</span>
+            <span class="cost">Cost: ₹55</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="tea (চাহ) | nameri | 250 g nameri tea & beverages 250 g">
+        <div class="img-wrap">
+          <span class="variant-tag">250 g</span>
+          <img src="https://1dd.web.app/images/products/Tea%20(%E0%A6%9A%E0%A6%BE%E0%A6%B9)%20%7C%20Nameri%20%7C%20250%20g.jpg" alt="Tea (চাহ) | Nameri | 250 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Tea & Beverages</span>
+          <span class="brand">Nameri • 250 g</span>
+          <div class="title">Tea (চাহ) | Nameri | 250 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹80</span>
+            <span class="cost">Cost: ₹75</span>
+            <span class="profit">+₹5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="tea (চাহ) | sonitpur | 500g sonitpur tea & beverages 500g">
+        <div class="img-wrap">
+          <span class="variant-tag">500g</span>
+          <img src="https://1dd.web.app/images/products/Tea%20(%E0%A6%9A%E0%A6%BE%E0%A6%B9)%20%7C%20Sonitpur%20%7C%20500g.jpg" alt="Tea (চাহ) | Sonitpur | 500g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Tea & Beverages</span>
+          <span class="brand">Sonitpur • 500g</span>
+          <div class="title">Tea (চাহ) | Sonitpur | 500g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹110</span>
+            <span class="cost">Cost: ₹100</span>
+            <span class="profit">+₹10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="tooth paste | colgate | 100 g colgate oral care & toothpaste 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Tooth%20Paste%20%7C%20Colgate%20%7C%20100%20g.jpg" alt="Tooth Paste | Colgate | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Oral Care & Toothpaste</span>
+          <span class="brand">Colgate • 100 g</span>
+          <div class="title">Tooth Paste | Colgate | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹75</span>
+            <span class="cost">Cost: ₹60</span>
+            <span class="profit">+₹15</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="tooth paste | dabur red | 100 g dabur oral care & toothpaste 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Tooth%20Paste%20%7C%20Dabur%20Red%20%7C%20100%20g.webp" alt="Tooth Paste | Dabur Red | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Oral Care & Toothpaste</span>
+          <span class="brand">Dabur • 100 g</span>
+          <div class="title">Tooth Paste | Dabur Red | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹70</span>
+            <span class="cost">Cost: ₹56</span>
+            <span class="profit">+₹14</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="tooth paste | patanjali | 100 g patanjali oral care & toothpaste 100 g">
+        <div class="img-wrap">
+          <span class="variant-tag">100 g</span>
+          <img src="https://1dd.web.app/images/products/Tooth%20Paste%20%7C%20Patanjali%20%7C%20100%20g.webp" alt="Tooth Paste | Patanjali | 100 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Oral Care & Toothpaste</span>
+          <span class="brand">Patanjali • 100 g</span>
+          <div class="title">Tooth Paste | Patanjali | 100 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹55</span>
+            <span class="cost">Cost: ₹42</span>
+            <span class="profit">+₹13</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-text="tooth paste | sensodyne | 70 g sensodyne oral care & toothpaste 70 g">
+        <div class="img-wrap">
+          <span class="variant-tag">70 g</span>
+          <img src="https://1dd.web.app/images/products/Tooth%20Paste%20%7C%20Sensodyne%20%7C%2070%20g.jpg" alt="Tooth Paste | Sensodyne | 70 g" referrerpolicy="no-referrer" loading="lazy" onerror="this.src='https://placehold.co/300x300/png?text=No+Image'">
+        </div>
+        <div class="info">
+          <span class="badge">Oral Care & Toothpaste</span>
+          <span class="brand">Sensodyne • 70 g</span>
+          <div class="title">Tooth Paste | Sensodyne | 70 g</div>
+          <div class="prices">
+            <span class="mrp">MRP: ₹170</span>
+            <span class="cost">Cost: ₹140</span>
+            <span class="profit">+₹30</span>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const countDisplay = document.getElementById("countDisplay");
+    const cards = document.querySelectorAll(".card");
+
+    searchInput.addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      let visible = 0;
+      cards.forEach(c => {
+        const txt = c.getAttribute("data-text");
+        if (!q || txt.includes(q)) {
+          c.style.display = "flex";
+          visible++;
+        } else {
+          c.style.display = "none";
+        }
+      });
+      countDisplay.textContent = "Showing " + visible + " Products";
+    });
+  </script>
+</body>
+</html>

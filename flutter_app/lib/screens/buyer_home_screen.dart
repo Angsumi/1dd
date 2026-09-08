@@ -4,6 +4,7 @@ import '../config/location_constants.dart';
 import '../models/product.dart';
 import '../providers/cart_provider.dart';
 import '../services/firestore_service.dart';
+import '../services/meta_catalog_service.dart';
 import '../widgets/cart_checkout_sheet.dart';
 import 'seller_dashboard_screen.dart';
 
@@ -66,32 +67,42 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
                 ),
                 Text(
-                  "1-Day Local Delivery",
-                  style: TextStyle(fontSize: 11, color: Colors.grey),
+                  "1-Day Express WhatsApp Store",
+                  style: TextStyle(fontSize: 11, color: Color(0xFF15803D), fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ],
         ),
         actions: [
-          // Live Cloud Sync Pill
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              color: const Color(0xFFDCFCE7),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.circle, size: 8, color: Color(0xFF15803D)),
-                SizedBox(width: 4),
-                Text(
-                  "Cloud Live",
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF15803D)),
-                ),
-              ],
+          // Live WhatsApp Catalog Pill
+          InkWell(
+            onTap: () {
+              MetaCatalogService.launchWhatsApp(
+                phone: LocationConstants.storePhone,
+                message: "👋 Hi Rangachakua Store, I want to check your latest available items & place an order.",
+              );
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: const Color(0xFFDCFCE7),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFF86EFAC)),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.chat, size: 13, color: Color(0xFF15803D)),
+                  SizedBox(width: 4),
+                  Text(
+                    "WhatsApp Active",
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF15803D)),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(width: 6),
@@ -173,38 +184,71 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        "Store House Origin Hub",
+                        "Rangachakua Store House",
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: const Color(0xFF25D366),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Text(
-                          "⚡ 1-Day Express",
-                          style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.chat, size: 12, color: Colors.white),
+                            SizedBox(width: 4),
+                            Text(
+                              "WhatsApp Connected",
+                              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 6),
                   const Text(
-                    "Assorted fresh vegetables, local specialties, and daily groceries packed directly from Rangachakua Central Depot.",
+                    "Shop local vegetables, groceries, and staples. Order directly through WhatsApp or web with 1-Day guaranteed delivery.",
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      "📍 GPS: ${LocationConstants.storeOriginLat}° N, ${LocationConstants.storeOriginLng}° E • Call: ${LocationConstants.storePhone}",
-                      style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontSize: 11),
-                    ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 6,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          "📍 Depot: ${LocationConstants.storeOriginLat}° N, ${LocationConstants.storeOriginLng}° E",
+                          style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontSize: 11),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          MetaCatalogService.launchWhatsApp(
+                            phone: LocationConstants.storePhone,
+                            message: "👋 Hello, I have an inquiry for Rangachakua Store House.",
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF25D366).withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: const Color(0xFF25D366)),
+                          ),
+                          child: Text(
+                            "💬 WhatsApp: ${LocationConstants.storePhone}",
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 11),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -221,7 +265,7 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                   setState(() => _searchQuery = val.toLowerCase().trim());
                 },
                 decoration: InputDecoration(
-                  hintText: "Search spinach, milk, Joha rice, cakes...",
+                  hintText: "Search spinach, milk, Joha rice, mustard oil...",
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   suffixIcon: _searchQuery.isNotEmpty
                       ? IconButton(
@@ -335,7 +379,7 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCount,
-                    childAspectRatio: 0.72,
+                    childAspectRatio: 0.68,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
@@ -354,7 +398,7 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
         ],
       ),
 
-      // Floating Cart Checkout Action
+      // Floating Action Button: Cart or Direct WhatsApp
       floatingActionButton: cart.totalCount > 0
           ? FloatingActionButton.extended(
               backgroundColor: const Color(0xFF15803D),
@@ -363,7 +407,18 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
               label: Text("Cart (${cart.totalCount}) • ₹${cart.totalAmount.toStringAsFixed(0)}"),
               onPressed: _openCartSheet,
             )
-          : null,
+          : FloatingActionButton.extended(
+              backgroundColor: const Color(0xFF25D366),
+              foregroundColor: Colors.white,
+              icon: const Icon(Icons.chat),
+              label: const Text("Chat & Order on WhatsApp"),
+              onPressed: () {
+                MetaCatalogService.launchWhatsApp(
+                  phone: LocationConstants.storePhone,
+                  message: "👋 Hi, I want to order fresh groceries from Rangachakua Store House.",
+                );
+              },
+            ),
     );
   }
 
@@ -386,7 +441,7 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image + Badges
+          // Image + Badges + WhatsApp Share
           Expanded(
             flex: 5,
             child: Stack(
@@ -440,6 +495,30 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                     ],
                   ),
                 ),
+                // Quick WhatsApp Share Button on card
+                Positioned(
+                  top: 6,
+                  right: 6,
+                  child: InkWell(
+                    onTap: () {
+                      MetaCatalogService.launchWhatsApp(
+                        phone: LocationConstants.storePhone,
+                        message: MetaCatalogService.formatProductWhatsAppShareText(product),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 4),
+                        ],
+                      ),
+                      child: const Icon(Icons.chat, size: 16, color: Color(0xFF25D366)),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -483,38 +562,43 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 32,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF15803D),
-                        foregroundColor: Colors.white,
-                        disabledBackgroundColor: Colors.grey.shade300,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        padding: EdgeInsets.zero,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 32,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF15803D),
+                              foregroundColor: Colors.white,
+                              disabledBackgroundColor: Colors.grey.shade300,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              padding: EdgeInsets.zero,
+                            ),
+                            onPressed: isOutOfStock
+                                ? null
+                                : () {
+                                    cart.addToCart(product);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text("Added ${product.title} to cart"),
+                                        duration: const Duration(seconds: 1),
+                                        action: SnackBarAction(
+                                          label: "View Cart",
+                                          textColor: Colors.white,
+                                          onPressed: _openCartSheet,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                            child: Text(
+                              isOutOfStock ? "Sold Out" : "+ Add to Cart",
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                            ),
+                          ),
+                        ),
                       ),
-                      onPressed: isOutOfStock
-                          ? null
-                          : () {
-                              cart.addToCart(product);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Added ${product.title} to cart"),
-                                  duration: const Duration(seconds: 1),
-                                  action: SnackBarAction(
-                                    label: "View Cart",
-                                    textColor: Colors.white,
-                                    onPressed: _openCartSheet,
-                                  ),
-                                ),
-                              );
-                            },
-                      child: Text(
-                        isOutOfStock ? "Sold Out" : "+ Add to Cart",
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                      ),
-                    ),
+                    ],
                   ),
                 ],
               ),

@@ -1,0 +1,6 @@
+id,title,description,availability,condition,price,link,image_link,brand
+prod_spinach,Organic Red Spinach (Dhekia),Fresh local greens from Rangachakua fields,in stock,new,30.00 INR,https://1dd.web.app?product=prod_spinach,https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600,1DD Rangachakua
+prod_milk,Pure Cow Milk (Local Dairy),Fresh unadulterated cow milk from Rangachakua dairy,in stock,new,60.00 INR,https://1dd.web.app?product=prod_milk,https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600,1DD Rangachakua
+prod_rice,Aromatic Joha Rice,Heritage scented premium Joha rice,in stock,new,130.00 INR,https://1dd.web.app?product=prod_rice,https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600,1DD Rangachakua
+prod_oil,Cold Pressed Mustard Oil,Pure wood-pressed pungent mustard oil,in stock,new,160.00 INR,https://1dd.web.app?product=prod_oil,https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600,1DD Rangachakua
+prod_cake,Traditional Festive Cake,Freshly baked local sweet delicacy,in stock,new,180.00 INR,https://1dd.web.app?product=prod_cake,https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600,1DD Rangachakua

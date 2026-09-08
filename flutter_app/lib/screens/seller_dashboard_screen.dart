@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/order.dart';
 import '../models/product.dart';
 import '../services/auth_service.dart';
 import '../services/firestore_service.dart';
+import '../services/meta_catalog_service.dart';
+import '../config/location_constants.dart';
 
 class SellerDashboardScreen extends StatefulWidget {
   const SellerDashboardScreen({super.key});
@@ -22,10 +25,16 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
   final _passwordController = TextEditingController();
   bool _isAuthLoading = false;
 
+  // Meta API controllers
+  final _metaCatalogIdController = TextEditingController();
+  final _metaTokenController = TextEditingController();
+  bool _isMetaSyncing = false;
+  String _metaSyncStatusMessage = "";
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -33,6 +42,8 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
     _tabController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _metaCatalogIdController.dispose();
+    _metaTokenController.dispose();
     super.dispose();
   }
 
@@ -186,7 +197,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: Colors.red.shade700,
-              content: Text("Login error: $e. If this is your first time, click 'Create / Register Password'."),
+              content: Text("Login error: $e. If this is your first time, click 'Register'."),
             ),
           );
         }
@@ -306,7 +317,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
               children: [
                 TextField(
                   controller: titleCtrl,
-                  decoration: const InputDecoration(labelText: "Product Title *", hintText: "e.g. Fresh Red Tomatoes"),
+                  decoration: const InputDecoration(labelText: "Product Title *", hintText: "e.g. Red Spinach / Joha Rice"),
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<ProductCategory>(
@@ -334,7 +345,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                     Expanded(
                       child: TextField(
                         controller: unitCtrl,
-                        decoration: const InputDecoration(labelText: "Unit *", hintText: "500g bunch"),
+                        decoration: const InputDecoration(labelText: "Unit *", hintText: "1 kg / 500g"),
                       ),
                     ),
                   ],
@@ -343,18 +354,18 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                 TextField(
                   controller: stockCtrl,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: "Initial Stock *", hintText: "20"),
+                  decoration: const InputDecoration(labelText: "Initial Stock Quantity *", hintText: "20"),
                 ),
                 const SizedBox(height: 10),
                 TextField(
                   controller: imgCtrl,
-                  decoration: const InputDecoration(labelText: "Image URL", hintText: "https://... or images/Cake.jpeg"),
+                  decoration: const InputDecoration(labelText: "Image URL", hintText: "https://..."),
                 ),
                 const SizedBox(height: 10),
                 TextField(
                   controller: descCtrl,
                   maxLines: 2,
-                  decoration: const InputDecoration(labelText: "Description", hintText: "Freshly harvested..."),
+                  decoration: const InputDecoration(labelText: "Description", hintText: "Freshly harvested from Rangachakua..."),
                 ),
               ],
             ),
@@ -397,14 +408,30 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                 );
 
                 await _firestore.createProduct(newProd);
-                if (mounted) Navigator.pop(ctx);
+
+                // Auto-push to Meta Graph API if credentials are provided
+                if (_metaCatalogIdController.text.trim().isNotEmpty && _metaTokenController.text.trim().isNotEmpty) {
+                  MetaCatalogService.pushProductToMetaGraphApi(
+                    product: newProd,
+                    catalogId: _metaCatalogIdController.text.trim(),
+                    accessToken: _metaTokenController.text.trim(),
+                  );
+                }
+
+                if (ctx.mounted) Navigator.pop(ctx);
               },
-              child: const Text("Save to Cloud"),
+              child: const Text("Save & Sync"),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _sendWhatsAppStatusUpdate(StoreOrder order, OrderStatus newStatus) async {
+    await _firestore.updateOrderStatus(order.id, newStatus);
+    final msg = MetaCatalogService.formatSellerStatusUpdateMessage(order, newStatus);
+    await MetaCatalogService.launchWhatsApp(phone: order.customerPhone, message: msg);
   }
 
   @override
@@ -455,13 +482,13 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    "Store Owner Access",
+                    "Store House Owner Access",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                   ),
                   const SizedBox(height: 6),
                   const Text(
-                    "Restricted to verified Store House Owner (angsudas62@gmail.com). Buyers do not need to sign in.",
+                    "Restricted to verified Store House Owner (angsudas62@gmail.com).",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
@@ -606,7 +633,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Store House Owner Dashboard", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
-            Text("Live Cloud Admin • angsudas62@gmail.com", style: TextStyle(fontSize: 11, color: Color(0xFF15803D), fontWeight: FontWeight.bold)),
+            Text("WhatsApp Commerce Hub • angsudas62@gmail.com", style: TextStyle(fontSize: 11, color: Color(0xFF15803D), fontWeight: FontWeight.bold)),
           ],
         ),
         actions: [
@@ -624,7 +651,8 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
           indicatorWeight: 3,
           tabs: const [
             Tab(icon: Icon(Icons.inventory_2_outlined), text: "Inventory Catalog"),
-            Tab(icon: Icon(Icons.receipt_long_outlined), text: "Live Customer Orders"),
+            Tab(icon: Icon(Icons.receipt_long_outlined), text: "Customer Orders"),
+            Tab(icon: Icon(Icons.sync_alt), text: "WhatsApp & Meta Sync"),
           ],
         ),
       ),
@@ -633,15 +661,18 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
         children: [
           _buildInventoryTab(),
           _buildOrdersTab(),
+          _buildMetaCatalogTab(),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: const Color(0xFF15803D),
-        foregroundColor: Colors.white,
-        icon: const Icon(Icons.add),
-        label: const Text("Add Product"),
-        onPressed: _openAddProductDialog,
-      ),
+      floatingActionButton: _tabController.index == 0
+          ? FloatingActionButton.extended(
+              backgroundColor: const Color(0xFF15803D),
+              foregroundColor: Colors.white,
+              icon: const Icon(Icons.add),
+              label: const Text("Add Product"),
+              onPressed: _openAddProductDialog,
+            )
+          : null,
     );
   }
 
@@ -672,9 +703,18 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
               ],
             ),
             const SizedBox(height: 16),
-            const Text(
-              "Catalog Items",
-              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Catalog Items",
+                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                ),
+                Text(
+                  "${products.length} live items",
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ],
             ),
             const SizedBox(height: 10),
             ...products.map((prod) {
@@ -719,6 +759,16 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                       Row(
                         children: [
                           IconButton(
+                            icon: const Icon(Icons.chat, color: Color(0xFF25D366), size: 20),
+                            tooltip: "Share to WhatsApp",
+                            onPressed: () {
+                              MetaCatalogService.launchWhatsApp(
+                                phone: LocationConstants.storePhone,
+                                message: MetaCatalogService.formatProductWhatsAppShareText(prod),
+                              );
+                            },
+                          ),
+                          IconButton(
                             icon: const Icon(Icons.edit_note, color: Colors.blue),
                             tooltip: "Quick Stock Edit",
                             onPressed: () {
@@ -738,7 +788,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                                       onPressed: () async {
                                         final newQty = int.tryParse(ctrl.text.trim()) ?? prod.stockQuantity;
                                         await _firestore.updateProductStock(prod.id, newQty);
-                                        if (mounted) Navigator.pop(ctx);
+                                        if (ctx.mounted) Navigator.pop(ctx);
                                       },
                                       child: const Text("Save"),
                                     )
@@ -805,7 +855,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                 Icon(Icons.inbox_outlined, size: 48, color: Colors.grey),
                 SizedBox(height: 12),
                 Text("No orders placed yet", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                Text("Incoming orders from customers will appear here in real time.", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Text("Incoming orders from WhatsApp or web will appear here in real time.", style: TextStyle(color: Colors.grey, fontSize: 12)),
               ],
             ),
           );
@@ -828,14 +878,14 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
             ),
             const SizedBox(height: 16),
             const Text(
-              "Customer Order Feed",
+              "Customer Order Feed & WhatsApp Status Dispatch",
               style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
             ),
             const SizedBox(height: 10),
             ...orders.map((order) {
               return Card(
                 elevation: 0.5,
-                margin: const EdgeInsets.only(bottom: 12),
+                margin: const EdgeInsets.only(bottom: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                   side: const BorderSide(color: Color(0xFFE2E8F0)),
@@ -855,51 +905,63 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                       const SizedBox(height: 8),
                       Text("👤 Customer: ${order.customerName} (${order.customerPhone})", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                       Text("📍 Destination: ${order.deliveryAddress}", style: const TextStyle(fontSize: 12, color: Colors.black87)),
-                      Text("⏱️ Haversine: ${order.distanceKm} km • OTP: ${order.otpCode}", style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                      Text("⏱️ Haversine: ${order.distanceKm} km (~${order.estimatedMinutes} mins) • 🔐 OTP: ${order.otpCode}", style: const TextStyle(fontSize: 12, color: Colors.grey)),
                       const Divider(height: 16),
                       ...order.items.map((it) => Text("• ${it.productTitle} × ${it.quantity} (${it.unit}) = ₹${it.subtotal.toStringAsFixed(0)}", style: const TextStyle(fontSize: 12))),
                       const SizedBox(height: 6),
                       Text(
-                        "Total Amount: ₹${order.totalAmount.toStringAsFixed(0)} (Cash on Delivery)",
+                        "Total: ₹${order.totalAmount.toStringAsFixed(0)} (${order.paymentMethod})",
                         style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: Color(0xFF15803D)),
                       ),
                       const SizedBox(height: 12),
 
-                      // Status Action Buttons
+                      // Status & WhatsApp Actions
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: [
                           if (order.status == OrderStatus.PLACED)
-                            ElevatedButton(
+                            ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFFEF3C7), foregroundColor: const Color(0xFF92400E)),
-                              onPressed: () => _firestore.updateOrderStatus(order.id, OrderStatus.PREPARING),
-                              child: const Text("Accept & Prepare"),
+                              icon: const Icon(Icons.check_circle_outline, size: 16),
+                              label: const Text("Accept & Prepare"),
+                              onPressed: () => _sendWhatsAppStatusUpdate(order, OrderStatus.PREPARING),
                             ),
                           if (order.status == OrderStatus.PREPARING)
-                            ElevatedButton(
+                            ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE0E7FF), foregroundColor: const Color(0xFF3730A3)),
-                              onPressed: () => _firestore.updateOrderStatus(order.id, OrderStatus.OUT_FOR_DELIVERY),
-                              child: const Text("Out for Delivery"),
+                              icon: const Icon(Icons.two_wheeler, size: 16),
+                              label: const Text("Out for Delivery"),
+                              onPressed: () => _sendWhatsAppStatusUpdate(order, OrderStatus.OUT_FOR_DELIVERY),
                             ),
                           if (order.status == OrderStatus.OUT_FOR_DELIVERY)
-                            ElevatedButton(
+                            ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFDCFCE7), foregroundColor: const Color(0xFF166534)),
-                              onPressed: () => _firestore.updateOrderStatus(order.id, OrderStatus.DELIVERED),
-                              child: const Text("Mark Delivered"),
+                              icon: const Icon(Icons.done_all, size: 16),
+                              label: const Text("Mark Delivered"),
+                              onPressed: () => _sendWhatsAppStatusUpdate(order, OrderStatus.DELIVERED),
+                            ),
+                          // 1-Tap WhatsApp Message Customer
+                          if (order.customerPhone.isNotEmpty)
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF25D366), foregroundColor: Colors.white),
+                              icon: const Icon(Icons.chat, size: 16),
+                              label: const Text("WhatsApp Buyer"),
+                              onPressed: () {
+                                final msg = MetaCatalogService.formatSellerStatusUpdateMessage(order, order.status);
+                                MetaCatalogService.launchWhatsApp(phone: order.customerPhone, message: msg);
+                              },
                             ),
                           if (order.customerPhone.isNotEmpty)
                             OutlinedButton.icon(
                               icon: const Icon(Icons.phone, size: 16),
                               label: const Text("Call"),
-                              onPressed: () {
-                                launchUrl(Uri.parse("tel:${order.customerPhone}"));
-                              },
+                              onPressed: () => launchUrl(Uri.parse("tel:${order.customerPhone}")),
                             ),
                           if (order.status != OrderStatus.DELIVERED && order.status != OrderStatus.CANCELLED)
                             TextButton(
                               onPressed: () => _firestore.updateOrderStatus(order.id, OrderStatus.CANCELLED),
-                              child: const Text("Cancel Order", style: TextStyle(color: Colors.red)),
+                              child: const Text("Cancel Order", style: TextStyle(color: Colors.red, fontSize: 12)),
                             ),
                         ],
                       ),
@@ -915,51 +977,317 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
     );
   }
 
-  Widget _buildMetricCard(String title, String value, IconData icon, Color color) {
+  Widget _buildMetaCatalogTab() {
+    return StreamBuilder<List<Product>>(
+      stream: _firestore.getProductsStream(),
+      builder: (context, snapshot) {
+        final products = snapshot.data ?? [];
+
+        return ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            // Card 1: 100% Free Scheduled Data Feed URL (Recommended Method)
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xFF86EFAC))),
+              color: const Color(0xFFF0FDF4),
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.link, color: Color(0xFF15803D)),
+                        SizedBox(width: 8),
+                        Text(
+                          "Method 1: Live Meta Scheduled Feed (100% Free)",
+                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: Color(0xFF166534)),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Paste this Live CSV Feed URL into Meta Commerce Manager > Data Sources > Scheduled Feed. Meta will automatically fetch and sync all your products with your WhatsApp Catalog on schedule.",
+                      style: TextStyle(fontSize: 13, color: Colors.black87),
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xFFCBD5E1)),
+                      ),
+                      child: const Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "https://1dd.web.app/whatsapp-catalog.csv",
+                              style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF15803D), foregroundColor: Colors.white),
+                          icon: const Icon(Icons.copy, size: 16),
+                          label: const Text("Copy Feed URL"),
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(text: "https://1dd.web.app/whatsapp-catalog.csv"));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Copied Meta Feed URL to clipboard!")),
+                            );
+                          },
+                        ),
+                        OutlinedButton.icon(
+                          icon: const Icon(Icons.file_download_outlined, size: 16),
+                          label: const Text("Copy Raw Meta CSV to Clipboard"),
+                          onPressed: () {
+                            final csvContent = MetaCatalogService.generateMetaCommerceCsv(products);
+                            Clipboard.setData(ClipboardData(text: csvContent));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Copied ${products.length} products in Meta CSV format!")),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Card 2: Real-time Meta Graph API Push (When API details added)
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xFFE2E8F0))),
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.bolt, color: Color(0xFF2563EB)),
+                        SizedBox(width: 8),
+                        Text(
+                          "Method 2: Meta Graph API (Real-Time Push)",
+                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      "Whenever you are ready to use Meta Graph API, enter your Meta Catalog ID & System User Token below to push items instantly:",
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _metaCatalogIdController,
+                      decoration: const InputDecoration(
+                        labelText: "Meta Commerce Catalog ID",
+                        hintText: "e.g. 123456789012345",
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.store),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _metaTokenController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: "Meta System User Access Token (EAA...)",
+                        hintText: "EAABw...",
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.vpn_key),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    if (_metaSyncStatusMessage.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          _metaSyncStatusMessage,
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF15803D)),
+                        ),
+                      ),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB), foregroundColor: Colors.white),
+                      icon: _isMetaSyncing
+                          ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                          : const Icon(Icons.cloud_upload_outlined, size: 18),
+                      label: Text(_isMetaSyncing ? "Syncing..." : "⚡ Push All ${products.length} Products to Meta Catalog"),
+                      onPressed: _isMetaSyncing
+                          ? null
+                          : () async {
+                              final catId = _metaCatalogIdController.text.trim();
+                              final token = _metaTokenController.text.trim();
+
+                              if (catId.isEmpty || token.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Please fill Meta Catalog ID and Access Token (or use Method 1 above for free)")),
+                                );
+                                return;
+                              }
+
+                              setState(() {
+                                _isMetaSyncing = true;
+                                _metaSyncStatusMessage = "Syncing ${products.length} items to Meta...";
+                              });
+
+                              int successCount = 0;
+                              for (final prod in products) {
+                                final res = await MetaCatalogService.pushProductToMetaGraphApi(
+                                  product: prod,
+                                  catalogId: catId,
+                                  accessToken: token,
+                                );
+                                if (res['success'] == true) successCount++;
+                              }
+
+                              setState(() {
+                                _isMetaSyncing = false;
+                                _metaSyncStatusMessage = "Sync complete: $successCount / ${products.length} items pushed to Meta.";
+                              });
+                            },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Card 3: WhatsApp Business Quick Reply Templates
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: Color(0xFFE2E8F0))),
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.chat_bubble_outline, color: Color(0xFF15803D)),
+                        SizedBox(width: 8),
+                        Text(
+                          "WhatsApp Business Quick Reply Templates",
+                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Copy and add these templates into your WhatsApp Business App > Business Tools > Quick Replies for 1-tap customer chat replies:",
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildTemplateRow("Welcome / Shop", "👋 Welcome to 1DD Rangachakua Store! Browse our catalog or reply with the items you need for 1-Day delivery."),
+                    _buildTemplateRow("UPI Payment", "💳 You can pay via UPI to: 9864012345@upi or scan our store QR code upon delivery."),
+                    _buildTemplateRow("Delivery Status", "🚚 Your order is on the way with our 1DD rider! Please keep your OTP ready."),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 40),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildTemplateRow(String title, String message) {
     return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-      ),
-      child: Column(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(color: const Color(0xFFF8FAFC), borderRadius: BorderRadius.circular(8), border: Border.all(color: const Color(0xFFE2E8F0))),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF15803D))),
+                const SizedBox(height: 2),
+                Text(message, style: const TextStyle(fontSize: 12)),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.copy, size: 16, color: Colors.grey),
+            tooltip: "Copy Template",
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: message));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Copied '$title' template!")),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMetricCard(String title, String value, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey)),
-              Icon(icon, size: 18, color: color),
+              Text(value, style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: color)),
+              Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
             ],
           ),
-          const SizedBox(height: 6),
-          Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: color)),
         ],
       ),
     );
   }
 
   Widget _buildStatusBadge(OrderStatus status) {
-    Color bg = const Color(0xFFDBEAFE);
-    Color fg = const Color(0xFF1E40AF);
+    Color bg = const Color(0xFFE2E8F0);
+    Color fg = const Color(0xFF334155);
 
     switch (status) {
       case OrderStatus.PLACED:
-        bg = const Color(0xFFDBEAFE);
-        fg = const Color(0xFF1E40AF);
-        break;
-      case OrderStatus.PREPARING:
         bg = const Color(0xFFFEF3C7);
         fg = const Color(0xFF92400E);
         break;
-      case OrderStatus.OUT_FOR_DELIVERY:
+      case OrderStatus.PREPARING:
         bg = const Color(0xFFE0E7FF);
         fg = const Color(0xFF3730A3);
         break;
-      case OrderStatus.DELIVERED:
+      case OrderStatus.OUT_FOR_DELIVERY:
         bg = const Color(0xFFDCFCE7);
         fg = const Color(0xFF166534);
+        break;
+      case OrderStatus.DELIVERED:
+        bg = const Color(0xFFD1FAE5);
+        fg = const Color(0xFF065F46);
         break;
       case OrderStatus.CANCELLED:
         bg = const Color(0xFFFEE2E2);
@@ -969,8 +1297,14 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(8)),
-      child: Text(status.shortLabel, style: TextStyle(color: fg, fontWeight: FontWeight.bold, fontSize: 11)),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        status.displayName,
+        style: TextStyle(color: fg, fontWeight: FontWeight.bold, fontSize: 11),
+      ),
     );
   }
 }
