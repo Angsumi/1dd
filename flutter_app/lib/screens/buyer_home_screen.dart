@@ -63,11 +63,11 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Rangachakua Store",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                  "1DD",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black87),
                 ),
                 Text(
-                  "1-Day Express WhatsApp Store",
+                  "1-Day Express Delivery",
                   style: TextStyle(fontSize: 11, color: Color(0xFF15803D), fontWeight: FontWeight.bold),
                 ),
               ],

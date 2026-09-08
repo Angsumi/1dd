@@ -169,7 +169,7 @@ class StoreOrder {
       landmarkName: map['landmarkName'] as String? ?? '',
       items: parsedItems,
       subtotal: (map['subtotal'] as num?)?.toDouble() ?? 0.0,
-      deliveryFee: (map['deliveryFee'] as num?)?.toDouble() ?? 25.0,
+      deliveryFee: (map['deliveryFee'] as num?)?.toDouble() ?? 0.0,
       totalAmount: (map['totalAmount'] as num?)?.toDouble() ?? 0.0,
       status: st,
       orderTimestamp: (map['orderTimestamp'] as num?)?.toInt() ?? DateTime.now().millisecondsSinceEpoch,

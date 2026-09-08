@@ -93,10 +93,10 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
       return;
     }
 
-    if (slNumber.isEmpty || phone.isEmpty || location.isEmpty) {
+    if (phone.isEmpty || location.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Please fill SL Number, WhatsApp Number, and Current Location."),
+          content: Text("Please fill WhatsApp Number and Current Location."),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -116,8 +116,10 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
           : 1.5;
       final int eta = HaversineService.estimateDeliveryMinutes(distance);
 
-      final customerDisplayName = name.isNotEmpty ? "$name (SL: $slNumber)" : "SL #$slNumber";
-      final fullAddress = "SL / House: $slNumber | Location: $location${_gpsLat != null ? ' [GPS: ${_gpsLat!.toStringAsFixed(4)}, ${_gpsLng!.toStringAsFixed(4)}]' : ''}";
+      final customerDisplayName = name.isNotEmpty
+          ? (slNumber.isNotEmpty ? "$name (SL: $slNumber)" : name)
+          : (slNumber.isNotEmpty ? "SL #$slNumber" : "Customer");
+      final fullAddress = "${slNumber.isNotEmpty ? 'SL / House: $slNumber | ' : ''}Location: $location${_gpsLat != null ? ' [GPS: ${_gpsLat!.toStringAsFixed(4)}, ${_gpsLng!.toStringAsFixed(4)}]' : ''}";
 
       final storeOrder = StoreOrder(
         id: orderId,
@@ -370,12 +372,12 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
                   // SL Number & WhatsApp Number Row
                   Row(
                     children: [
-                      // SL / House Number
+                      // SL / House Number (Optional)
                       Expanded(
                         child: TextField(
                           controller: _slNumberController,
                           decoration: InputDecoration(
-                            labelText: "SL / House No. *",
+                            labelText: "SL / House No. (Optional)",
                             hintText: "e.g. SL-12 / House 4",
                             prefixIcon: const Icon(Icons.tag),
                             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -447,12 +449,28 @@ class _CartCheckoutSheetState extends State<CartCheckoutSheet> {
                             Text("₹${cart.subtotal.toStringAsFixed(0)}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                           ],
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 6),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text("1-Day Express Delivery:", style: TextStyle(fontSize: 13, color: Colors.black87)),
-                            Text("₹${cart.deliveryFee.toStringAsFixed(0)}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                            const Row(
+                              children: [
+                                Icon(Icons.electric_bolt, size: 16, color: Color(0xFF15803D)),
+                                SizedBox(width: 4),
+                                Text("1-Day Express Delivery:", style: TextStyle(fontSize: 13, color: Colors.black87, fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFDCFCE7),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Text(
+                                "FREE (₹0)",
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF15803D)),
+                              ),
+                            ),
                           ],
                         ),
                         const Divider(height: 14),

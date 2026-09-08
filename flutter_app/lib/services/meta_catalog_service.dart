@@ -7,7 +7,7 @@ import '../config/location_constants.dart';
 
 class MetaCatalogService {
   static const String webStoreUrl = "https://1dd.web.app";
-  static const String storeBrandName = "1DD Rangachakua";
+  static const String storeBrandName = "1DD";
 
   /// Generates official Meta Commerce Manager / WhatsApp Business Catalog CSV Feed.
   static String generateMetaCommerceCsv(List<Product> products) {
@@ -39,9 +39,9 @@ class MetaCatalogService {
     buffer.writeln('<?xml version="1.0" encoding="UTF-8"?>');
     buffer.writeln('<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">');
     buffer.writeln('  <channel>');
-    buffer.writeln('    <title>1DD Rangachakua WhatsApp Catalog</title>');
+    buffer.writeln('    <title>1DD WhatsApp Catalog</title>');
     buffer.writeln('    <link>$webStoreUrl</link>');
-    buffer.writeln('    <description>Fresh Groceries &amp; Local Deliveries from Rangachakua Central Depot</description>');
+    buffer.writeln('    <description>Fresh Groceries &amp; Local Deliveries from 1DD</description>');
 
     for (final p in products) {
       buffer.writeln('    <item>');
@@ -164,7 +164,7 @@ class MetaCatalogService {
 
   /// Generates product share message for WhatsApp.
   static String formatProductWhatsAppShareText(Product product) {
-    return "🛒 *Check out ${product.title} on 1DD Rangachakua!*\n"
+    return "🛒 *Check out ${product.title} on 1DD!*\n"
         "💰 Price: ₹${product.price.toStringAsFixed(0)} / ${product.unit}\n"
         "⚡ 1-Day Express Local Delivery\n\n"
         "👉 Order now: $webStoreUrl?product=${product.id}";
@@ -181,7 +181,7 @@ class MetaCatalogService {
         buffer.writeln("✅ Your order *${order.orderNumber}* has been received and confirmed!");
         break;
       case OrderStatus.PREPARING:
-        buffer.writeln("📦 Your order *${order.orderNumber}* is now being packed at Rangachakua Central Depot.");
+        buffer.writeln("📦 Your order *${order.orderNumber}* is now being packed at 1DD Central Depot.");
         break;
       case OrderStatus.OUT_FOR_DELIVERY:
         buffer.writeln("🚚 Good news! Your order *${order.orderNumber}* is *OUT FOR DELIVERY*.");
@@ -190,7 +190,7 @@ class MetaCatalogService {
         break;
       case OrderStatus.DELIVERED:
         buffer.writeln("🎉 Order *${order.orderNumber}* has been *DELIVERED*!");
-        buffer.writeln("Thank you for shopping local with 1DD Rangachakua Store!");
+        buffer.writeln("Thank you for shopping local with 1DD!");
         break;
       case OrderStatus.CANCELLED:
         buffer.writeln("⚠️ Order *${order.orderNumber}* has been cancelled. Contact support for details.");

@@ -1,11 +1,11 @@
 {
-    "name": "Rangachakua Store - 1DD Marketplace",
-    "short_name": "Rangachakua Store",
+    "name": "1DD - 1-Day Delivery Marketplace",
+    "short_name": "1DD",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#15803D",
-    "description": "Rangachakua Store - 1-Day Local Delivery Marketplace",
+    "description": "1DD - 1-Day Local Express Delivery Marketplace",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

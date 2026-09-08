@@ -1189,7 +1189,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     const SizedBox(height: 10),
-                    _buildTemplateRow("Welcome / Shop", "👋 Welcome to 1DD Rangachakua Store! Browse our catalog or reply with the items you need for 1-Day delivery."),
+                    _buildTemplateRow("Welcome / Shop", "👋 Welcome to 1DD! Browse our catalog or reply with the items you need for 1-Day delivery."),
                     _buildTemplateRow("UPI Payment", "💳 You can pay via UPI to: 9864012345@upi or scan our store QR code upon delivery."),
                     _buildTemplateRow("Delivery Status", "🚚 Your order is on the way with our 1DD rider! Please keep your OTP ready."),
                   ],

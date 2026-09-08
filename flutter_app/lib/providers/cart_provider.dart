@@ -28,7 +28,7 @@ class CartProvider extends ChangeNotifier {
     return _items.values.fold(0.0, (sum, it) => sum + it.subtotal);
   }
 
-  double get deliveryFee => 25.0;
+  double get deliveryFee => 0.0;
 
   double get totalAmount => subtotal + deliveryFee;
 
