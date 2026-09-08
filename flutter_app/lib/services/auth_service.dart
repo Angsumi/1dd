@@ -13,6 +13,7 @@ class AuthService extends ChangeNotifier {
   // Whitelist of authorized owner emails
   static const List<String> authorizedOwners = [
     'angsudas62@gmail.com',
+    'dipankarsaikiads1@gmail.com',
   ];
 
   bool get isAuthorizedOwner {

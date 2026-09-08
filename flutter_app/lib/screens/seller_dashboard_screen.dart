@@ -434,6 +434,29 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
     await MetaCatalogService.launchWhatsApp(phone: order.customerPhone, message: msg);
   }
 
+  void _startJourneyNavigation(StoreOrder order) async {
+    String mapUrl;
+    if (order.deliveryLat != 0.0 && order.deliveryLng != 0.0) {
+      mapUrl = "https://www.google.com/maps/dir/?api=1&destination=${order.deliveryLat},${order.deliveryLng}";
+    } else {
+      mapUrl = "https://www.google.com/maps/dir/?api=1&destination=${Uri.encodeComponent(order.deliveryAddress)}";
+    }
+    final uri = Uri.parse(mapUrl);
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        await launchUrl(uri);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Could not launch Google Maps: $e")),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthService>(context);
@@ -488,7 +511,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                   ),
                   const SizedBox(height: 6),
                   const Text(
-                    "Restricted to verified Store House Owner (angsudas62@gmail.com).",
+                    "Restricted to verified Store House Owners (angsudas62@gmail.com, dipankarsaikiads1@gmail.com).",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
@@ -915,11 +938,24 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> with Sing
                       ),
                       const SizedBox(height: 12),
 
-                      // Status & WhatsApp Actions
+                      // Status & WhatsApp & Navigation Actions
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: [
+                          // GO / Navigate Button to Google Maps
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF1D4ED8), // Royal Blue
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              elevation: 1,
+                            ),
+                            icon: const Icon(Icons.navigation, size: 16),
+                            label: const Text("Go", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+                            onPressed: () => _startJourneyNavigation(order),
+                          ),
                           if (order.status == OrderStatus.PLACED)
                             ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFFEF3C7), foregroundColor: const Color(0xFF92400E)),
