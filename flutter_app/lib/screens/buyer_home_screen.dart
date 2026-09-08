@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../config/location_constants.dart';
@@ -17,9 +18,31 @@ class BuyerHomeScreen extends StatefulWidget {
 
 class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
   final FirestoreService _firestore = FirestoreService();
+  late final Stream<List<Product>> _productsStream;
+  final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounceTimer;
+
   String _selectedCategory = "ALL";
   String _searchQuery = "";
-  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Cache stream once in initState to avoid stream re-creation and scroll resets on state updates
+    _productsStream = _firestore.getProductsStream();
+  }
+
+  void _onSearchChanged(String val) {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 200), () {
+      if (mounted) {
+        setState(() {
+          _searchQuery = val.toLowerCase().trim();
+        });
+      }
+    });
+  }
 
   void _openCartSheet() {
     showModalBottomSheet(
@@ -34,14 +57,14 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _searchController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartProvider>(context);
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
@@ -96,36 +119,40 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
             },
           ),
           const SizedBox(width: 6),
-          // Cart Button
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black87),
-                onPressed: _openCartSheet,
-              ),
-              if (cart.totalCount > 0)
-                Positioned(
-                  right: 6,
-                  top: 6,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF15803D),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      "${cart.totalCount}",
-                      style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
-                    ),
+          // Cart Button with isolated Consumer so cart changes don't rebuild the whole product list
+          Consumer<CartProvider>(
+            builder: (context, cart, child) {
+              return Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black87),
+                    onPressed: _openCartSheet,
                   ),
-                ),
-            ],
+                  if (cart.totalCount > 0)
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF15803D),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          "${cart.totalCount}",
+                          style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
           const SizedBox(width: 8),
         ],
       ),
       body: StreamBuilder<List<Product>>(
-        stream: _firestore.getProductsStream(),
+        stream: _productsStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator(color: Color(0xFF15803D)));
@@ -153,6 +180,8 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
           }).toList();
 
           return CustomScrollView(
+            key: const PageStorageKey<String>('buyer_products_scroll'),
+            controller: _scrollController,
             slivers: [
               // Depot Hero Banner
               SliverToBoxAdapter(
@@ -178,12 +207,12 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Rangachakua Store House",
+                        "1DD Central Depot",
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
                       ),
                       const SizedBox(height: 6),
                       const Text(
-                        "Shop local vegetables, groceries, and staples. Order directly through WhatsApp or web with 1-Day guaranteed delivery.",
+                        "Shop fresh vegetables, groceries, and staples. Free 1-Day express delivery right to your doorstep.",
                         style: TextStyle(color: Colors.white70, fontSize: 12),
                       ),
                       const SizedBox(height: 10),
@@ -194,7 +223,7 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          "📍 Depot: ${LocationConstants.storeOriginLat}° N, ${LocationConstants.storeOriginLng}° E",
+                          "📍 Hub: ${LocationConstants.storeOriginLat}° N, ${LocationConstants.storeOriginLng}° E",
                           style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontSize: 11),
                         ),
                       ),
@@ -209,17 +238,20 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextField(
                     controller: _searchController,
-                    onChanged: (val) {
+                    onChanged: _onSearchChanged,
+                    onSubmitted: (val) {
+                      _debounceTimer?.cancel();
                       setState(() => _searchQuery = val.toLowerCase().trim());
                     },
                     decoration: InputDecoration(
                       hintText: "Search items, groceries, vegetables...",
                       prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                      suffixIcon: _searchQuery.isNotEmpty
+                      suffixIcon: _searchController.text.isNotEmpty
                           ? IconButton(
                               icon: const Icon(Icons.clear, size: 18),
                               onPressed: () {
                                 _searchController.clear();
+                                _debounceTimer?.cancel();
                                 setState(() => _searchQuery = "");
                               },
                             )
@@ -314,7 +346,7 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         final product = filtered[index];
-                        return _buildProductCard(context, product, cart);
+                        return _buildProductCard(context, product);
                       },
                       childCount: filtered.length,
                     ),
@@ -327,15 +359,18 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
       ),
 
       // Floating Action Button: Cart or Direct WhatsApp
-      floatingActionButton: cart.totalCount > 0
-          ? FloatingActionButton.extended(
+      floatingActionButton: Consumer<CartProvider>(
+        builder: (context, cart, child) {
+          if (cart.totalCount > 0) {
+            return FloatingActionButton.extended(
               backgroundColor: const Color(0xFF15803D),
               foregroundColor: Colors.white,
               icon: const Icon(Icons.shopping_bag),
               label: Text("Cart (${cart.totalCount}) • ₹${cart.totalAmount.toStringAsFixed(0)}"),
               onPressed: _openCartSheet,
-            )
-          : FloatingActionButton.extended(
+            );
+          } else {
+            return FloatingActionButton.extended(
               backgroundColor: const Color(0xFF25D366),
               foregroundColor: Colors.white,
               icon: const Icon(Icons.chat),
@@ -343,14 +378,17 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
               onPressed: () {
                 MetaCatalogService.launchWhatsApp(
                   phone: LocationConstants.storePhone,
-                  message: "👋 Hi, I want to order fresh groceries from Rangachakua Store House.",
+                  message: "👋 Hi, I want to order fresh groceries from 1DD.",
                 );
               },
-            ),
+            );
+          }
+        },
+      ),
     );
   }
 
-  Widget _buildProductCard(BuildContext context, Product product, CartProvider cart) {
+  Widget _buildProductCard(BuildContext context, Product product) {
     final isOutOfStock = product.stockQuantity <= 0;
 
     return Container(
@@ -506,11 +544,13 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                             onPressed: isOutOfStock
                                 ? null
                                 : () {
-                                    cart.addToCart(product);
+                                    context.read<CartProvider>().addToCart(product);
+                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text("Added ${product.title} to cart"),
-                                        duration: const Duration(seconds: 1),
+                                        duration: const Duration(seconds: 2),
+                                        behavior: SnackBarBehavior.floating,
                                         action: SnackBarAction(
                                           label: "View Cart",
                                           textColor: Colors.white,
