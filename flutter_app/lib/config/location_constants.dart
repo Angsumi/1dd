@@ -3,7 +3,7 @@ class LocationConstants {
   static const double storeOriginLng = 92.910579;
   static const String storeHubName = "Store House";
   static const String storeHubAddress = "Central Store House, Rangachakua";
-  static const String storePhone = "+91 98640 12345";
+  static const String storePhone = "+91 87238 11930";
   static const double maxLocalDeliveryRadiusKm = 35.0;
   static const double baseDeliveryFee = 25.0;
 }

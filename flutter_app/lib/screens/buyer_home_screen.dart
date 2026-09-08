@@ -17,7 +17,7 @@ class BuyerHomeScreen extends StatefulWidget {
 
 class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
   final FirestoreService _firestore = FirestoreService();
-  ProductCategory _selectedCategory = ProductCategory.ALL;
+  String _selectedCategory = "ALL";
   String _searchQuery = "";
   final TextEditingController _searchController = TextEditingController();
 
@@ -75,37 +75,6 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
           ],
         ),
         actions: [
-          // Live WhatsApp Catalog Pill
-          InkWell(
-            onTap: () {
-              MetaCatalogService.launchWhatsApp(
-                phone: LocationConstants.storePhone,
-                message: "👋 Hi Rangachakua Store, I want to check your latest available items & place an order.",
-              );
-            },
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: const Color(0xFFDCFCE7),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF86EFAC)),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.chat, size: 13, color: Color(0xFF15803D)),
-                  SizedBox(width: 4),
-                  Text(
-                    "WhatsApp Active",
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF15803D)),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 6),
           // Owner Dashboard Button
           TextButton.icon(
             style: TextButton.styleFrom(
@@ -155,68 +124,69 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
           const SizedBox(width: 8),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          // Depot Hero Banner
-          SliverToBoxAdapter(
-            child: Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF15803D), Color(0xFF065F46)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+      body: StreamBuilder<List<Product>>(
+        stream: _firestore.getProductsStream(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator(color: Color(0xFF15803D)));
+          }
+
+          final products = snapshot.data ?? [];
+
+          // Extract dynamic categories based on first word of title
+          final categorySet = <String>{};
+          for (final p in products) {
+            final firstWord = p.title.split("|").first.trim();
+            if (firstWord.isNotEmpty) {
+              categorySet.add(firstWord);
+            }
+          }
+          final sortedCategories = ["ALL", ...categorySet.toList()..sort()];
+
+          final filtered = products.where((p) {
+            final firstWord = p.title.split("|").first.trim();
+            final matchCat = _selectedCategory == "ALL" || firstWord.toLowerCase() == _selectedCategory.toLowerCase();
+            final matchSearch = _searchQuery.isEmpty ||
+                p.title.toLowerCase().contains(_searchQuery) ||
+                p.description.toLowerCase().contains(_searchQuery);
+            return matchCat && matchSearch;
+          }).toList();
+
+          return CustomScrollView(
+            slivers: [
+              // Depot Hero Banner
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF15803D), Color(0xFF065F46)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         "Rangachakua Store House",
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF25D366),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.chat, size: 12, color: Colors.white),
-                            SizedBox(width: 4),
-                            Text(
-                              "WhatsApp Connected",
-                              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(height: 6),
+                      const Text(
+                        "Shop local vegetables, groceries, and staples. Order directly through WhatsApp or web with 1-Day guaranteed delivery.",
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    "Shop local vegetables, groceries, and staples. Order directly through WhatsApp or web with 1-Day guaranteed delivery.",
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
-                  ),
-                  const SizedBox(height: 10),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 6,
-                    children: [
+                      const SizedBox(height: 10),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
@@ -228,129 +198,89 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                           style: const TextStyle(color: Colors.white, fontFamily: 'monospace', fontSize: 11),
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          MetaCatalogService.launchWhatsApp(
-                            phone: LocationConstants.storePhone,
-                            message: "👋 Hello, I have an inquiry for Rangachakua Store House.",
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF25D366).withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: const Color(0xFF25D366)),
-                          ),
-                          child: Text(
-                            "💬 WhatsApp: ${LocationConstants.storePhone}",
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 11),
-                          ),
-                        ),
-                      ),
                     ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // Search Bar
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
-                controller: _searchController,
-                onChanged: (val) {
-                  setState(() => _searchQuery = val.toLowerCase().trim());
-                },
-                decoration: InputDecoration(
-                  hintText: "Search spinach, milk, Joha rice, mustard oil...",
-                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                  suffixIcon: _searchQuery.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear, size: 18),
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() => _searchQuery = "");
-                          },
-                        )
-                      : null,
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
                   ),
                 ),
               ),
-            ),
-          ),
 
-          // Category Chips Bar
-          SliverToBoxAdapter(
-            child: Container(
-              height: 48,
-              margin: const EdgeInsets.symmetric(vertical: 12),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                children: ProductCategory.values.map((cat) {
-                  final isSelected = _selectedCategory == cat;
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: FilterChip(
-                      selected: isSelected,
-                      label: Text("${cat.iconEmoji} ${cat.displayName}"),
-                      labelStyle: TextStyle(
-                        fontSize: 12,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        color: isSelected ? Colors.white : Colors.black87,
+              // Search Bar
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: (val) {
+                      setState(() => _searchQuery = val.toLowerCase().trim());
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Search items, groceries, vegetables...",
+                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                      suffixIcon: _searchQuery.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.clear, size: 18),
+                              onPressed: () {
+                                _searchController.clear();
+                                setState(() => _searchQuery = "");
+                              },
+                            )
+                          : null,
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
                       ),
-                      selectedColor: const Color(0xFF15803D),
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(
-                          color: isSelected ? const Color(0xFF15803D) : const Color(0xFFE2E8F0),
-                        ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
                       ),
-                      onSelected: (_) {
-                        setState(() => _selectedCategory = cat);
-                      },
                     ),
-                  );
-                }).toList(),
+                  ),
+                ),
               ),
-            ),
-          ),
 
-          // Products Grid Stream
-          StreamBuilder<List<Product>>(
-            stream: _firestore.getProductsStream(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator(color: Color(0xFF15803D))),
-                );
-              }
+              // Category Chips Bar
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 48,
+                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    children: sortedCategories.map((cat) {
+                      final isSelected = _selectedCategory == cat;
+                      final labelText = cat == "ALL" ? "🛒 All Items" : cat;
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: FilterChip(
+                          selected: isSelected,
+                          label: Text(labelText),
+                          labelStyle: TextStyle(
+                            fontSize: 12,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            color: isSelected ? Colors.white : Colors.black87,
+                          ),
+                          selectedColor: const Color(0xFF15803D),
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(
+                              color: isSelected ? const Color(0xFF15803D) : const Color(0xFFE2E8F0),
+                            ),
+                          ),
+                          onSelected: (_) {
+                            setState(() => _selectedCategory = cat);
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
 
-              final products = snapshot.data ?? [];
-              final filtered = products.filter((p) {
-                final matchCat = _selectedCategory == ProductCategory.ALL || p.category == _selectedCategory;
-                final matchSearch = _searchQuery.isEmpty ||
-                    p.title.toLowerCase().contains(_searchQuery) ||
-                    p.description.toLowerCase().contains(_searchQuery);
-                return matchCat && matchSearch;
-              }).toList();
-
-              if (filtered.isEmpty) {
-                return const SliverFillRemaining(
+              if (filtered.isEmpty)
+                const SliverFillRemaining(
                   child: Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -368,34 +298,32 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                       ],
                     ),
                   ),
-                );
-              }
-
-              final screenWidth = MediaQuery.of(context).size.width;
-              final crossAxisCount = screenWidth > 900 ? 4 : (screenWidth > 600 ? 3 : 2);
-
-              return SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    childAspectRatio: 0.68,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final product = filtered[index];
-                      return _buildProductCard(context, product, cart);
-                    },
-                    childCount: filtered.length,
+                )
+              else
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: MediaQuery.of(context).size.width > 900
+                          ? 4
+                          : (MediaQuery.of(context).size.width > 600 ? 3 : 2),
+                      childAspectRatio: 0.68,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final product = filtered[index];
+                        return _buildProductCard(context, product, cart);
+                      },
+                      childCount: filtered.length,
+                    ),
                   ),
                 ),
-              );
-            },
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 80)),
-        ],
+              const SliverToBoxAdapter(child: SizedBox(height: 80)),
+            ],
+          );
+        },
       ),
 
       // Floating Action Button: Cart or Direct WhatsApp
