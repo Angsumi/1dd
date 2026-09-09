@@ -16,8 +16,7 @@
       --success: #10b981;
       --success-hover: #059669;
       --warning: #f59e0b;
-      --badge-bg: #3b82f620;
-      --badge-border: #3b82f650;
+      --danger: #ef4444;
     }
 
     * {
@@ -32,7 +31,7 @@
       background-color: var(--bg);
       color: var(--text-main);
       padding: 12px;
-      padding-bottom: 70px;
+      padding-bottom: 80px;
       min-height: 100vh;
     }
 
@@ -43,7 +42,7 @@
 
     /* Header */
     header {
-      padding: 12px 4px 14px 4px;
+      padding: 12px 4px 10px 4px;
       text-align: center;
     }
 
@@ -63,12 +62,39 @@
       margin-top: 4px;
     }
 
+    .top-action-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .action-btn-sm {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    .action-btn-sm:hover {
+      background: #334155;
+      color: #fff;
+    }
+
     /* Filter tabs */
     .filter-tabs {
       display: flex;
       gap: 6px;
       margin-top: 10px;
       justify-content: center;
+      flex-wrap: wrap;
     }
     .tab-btn {
       background: #1e293b;
@@ -222,17 +248,13 @@
       flex-direction: column;
       gap: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      transition: transform 0.1s ease, border-color 0.2s ease;
+      position: relative;
     }
 
     .card.pending-loc {
       border-style: dashed;
       border-color: #475569;
       background: #162032;
-    }
-
-    .card:active {
-      transform: scale(0.99);
     }
 
     .card-top {
@@ -283,18 +305,23 @@
       color: #94a3b8;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .person-phone a {
       color: #38bdf8;
       text-decoration: none;
       font-weight: 600;
+      background: #0f172a;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid #334155;
     }
 
     .status-tag {
       display: inline-block;
-      margin-top: 5px;
+      margin-top: 6px;
       font-size: 0.75rem;
       font-weight: 600;
       padding: 2px 8px;
@@ -326,7 +353,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       padding: 12px 14px;
       border-radius: 12px;
       font-size: 0.95rem;
@@ -343,7 +370,6 @@
       color: #ffffff;
       box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
     }
-
     .btn-maps:hover, .btn-maps:active {
       background: linear-gradient(135deg, #059669, #047857);
     }
@@ -353,7 +379,6 @@
       color: #ffffff;
       box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
     }
-
     .btn-call:hover, .btn-call:active {
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
     }
@@ -361,8 +386,37 @@
     .btn-pending {
       background: #334155;
       color: #94a3b8;
-      cursor: not-allowed;
+      cursor: pointer;
       border: 1px dashed #475569;
+    }
+    .btn-pending:hover {
+      background: #475569;
+      color: #fff;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 4px;
+      border-top: 1px solid #33415520;
+    }
+
+    .btn-edit {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-edit:hover {
+      color: #38bdf8;
+      background: #33415540;
     }
 
     .no-results {
@@ -370,10 +424,94 @@
       padding: 48px 16px;
       color: #64748b;
     }
-
     .no-results-icon {
       font-size: 2.5rem;
       margin-bottom: 8px;
+    }
+
+    /* Edit / Add Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-content {
+      background: #1e293b;
+      border: 1px solid #475569;
+      border-radius: 18px;
+      max-width: 480px;
+      width: 100%;
+      padding: 20px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+    .form-input {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      color: #fff;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--primary);
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn-save {
+      flex: 1;
+      background: var(--primary);
+      color: #fff;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-cancel {
+      background: #334155;
+      color: #cbd5e1;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -382,6 +520,12 @@
     <header>
       <h1>🛵 Rider Navigator</h1>
       <p class="subtitle">Quick search house & start GPS navigation (Houses 1 to 28)</p>
+      
+      <div class="top-action-bar">
+        <button class="action-btn-sm" id="addNewBtn">➕ Add House</button>
+        <button class="action-btn-sm" id="resetBtn" title="Reset to official data">🔄 Reset Data</button>
+      </div>
+
       <div class="filter-tabs">
         <button class="tab-btn active" data-tab="all" id="tabAll">All (28)</button>
         <button class="tab-btn" data-tab="ready" id="tabReady">📍 GPS Ready (16)</button>
@@ -424,9 +568,39 @@
     </div>
   </div>
 
+  <!-- Edit / Add Modal -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal-content">
+      <div class="modal-title">
+        <span id="modalHeading">Edit House Details</span>
+        <button class="modal-close" id="modalCloseBtn">✕</button>
+      </div>
+      <input type="hidden" id="editHouseNum" />
+      <div class="form-group">
+        <label>House Number *</label>
+        <input type="text" id="inputHouseNo" class="form-input" placeholder="e.g. 14, 05, 29" />
+      </div>
+      <div class="form-group">
+        <label>Customer Name / Landmark</label>
+        <input type="text" id="inputName" class="form-input" placeholder="e.g. Sabita, Near Temple" />
+      </div>
+      <div class="form-group">
+        <label>Phone Number(s)</label>
+        <input type="text" id="inputPhone" class="form-input" placeholder="e.g. 7670085339, 9854623350" />
+      </div>
+      <div class="form-group">
+        <label>Google Maps URL</label>
+        <input type="url" id="inputMapUrl" class="form-input" placeholder="https://maps.app.goo.gl/..." />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="modalCancelBtn">Cancel</button>
+        <button class="btn-save" id="modalSaveBtn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Complete list of houses from 1 to 28
-    const locationsData = [
+    const defaultLocationsData = [
       {
         houseNo: "01",
         houseNum: 1,
@@ -522,7 +696,7 @@
         houseNo: "14",
         houseNum: 14,
         name: "Sabita",
-        phone: "",
+        phone: "7670085339",
         mapUrl: "https://maps.app.goo.gl/QVwvqN7anfNiwQYQA?g_st=ac"
       },
       {
@@ -564,7 +738,7 @@
         houseNo: "20",
         houseNum: 20,
         name: "",
-        phone: "",
+        phone: "7670085339",
         mapUrl: "https://maps.app.goo.gl/MQz1hVKyWSGbWUpD8"
       },
       {
@@ -620,11 +794,23 @@
         houseNo: "28",
         houseNum: 28,
         name: "Dilman Basnet",
-        phone: "7002032307",
+        phone: "7002032307, 7670085339",
         mapUrl: "https://maps.app.goo.gl/9i81TRxZPc2dDScg7"
       }
     ];
 
+    // Load from localStorage or use defaults
+    function loadLocations() {
+      const saved = localStorage.getItem("rider_locations_v2");
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {}
+      }
+      return JSON.parse(JSON.stringify(defaultLocationsData));
+    }
+
+    let locationsData = loadLocations();
     let sortAsc = true;
     let activeTab = "all"; // "all" | "ready" | "pending"
 
@@ -636,7 +822,24 @@
     const sortToggle = document.getElementById("sortToggle");
     const quickChips = document.getElementById("quickChips");
 
-    // Build quick filter chips
+    // Modal elements
+    const editModal = document.getElementById("editModal");
+    const modalHeading = document.getElementById("modalHeading");
+    const editHouseNum = document.getElementById("editHouseNum");
+    const inputHouseNo = document.getElementById("inputHouseNo");
+    const inputName = document.getElementById("inputName");
+    const inputPhone = document.getElementById("inputPhone");
+    const inputMapUrl = document.getElementById("inputMapUrl");
+    const modalCloseBtn = document.getElementById("modalCloseBtn");
+    const modalCancelBtn = document.getElementById("modalCancelBtn");
+    const modalSaveBtn = document.getElementById("modalSaveBtn");
+    const addNewBtn = document.getElementById("addNewBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function saveLocations() {
+      localStorage.setItem("rider_locations_v2", JSON.stringify(locationsData));
+    }
+
     function renderChips() {
       quickChips.innerHTML = "";
       const allChip = document.createElement("div");
@@ -668,19 +871,25 @@
     }
 
     function cleanPhoneNumber(phone) {
-      return phone.replace(/[^\d+]/g, "");
+      // If multiple phones comma separated, take first for primary dial
+      const firstPhone = phone.split(",")[0].trim();
+      return firstPhone.replace(/[^\d+]/g, "");
     }
 
     function render() {
       const query = searchInput.value.trim().toLowerCase();
       clearBtn.style.display = query.length > 0 ? "flex" : "none";
 
+      const readyCount = locationsData.filter(i => Boolean(i.mapUrl)).length;
+      const pendingCount = locationsData.filter(i => !i.mapUrl).length;
+      document.getElementById("tabAll").textContent = `All (${locationsData.length})`;
+      document.getElementById("tabReady").textContent = `📍 GPS Ready (${readyCount})`;
+      document.getElementById("tabPending").textContent = `⏳ Pending (${pendingCount})`;
+
       let filtered = locationsData.filter(item => {
-        // Tab filter
         if (activeTab === "ready" && !item.mapUrl) return false;
         if (activeTab === "pending" && item.mapUrl) return false;
 
-        // Search query filter
         if (!query) return true;
         const matchHouse = item.houseNo.toLowerCase().includes(query) || item.houseNum.toString() === query;
         const matchName = item.name.toLowerCase().includes(query);
@@ -707,11 +916,22 @@
 
           card.className = `card ${hasMap ? '' : 'pending-loc'}`;
 
+          // Format multiple phones if present
+          let phoneMarkup = '';
+          if (item.phone) {
+            const phones = item.phone.split(',').map(p => p.trim()).filter(Boolean);
+            phoneMarkup = `
+              <div class="person-phone">
+                📞 ${phones.map(p => `<a href="tel:${p.replace(/[^\d+]/g, "")}">${p}</a>`).join(' ')}
+              </div>
+            `;
+          }
+
           card.innerHTML = `
             <div class="card-top">
               <div class="person-info">
-                <div class="person-name ${!item.name ? 'empty' : ''}">${item.name || 'House #' + item.houseNo + ' (Name not provided)'}</div>
-                ${item.phone ? `<div class="person-phone">📞 <a href="tel:${cleanPhone}">${item.phone}</a></div>` : ''}
+                <div class="person-name ${!item.name ? 'empty' : ''}">${item.name || 'House #' + item.houseNo + ' (Name not specified)'}</div>
+                ${phoneMarkup}
                 <div>
                   ${hasMap 
                     ? `<span class="status-tag ready">📍 GPS Location Linked</span>` 
@@ -727,9 +947,9 @@
                   <span>📍 Start Navigation</span>
                 </a>
               ` : `
-                <div class="btn btn-pending">
-                  <span>⏳ Location Not Linked</span>
-                </div>
+                <button class="btn btn-pending" onclick="openEditModal(${item.houseNum})">
+                  <span>➕ Add GPS Location Link</span>
+                </button>
               `}
               ${hasPhone ? `
                 <a href="tel:${cleanPhone}" class="btn btn-call">
@@ -737,11 +957,88 @@
                 </a>
               ` : ''}
             </div>
+
+            <div class="card-footer">
+              <button class="btn-edit" onclick="openEditModal(${item.houseNum})">
+                ✏️ Edit House Details
+              </button>
+            </div>
           `;
           cardsList.appendChild(card);
         });
       }
     }
+
+    // Modal handling
+    window.openEditModal = function(houseNum) {
+      const item = locationsData.find(i => i.houseNum === houseNum);
+      if (item) {
+        modalHeading.textContent = `Edit House #${item.houseNo}`;
+        editHouseNum.value = item.houseNum;
+        inputHouseNo.value = item.houseNo;
+        inputName.value = item.name;
+        inputPhone.value = item.phone;
+        inputMapUrl.value = item.mapUrl;
+      } else {
+        modalHeading.textContent = `Add New House`;
+        editHouseNum.value = "";
+        inputHouseNo.value = "";
+        inputName.value = "";
+        inputPhone.value = "";
+        inputMapUrl.value = "";
+      }
+      editModal.style.display = "flex";
+    };
+
+    function closeModal() {
+      editModal.style.display = "none";
+    }
+
+    modalCloseBtn.onclick = closeModal;
+    modalCancelBtn.onclick = closeModal;
+
+    modalSaveBtn.onclick = function() {
+      const hNo = inputHouseNo.value.trim();
+      if (!hNo) {
+        alert("Please enter a House Number");
+        return;
+      }
+      const num = parseInt(hNo.replace(/\D/g, ""), 10) || 0;
+      const targetNum = editHouseNum.value ? parseInt(editHouseNum.value, 10) : null;
+
+      const updatedObj = {
+        houseNo: hNo.length === 1 ? "0" + hNo : hNo,
+        houseNum: num,
+        name: inputName.value.trim(),
+        phone: inputPhone.value.trim(),
+        mapUrl: inputMapUrl.value.trim()
+      };
+
+      if (targetNum !== null && !isNaN(targetNum)) {
+        const idx = locationsData.findIndex(i => i.houseNum === targetNum);
+        if (idx !== -1) {
+          locationsData[idx] = updatedObj;
+        }
+      } else {
+        locationsData.push(updatedObj);
+      }
+
+      saveLocations();
+      closeModal();
+      renderChips();
+      render();
+    };
+
+    addNewBtn.onclick = () => window.openEditModal(null);
+
+    resetBtn.onclick = () => {
+      if (confirm("Reset all house records back to official defaults?")) {
+        localStorage.removeItem("rider_locations_v2");
+        locationsData = JSON.parse(JSON.stringify(defaultLocationsData));
+        renderChips();
+        render();
+      }
+    };
 
     // Tabs filter listeners
     document.querySelectorAll(".tab-btn").forEach(btn => {
