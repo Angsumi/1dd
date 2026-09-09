@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Rider Delivery Navigator</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --success-hover: #059669;
+      --accent: #f59e0b;
+      --badge-bg: #3b82f620;
+      --badge-border: #3b82f650;
+      --badge-text: #60a5fa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding: 12px;
+      padding-bottom: 60px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      padding: 12px 4px 16px 4px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    p.subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Sticky Search Bar */
+    .sticky-bar {
+      position: sticky;
+      top: 8px;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 6px 0 12px 0;
+    }
+
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 44px 14px 42px;
+      font-size: 1.05rem;
+      color: #fff;
+      outline: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+    }
+
+    .search-input::placeholder {
+      color: #64748b;
+    }
+
+    .clear-btn {
+      position: absolute;
+      right: 12px;
+      background: #334155;
+      border: none;
+      color: #cbd5e1;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 4px 12px 4px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .sort-badge {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: #cbd5e1;
+      user-select: none;
+    }
+
+    /* Delivery Cards List */
+    .cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      transition: transform 0.1s ease, border-color 0.2s ease;
+    }
+
+    .card:active {
+      transform: scale(0.99);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .house-badge {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+    }
+
+    .person-info {
+      flex: 1;
+    }
+
+    .person-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f8fafc;
+      line-height: 1.3;
+    }
+
+    .person-name.empty {
+      color: #64748b;
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .person-phone {
+      margin-top: 4px;
+      font-size: 0.95rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .person-phone a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Action Buttons */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .actions-grid.has-phone {
+      grid-template-columns: 2fr 1fr;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .btn-maps {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-maps:hover, .btn-maps:active {
+      background: linear-gradient(135deg, #059669, #047857);
+    }
+
+    .btn-call {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-call:hover, .btn-call:active {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 48px 16px;
+      color: #64748b;
+    }
+
+    .no-results-icon {
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+
+    /* Quick jump chips */
+    .quick-chips {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 4px 0 10px 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .quick-chips::-webkit-scrollbar {
+      display: none;
+    }
+    .chip {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .chip.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🛵 Rider Navigator</h1>
+      <p class="subtitle">Quick search house & start GPS navigation</p>
+    </header>
+
+    <div class="sticky-bar">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search House No, Name, Phone..."
+          autocomplete="off"
+          autofocus
+        />
+        <button id="clearBtn" class="clear-btn" title="Clear">✕</button>
+      </div>
+
+      <div class="quick-chips" id="quickChips">
+        <!-- Generated by JS -->
+      </div>
+
+      <div class="stats-bar">
+        <span id="resultCount">Showing 16 locations</span>
+        <span class="sort-badge" id="sortToggle">Sort: House # ⬆️</span>
+      </div>
+    </div>
+
+    <div class="cards-list" id="cardsList">
+      <!-- Cards rendered here by JS -->
+    </div>
+
+    <div id="noResults" class="no-results" style="display: none;">
+      <div class="no-results-icon">📍</div>
+      <div style="font-size: 1.1rem; font-weight: 600; color: #cbd5e1;">No matching location found</div>
+      <p style="margin-top: 4px; font-size: 0.9rem;">Try searching another house number or name.</p>
+    </div>
+  </div>
+
+  <script>
+    const locationsData = [
+      {
+        houseNo: "04",
+        houseNum: 4,
+        name: "Dibya ghoror fornt",
+        phone: "7086754681",
+        mapUrl: "https://maps.app.goo.gl/s744NJdENe5uVMacA?g_st=ac"
+      },
+      {
+        houseNo: "13",
+        houseNum: 13,
+        name: "Cobra Commando",
+        phone: "7099362096",
+        mapUrl: "https://maps.app.goo.gl/a5MNo8dJaN1hpNG48?g_st=ac"
+      },
+      {
+        houseNo: "14",
+        houseNum: 14,
+        name: "Sabita",
+        phone: "",
+        mapUrl: "https://maps.app.goo.gl/QVwvqN7anfNiwQYQA?g_st=ac"
+      },
+      {
+        houseNo: "15",
+        houseNum: 15,
+        name: "",
+        phone: "9394100250",
+        mapUrl: "https://maps.app.goo.gl/bHBwY42QcHyfS28m6?g_st=ac"
+      },
+      {
+        houseNo: "16",
+        houseNum: 16,
+        name: "",
+        phone: "9101648179",
+        mapUrl: "https://maps.app.goo.gl/a3FsrpPud7EUwHei8?g_st=ac"
+      },
+      {
+        houseNo: "17",
+        houseNum: 17,
+        name: "",
+        phone: "8471919773",
+        mapUrl: "https://maps.app.goo.gl/z675aZUfW47LzVMz7?g_st=ac"
+      },
+      {
+        houseNo: "18",
+        houseNum: 18,
+        name: "President baideur ghor",
+        phone: "9706540655",
+        mapUrl: "https://maps.app.goo.gl/p8JqhW3iU7Y7ogn56?g_st=ac"
+      },
+      {
+        houseNo: "19",
+        houseNum: 19,
+        name: "",
+        phone: "9954139339",
+        mapUrl: "https://maps.app.goo.gl/PZsaijWZkknnCM2U8?g_st=ac"
+      },
+      {
+        houseNo: "20",
+        houseNum: 20,
+        name: "",
+        phone: "",
+        mapUrl: "https://maps.app.goo.gl/MQz1hVKyWSGbWUpD8"
+      },
+      {
+        houseNo: "21",
+        houseNum: 21,
+        name: "LP school r kaxere virorole ghor",
+        phone: "9854623350",
+        mapUrl: "https://maps.app.goo.gl/8wKukvSmjoGjwEcj6"
+      },
+      {
+        houseNo: "23",
+        houseNum: 23,
+        name: "Minute gharae front",
+        phone: "+91 69009 91068",
+        mapUrl: "https://maps.app.goo.gl/JELJ69K75fyQU4st8?g_st=ac"
+      },
+      {
+        houseNo: "24",
+        houseNum: 24,
+        name: "Madhusmita Das",
+        phone: "91012 70447",
+        mapUrl: "https://maps.app.goo.gl/CsjFguMRevvQSVME7"
+      },
+      {
+        houseNo: "25",
+        houseNum: 25,
+        name: "Bharat Basnet",
+        phone: "9365127726",
+        mapUrl: "https://maps.app.goo.gl/kG6SUhohdHUwCisQ9?g_st=ac"
+      },
+      {
+        houseNo: "26",
+        houseNum: 26,
+        name: "Hari khura",
+        phone: "8011759452",
+        mapUrl: "https://maps.app.goo.gl/U1Ssnt4zTe3A1E1q6?g_st=ac"
+      },
+      {
+        houseNo: "27",
+        houseNum: 27,
+        name: "ranjan Basnet",
+        phone: "+917002560576",
+        mapUrl: "https://maps.app.goo.gl/U1Ssnt4zTe3A1E1q6?g_st=ac"
+      },
+      {
+        houseNo: "28",
+        houseNum: 28,
+        name: "Dilman Basnet",
+        phone: "7002032307",
+        mapUrl: "https://maps.app.goo.gl/9i81TRxZPc2dDScg7"
+      }
+    ];
+
+    let sortAsc = true;
+    let currentFilter = "";
+
+    const searchInput = document.getElementById("searchInput");
+    const clearBtn = document.getElementById("clearBtn");
+    const cardsList = document.getElementById("cardsList");
+    const noResults = document.getElementById("noResults");
+    const resultCount = document.getElementById("resultCount");
+    const sortToggle = document.getElementById("sortToggle");
+    const quickChips = document.getElementById("quickChips");
+
+    // Build quick filter chips
+    function renderChips() {
+      const allChip = document.createElement("div");
+      allChip.className = "chip active";
+      allChip.textContent = "All Houses";
+      allChip.onclick = () => {
+        searchInput.value = "";
+        currentFilter = "";
+        updateChipsActive(allChip);
+        render();
+      };
+      quickChips.appendChild(allChip);
+
+      // Unique house numbers
+      locationsData.forEach(item => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.textContent = `#${item.houseNo}`;
+        chip.onclick = () => {
+          searchInput.value = item.houseNo;
+          currentFilter = item.houseNo;
+          updateChipsActive(chip);
+          render();
+        };
+        quickChips.appendChild(chip);
+      });
+    }
+
+    function updateChipsActive(activeEl) {
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      if (activeEl) activeEl.classList.add("active");
+    }
+
+    function cleanPhoneNumber(phone) {
+      return phone.replace(/[^\d+]/g, "");
+    }
+
+    function render() {
+      const query = searchInput.value.trim().toLowerCase();
+      clearBtn.style.display = query.length > 0 ? "flex" : "none";
+
+      let filtered = locationsData.filter(item => {
+        const matchHouse = item.houseNo.toLowerCase().includes(query) || item.houseNum.toString() === query;
+        const matchName = item.name.toLowerCase().includes(query);
+        const matchPhone = item.phone.toLowerCase().replace(/\s+/g, "").includes(query.replace(/\s+/g, ""));
+        return matchHouse || matchName || matchPhone;
+      });
+
+      filtered.sort((a, b) => sortAsc ? a.houseNum - b.houseNum : b.houseNum - a.houseNum);
+
+      cardsList.innerHTML = "";
+
+      if (filtered.length === 0) {
+        noResults.style.display = "block";
+        resultCount.textContent = "0 locations";
+      } else {
+        noResults.style.display = "none";
+        resultCount.textContent = `Showing ${filtered.length} of ${locationsData.length} locations`;
+
+        filtered.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "card";
+
+          const cleanPhone = item.phone ? cleanPhoneNumber(item.phone) : "";
+          const hasPhone = Boolean(cleanPhone);
+
+          card.innerHTML = `
+            <div class="card-top">
+              <div class="person-info">
+                <div class="person-name ${!item.name ? 'empty' : ''}">${item.name || 'Unnamed Location / Customer'}</div>
+                ${item.phone ? `<div class="person-phone">📞 <a href="tel:${cleanPhone}">${item.phone}</a></div>` : ''}
+              </div>
+              <div class="house-badge"># ${item.houseNo}</div>
+            </div>
+
+            <div class="actions-grid ${hasPhone ? 'has-phone' : ''}">
+              <a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-maps">
+                <span>📍 Start Navigation</span>
+              </a>
+              ${hasPhone ? `
+                <a href="tel:${cleanPhone}" class="btn btn-call">
+                  <span>📞 Call</span>
+                </a>
+              ` : ''}
+            </div>
+          `;
+          cardsList.appendChild(card);
+        });
+      }
+    }
+
+    // Event Listeners
+    searchInput.addEventListener("input", () => {
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      render();
+    });
+
+    clearBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      document.querySelector(".chip")?.classList.add("active");
+      render();
+      searchInput.focus();
+    });
+
+    sortToggle.addEventListener("click", () => {
+      sortAsc = !sortAsc;
+      sortToggle.textContent = sortAsc ? "Sort: House # ⬆️" : "Sort: House # ⬇️";
+      render();
+    });
+
+    // Initial render
+    renderChips();
+    render();
+  </script>
+</body>
+</html>
