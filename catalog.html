@@ -1,0 +1,3684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1DD Grocery - Product & Pricing Master Catalog</title>
+  <meta name="description" content="1DD Grocery catalog with small row thumbnails, selling prices, buying costs, profit margins, brand and category filters." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-card: #151d30;
+      --surface-hover: #27354f;
+      --surface-active: #334155;
+      --border: #334155;
+      --border-subtle: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --primary-glow: rgba(56, 189, 248, 0.18);
+      --accent: #818cf8;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-card: #f1f5f9;
+      --surface-hover: #f1f5f9;
+      --surface-active: #e2e8f0;
+      --border: #e2e8f0;
+      --border-subtle: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-glow: rgba(2, 132, 199, 0.12);
+      --accent: #4f46e5;
+      --success: #059669;
+      --success-bg: #d1fae5;
+      --warning: #d97706;
+      --warning-bg: #fef3c7;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-container {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+
+    /* Header Section */
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #fff;
+      font-weight: 800;
+      font-size: 19px;
+      padding: 6px 14px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .header-title-group h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-title-group p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .action-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary);
+    }
+
+    /* Stats Ribbon */
+    .stats-ribbon {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--text-main);
+    }
+
+    .stat-meta {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* Controls & Filter Toolbar */
+    .toolbar-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .toolbar-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .search-wrapper svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 9px 12px 9px 38px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .filter-select {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+      min-width: 150px;
+      max-width: 220px;
+    }
+
+    .filter-select:focus {
+      border-color: var(--primary);
+    }
+
+    .segmented-control {
+      display: flex;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .segment-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .segment-btn.active {
+      background: var(--primary);
+      color: #0b132b;
+    }
+    [data-theme="light"] .segment-btn.active {
+      color: #fff;
+    }
+
+    /* Category Quick Filter Chips */
+    .chips-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+    }
+
+    .chips-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .chips-scroll::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    .chip {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .chip:hover {
+      color: var(--text-main);
+      border-color: var(--primary);
+    }
+
+    .chip.active {
+      background: var(--primary-glow);
+      color: var(--primary);
+      border-color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Active Filter Summary Bar */
+    .filter-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .reset-btn {
+      color: var(--primary);
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Table Layout */
+    .table-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13.5px;
+      white-space: nowrap;
+    }
+
+    .product-table th {
+      background: var(--surface-card);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--border);
+      user-select: none;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .product-table th.sortable {
+      cursor: pointer;
+    }
+
+    .product-table th.sortable:hover {
+      color: var(--primary);
+      background: var(--surface-hover);
+    }
+
+    .sort-icon {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 10px;
+      opacity: 0.4;
+      transition: opacity 0.2s;
+    }
+
+    .product-table th.active-sort .sort-icon {
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    .product-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.15s ease;
+    }
+
+    .product-table tbody tr:hover {
+      background-color: var(--surface-hover);
+    }
+
+    .product-table td {
+      padding: 10px 14px;
+      vertical-align: middle;
+    }
+
+    /* Compact / Spacious Density */
+    body.density-compact .product-table td {
+      padding: 6px 10px;
+      font-size: 12.5px;
+    }
+    body.density-compact .thumb-wrapper {
+      width: 36px;
+      height: 36px;
+    }
+    body.density-spacious .product-table td {
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+    body.density-spacious .thumb-wrapper {
+      width: 52px;
+      height: 52px;
+    }
+
+    /* Small Images in Rows */
+    .thumb-wrapper {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .thumb-wrapper:hover {
+      transform: scale(1.15);
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 5;
+    }
+
+    .thumb-img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Product Title & Details */
+    .prod-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: normal;
+      min-width: 250px;
+      max-width: 360px;
+    }
+
+    .prod-title {
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+      font-size: 13.5px;
+      cursor: pointer;
+    }
+
+    .prod-title:hover {
+      color: var(--primary);
+    }
+
+    .pack-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--surface-active);
+      color: #cbd5e1;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-top: 3px;
+    }
+    [data-theme="light"] .pack-badge {
+      color: #475569;
+    }
+
+    .brand-cell {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .category-badge {
+      font-size: 11.5px;
+      font-weight: 500;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    /* Numbers & Currency Columns */
+    .num-cell {
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .buying-cost {
+      color: var(--text-muted);
+    }
+
+    .selling-price {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .profit-cell {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .margin-pill {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .margin-high {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .margin-mid {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .margin-low {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .stock-badge {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--success);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stock-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+    }
+
+    .link-icon-btn {
+      color: var(--text-dim);
+      padding: 5px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s, background-color 0.15s;
+      text-decoration: none;
+    }
+
+    .link-icon-btn:hover {
+      color: var(--primary);
+      background: var(--surface-active);
+    }
+
+    /* Modal for Image Preview & Details */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      max-width: 650px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      overflow: hidden;
+      animation: modalSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalSlide {
+      from { transform: translateY(20px) scale(0.97); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .modal-close:hover {
+      color: var(--text-main);
+    }
+
+    .modal-body {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 620px) {
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .modal-img-wrap {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .modal-img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .modal-info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .modal-info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .modal-info-row .lbl {
+      color: var(--text-muted);
+    }
+
+    .modal-info-row .val {
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .modal-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-top: 6px;
+    }
+
+    .modal-footer {
+      padding: 12px 20px;
+      background: var(--surface-card);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .toolbar-panel, .header-actions, .stats-ribbon, .filter-status {
+        display: none !important;
+      }
+      .table-container {
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+      }
+      .product-table th, .product-table td {
+        border-color: #eee !important;
+        color: #000 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="top-bar">
+      <div class="branding">
+        <div class="logo-badge">1DD</div>
+        <div class="header-title-group">
+          <h1>Product & Pricing Master Catalog</h1>
+          <p>Complete product inventory breakdown with buying cost, selling price, profit margins & small thumbnail rows</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="action-btn" id="themeToggle" title="Toggle Dark/Light Mode">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <span id="themeText">Theme</span>
+        </button>
+        <button class="action-btn" id="exportCsvBtn" title="Download filtered data as CSV">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Export CSV
+        </button>
+        <button class="action-btn" onclick="window.print()" title="Print Catalog">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          Print
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Ribbon -->
+    <div class="stats-ribbon">
+      <div class="stat-card">
+        <span class="stat-label">Total Products</span>
+        <span class="stat-value" id="statTotalCount">128</span>
+        <span class="stat-meta" id="statFilteredMeta">All catalog items</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Selling Value</span>
+        <span class="stat-value" id="statTotalSelling">₹0</span>
+        <span class="stat-meta">Sum of 1 unit per item</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Cost Value</span>
+        <span class="stat-value" id="statTotalCost">₹0</span>
+        <span class="stat-meta">Sum of buying cost</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Potential Profit</span>
+        <span class="stat-value" id="statTotalProfit" style="color: var(--success);">₹0</span>
+        <span class="stat-meta" id="statAvgMargin">Avg Margin: 0%</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filter & Search Toolbar -->
+  <section class="toolbar-panel">
+    <div class="toolbar-row">
+      <div class="search-wrapper">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by name, brand, category, pack size, ID..." autocomplete="off" />
+      </div>
+
+      <div class="filter-group">
+        <select id="categoryFilter" class="filter-select">
+          <option value="">All Categories (All)</option>
+        </select>
+
+        <select id="brandFilter" class="filter-select">
+          <option value="">All Brands (All)</option>
+        </select>
+
+        <select id="marginFilter" class="filter-select">
+          <option value="">All Margins</option>
+          <option value="high">High Margin (&ge; 20%)</option>
+          <option value="mid">Medium Margin (10% - 19%)</option>
+          <option value="low">Low Margin (&lt; 10%)</option>
+        </select>
+
+        <div class="segmented-control" title="Table Row Density">
+          <button class="segment-btn" data-density="compact">Compact</button>
+          <button class="segment-btn active" data-density="normal">Normal</button>
+          <button class="segment-btn" data-density="spacious">Spacious</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Chips -->
+    <div class="chips-scroll" id="categoryChips">
+      <button class="chip active" data-cat="">All Categories</button>
+    </div>
+  </section>
+
+  <!-- Filter status bar -->
+  <div class="filter-status">
+    <span id="resultsCount">Showing 128 products</span>
+    <button class="reset-btn" id="resetFiltersBtn" style="display: none;">Reset all filters</button>
+  </div>
+
+  <!-- Data Table Container -->
+  <div class="table-container">
+    <table class="product-table" id="productTable">
+      <thead>
+        <tr>
+          <th style="width: 45px; text-align: center;">#</th>
+          <th style="width: 60px; text-align: center;">Image</th>
+          <th class="sortable" data-sort="title">Product Name <span class="sort-icon">&uarr;&darr;</span></th>
+          <th class="sortable" data-sort="category">Category <span class="sort-icon">&uarr;&darr;</span></th>
+          <th class="sortable" data-sort="brand">Brand <span class="sort-icon">&uarr;&darr;</span></th>
+          <th class="sortable" data-sort="pack_size">Pack Size <span class="sort-icon">&uarr;&darr;</span></th>
+          <th class="sortable" data-sort="buying_cost" style="text-align: right;">Buying Cost <span class="sort-icon">&uarr;&darr;</span></th>
+          <th class="sortable" data-sort="price" style="text-align: right;">Selling Price <span class="sort-icon">&uarr;&darr;</span></th>
+          <th class="sortable" data-sort="profit" style="text-align: right;">Profit (₹) <span class="sort-icon">&uarr;&darr;</span></th>
+          <th class="sortable" data-sort="margin_pct" style="text-align: center;">Margin % <span class="sort-icon">&uarr;&darr;</span></th>
+          <th style="text-align: center;">Status</th>
+          <th style="text-align: center; width: 60px;">Link</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Rendered via JS -->
+      </tbody>
+    </table>
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom: 12px; color: var(--text-dim);"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path><path d="M8 11h6"></path></svg>
+      <h3>No products matched your filters</h3>
+      <p style="margin-top: 6px;">Try adjusting your search terms or resetting the active category/brand filter.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Product Preview Modal -->
+<div class="modal-backdrop" id="productModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="modalTitle">Product Details</h3>
+      <button class="modal-close" id="modalCloseBtn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-img-wrap">
+        <img id="modalImg" src="" alt="Product Image" />
+      </div>
+      <div class="modal-info">
+        <div class="modal-info-row">
+          <span class="lbl">Product ID</span>
+          <span class="val" id="modalId" style="font-size: 11px;"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="lbl">Category</span>
+          <span class="val" id="modalCategory"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="lbl">Brand</span>
+          <span class="val" id="modalBrand"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="lbl">Pack Size</span>
+          <span class="val" id="modalPack"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="lbl">Buying Cost</span>
+          <span class="val" id="modalCost" style="color: var(--text-muted);"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="lbl">Selling Price</span>
+          <span class="val" id="modalPrice" style="color: var(--primary);"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="lbl">Profit per Unit</span>
+          <span class="val" id="modalProfit" style="color: var(--success);"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="lbl">Margin % (on MRP)</span>
+          <span class="val" id="modalMargin"></span>
+        </div>
+        <p class="modal-desc" id="modalDesc"></p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#" target="_blank" class="action-btn" id="modalStoreLink" style="background: var(--primary); color: #0b132b; border: none; font-weight: 700;">
+        Open in Store
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Embedded dataset
+  const PRODUCTS_DATA = [
+  {
+    "id": "1dd-aashirvaad-shudh-chakki-whole-wheat-atta-1-kg-r13",
+    "title": "Aata | Aashirvaad | 1 kg",
+    "buying_cost": 55.0,
+    "price": 60.0,
+    "profit": 5.0,
+    "margin_pct": 8.3,
+    "markup_pct": 9.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Aashirvaad",
+    "category": "Atta & Flour",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-aashirvaad-shudh-chakki-whole-wheat-atta-1-kg-r13",
+    "image_link": "https://1dd.web.app/images/products/Aata%20%7C%20Aashirvaad%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Aata%20%7C%20Aashirvaad%20%7C%201%20kg.jpg",
+    "description": "Aata | Aashirvaad | 1 kg. Fresh quality atta & flour available for fast 1-day home delivery across town at best price \u20b960."
+  },
+  {
+    "id": "1dd-aashirvaad-shudh-chakki-whole-wheat-atta-2kg-r14",
+    "title": "Aata | Aashirvaad | 2kg",
+    "buying_cost": 105.0,
+    "price": 120.0,
+    "profit": 15.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Aashirvaad",
+    "category": "Atta & Flour",
+    "pack_size": "2kg",
+    "link": "https://1dd.web.app/?item=1dd-aashirvaad-shudh-chakki-whole-wheat-atta-2kg-r14",
+    "image_link": "https://1dd.web.app/images/products/Aata%20%7C%20Aashirvaad%20%7C%202kg.jpg",
+    "local_image": "product_images/Aata%20%7C%20Aashirvaad%20%7C%202kg.jpg",
+    "description": "Aata | Aashirvaad | 2kg. Fresh quality atta & flour available for fast 1-day home delivery across town at best price \u20b9120."
+  },
+  {
+    "id": "1dd-fortune-chakki-fresh-wheat-atta-1-kg-r15",
+    "title": "Aata | Fortune Chakki Fresh | 1 kg",
+    "buying_cost": 45.0,
+    "price": 50.0,
+    "profit": 5.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Fortune",
+    "category": "Atta & Flour",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-fortune-chakki-fresh-wheat-atta-1-kg-r15",
+    "image_link": "https://1dd.web.app/images/products/Aata%20%7C%20Fortune%20Chakki%20Fresh%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Aata%20%7C%20Fortune%20Chakki%20Fresh%20%7C%201%20kg.jpg",
+    "description": "Aata | Fortune Chakki Fresh | 1 kg. Fresh quality atta & flour available for fast 1-day home delivery across town at best price \u20b950."
+  },
+  {
+    "id": "1dd-fresh-chakki-atta-loose-khula-1-kg-r16",
+    "title": "Aata | Loose Atta | 1 kg",
+    "buying_cost": 35.0,
+    "price": 40.0,
+    "profit": 5.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Local Chakki",
+    "category": "Atta & Flour",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-fresh-chakki-atta-loose-khula-1-kg-r16",
+    "image_link": "https://1dd.web.app/images/products/Aata%20%7C%20Loose%20Atta%20%7C%201%20kg.jpeg",
+    "local_image": "product_images/Aata%20%7C%20Loose%20Atta%20%7C%201%20kg.jpeg",
+    "description": "Aata | Loose Atta | 1 kg. Fresh quality atta & flour available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-eveready-aa-big-pencil-batteries-2-pieces-r102",
+    "title": "Battery | Eveready AA (Big) | 2 pieces",
+    "buying_cost": 15.0,
+    "price": 20.0,
+    "profit": 5.0,
+    "margin_pct": 25.0,
+    "markup_pct": 33.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Eveready",
+    "category": "Batteries & Electricals",
+    "pack_size": "2 pieces",
+    "link": "https://1dd.web.app/?item=1dd-eveready-aa-big-pencil-batteries-2-pieces-r102",
+    "image_link": "https://1dd.web.app/images/products/Battery%20%7C%20Eveready%20AA%20(Big)%20%7C%202%20pieces.jpg",
+    "local_image": "product_images/Battery%20%7C%20Eveready%20AA%20%28Big%29%20%7C%202%20pieces.jpg",
+    "description": "Battery | Eveready AA (Big) | 2 pieces. Fresh quality batteries & electricals available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-eveready-aaa-small-pencil-batteries-1packet-r101",
+    "title": "Battery | Eveready AAA (Small) | 1packet",
+    "buying_cost": 12.0,
+    "price": 15.0,
+    "profit": 3.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Eveready",
+    "category": "Batteries & Electricals",
+    "pack_size": "1packet",
+    "link": "https://1dd.web.app/?item=1dd-eveready-aaa-small-pencil-batteries-1packet-r101",
+    "image_link": "https://1dd.web.app/images/products/Battery%20%7C%20Eveready%20AAA%20(Small)%20%7C%201packet.jpg",
+    "local_image": "product_images/Battery%20%7C%20Eveready%20AAA%20%28Small%29%20%7C%201packet.jpg",
+    "description": "Battery | Eveready AAA (Small) | 1packet. Fresh quality batteries & electricals available for fast 1-day home delivery across town at best price \u20b915."
+  },
+  {
+    "id": "1dd-fortune-100-chana-dal-besan-500g-r29",
+    "title": "Besan | Fortune | 500g",
+    "buying_cost": 45.0,
+    "price": 50.0,
+    "profit": 5.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Fortune",
+    "category": "Breakfast & Staples",
+    "pack_size": "500g",
+    "link": "https://1dd.web.app/?item=1dd-fortune-100-chana-dal-besan-500g-r29",
+    "image_link": "https://1dd.web.app/images/products/Besan%20%7C%20Fortune%20%7C%20500g.png",
+    "local_image": "product_images/Besan%20%7C%20Fortune%20%7C%20500g.png",
+    "description": "Besan | Fortune | 500g. Fresh quality breakfast & staples available for fast 1-day home delivery across town at best price \u20b950."
+  },
+  {
+    "id": "1dd-bikaji-aslee-bikaneri-bhujia-200g-r125",
+    "title": "Bikaji | Bhujia | 200g",
+    "buying_cost": 50.0,
+    "price": 60.0,
+    "profit": 10.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Bikaji",
+    "category": "Namkeen & Snacks",
+    "pack_size": "200g",
+    "link": "https://1dd.web.app/?item=1dd-bikaji-aslee-bikaneri-bhujia-200g-r125",
+    "image_link": "https://1dd.web.app/images/products/Bikaji%20%7C%20Bhujia%20%7C%20200g.jpg",
+    "local_image": "product_images/Bikaji%20%7C%20Bhujia%20%7C%20200g.jpg",
+    "description": "Bikaji | Bhujia | 200g. Fresh quality namkeen & snacks available for fast 1-day home delivery across town at best price \u20b960."
+  },
+  {
+    "id": "1dd-bikaji-kolkata-special-jhal-chanachur-200g-r129",
+    "title": "Bikaji | Kolkata Jhal | 200g",
+    "buying_cost": 50.0,
+    "price": 60.0,
+    "profit": 10.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Bikaji",
+    "category": "Namkeen & Snacks",
+    "pack_size": "200g",
+    "link": "https://1dd.web.app/?item=1dd-bikaji-kolkata-special-jhal-chanachur-200g-r129",
+    "image_link": "https://1dd.web.app/images/products/Bikaji%20%7C%20Kolkata%20Jhal%20%7C%20200g.jpg",
+    "local_image": "product_images/Bikaji%20%7C%20Kolkata%20Jhal%20%7C%20200g.jpg",
+    "description": "Bikaji | Kolkata Jhal | 200g. Fresh quality namkeen & snacks available for fast 1-day home delivery across town at best price \u20b960."
+  },
+  {
+    "id": "1dd-bikaji-kuch-kuch-all-in-one-mixture-200g-r127",
+    "title": "Bikaji | Kuch Kuch | 200g",
+    "buying_cost": 50.0,
+    "price": 60.0,
+    "profit": 10.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Bikaji",
+    "category": "Namkeen & Snacks",
+    "pack_size": "200g",
+    "link": "https://1dd.web.app/?item=1dd-bikaji-kuch-kuch-all-in-one-mixture-200g-r127",
+    "image_link": "https://1dd.web.app/images/products/Bikaji%20%7C%20Kuch%20Kuch%20%7C%20200g.jpg",
+    "local_image": "product_images/Bikaji%20%7C%20Kuch%20Kuch%20%7C%20200g.jpg",
+    "description": "Bikaji | Kuch Kuch | 200g. Fresh quality namkeen & snacks available for fast 1-day home delivery across town at best price \u20b960."
+  },
+  {
+    "id": "1dd-bikaji-sab-kuch-navratna-mixture-200g-r128",
+    "title": "Bikaji | Sab Kuch | 200g",
+    "buying_cost": 50.0,
+    "price": 60.0,
+    "profit": 10.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Bikaji",
+    "category": "Namkeen & Snacks",
+    "pack_size": "200g",
+    "link": "https://1dd.web.app/?item=1dd-bikaji-sab-kuch-navratna-mixture-200g-r128",
+    "image_link": "https://1dd.web.app/images/products/Bikaji%20%7C%20Sab%20Kuch%20%7C%20200g.png",
+    "local_image": "product_images/Bikaji%20%7C%20Sab%20Kuch%20%7C%20200g.png",
+    "description": "Bikaji | Sab Kuch | 200g. Fresh quality namkeen & snacks available for fast 1-day home delivery across town at best price \u20b960."
+  },
+  {
+    "id": "1dd-anmol-khasta-crispy-biscuits-r113",
+    "title": "Biscuit | Anmol (Khasta) | Standard",
+    "buying_cost": 18.0,
+    "price": 20.0,
+    "profit": 2.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Anmol",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Khasta",
+    "link": "https://1dd.web.app/?item=1dd-anmol-khasta-crispy-biscuits-r113",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Anmol%20(Khasta)%20%7C%20Standard.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Anmol%20%28Khasta%29%20%7C%20Standard.jpg",
+    "description": "Biscuit | Anmol (Khasta) | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-anmol-salty-crispy-biscuits-r111",
+    "title": "Biscuit | Anmol (Salty) | Standard",
+    "buying_cost": 18.0,
+    "price": 20.0,
+    "profit": 2.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Anmol",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Salty",
+    "link": "https://1dd.web.app/?item=1dd-anmol-salty-crispy-biscuits-r111",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Anmol%20(Salty)%20%7C%20Standard.png",
+    "local_image": "product_images/Biscuit%20%7C%20Anmol%20%28Salty%29%20%7C%20Standard.png",
+    "description": "Biscuit | Anmol (Salty) | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-anmol-sugarfree-crispy-biscuits-r114",
+    "title": "Biscuit | Anmol (SugarFree) | Standard",
+    "buying_cost": 18.0,
+    "price": 20.0,
+    "profit": 2.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Anmol",
+    "category": "Biscuits & Bakery",
+    "pack_size": "SugarFree",
+    "link": "https://1dd.web.app/?item=1dd-anmol-sugarfree-crispy-biscuits-r114",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Anmol%20(SugarFree)%20%7C%20Standard.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Anmol%20%28SugarFree%29%20%7C%20Standard.jpg",
+    "description": "Biscuit | Anmol (SugarFree) | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-anmol-sweet-crispy-biscuits-r112",
+    "title": "Biscuit | Anmol (Sweet) | Standard",
+    "buying_cost": 18.0,
+    "price": 20.0,
+    "profit": 2.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Anmol",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Sweet",
+    "link": "https://1dd.web.app/?item=1dd-anmol-sweet-crispy-biscuits-r112",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Anmol%20(Sweet)%20%7C%20Standard.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Anmol%20%28Sweet%29%20%7C%20Standard.jpg",
+    "description": "Biscuit | Anmol (Sweet) | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-britannia-good-day-rich-butter-cookies-family-pack-r115",
+    "title": "Biscuit | Britannia Good Day | Standard",
+    "buying_cost": 36.0,
+    "price": 40.0,
+    "profit": 4.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Britannia",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Standard",
+    "link": "https://1dd.web.app/?item=1dd-britannia-good-day-rich-butter-cookies-family-pack-r115",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Good%20Day%20%7C%20Standard.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Britannia%20Good%20Day%20%7C%20Standard.jpg",
+    "description": "Biscuit | Britannia Good Day | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-britannia-marie-gold-tea-biscuits-big-pack-r109",
+    "title": "Biscuit | Britannia Marie Gold | Big",
+    "buying_cost": 36.0,
+    "price": 40.0,
+    "profit": 4.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Britannia",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Big",
+    "link": "https://1dd.web.app/?item=1dd-britannia-marie-gold-tea-biscuits-big-pack-r109",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Marie%20Gold%20%7C%20Big.png",
+    "local_image": "product_images/Biscuit%20%7C%20Britannia%20Marie%20Gold%20%7C%20Big.png",
+    "description": "Biscuit | Britannia Marie Gold | Big. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-britannia-marie-gold-tea-biscuits-small-pack-r108",
+    "title": "Biscuit | Britannia Marie Gold | Small",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Britannia",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Small",
+    "link": "https://1dd.web.app/?item=1dd-britannia-marie-gold-tea-biscuits-small-pack-r108",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Marie%20Gold%20%7C%20Small.webp",
+    "local_image": "product_images/Biscuit%20%7C%20Britannia%20Marie%20Gold%20%7C%20Small.webp",
+    "description": "Biscuit | Britannia Marie Gold | Small. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-britannia-nutrichoice-digestive-high-fibre-biscuits-big-r118",
+    "title": "Biscuit | Britannia NutriChoice | Big",
+    "buying_cost": 45.0,
+    "price": 50.0,
+    "profit": 5.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Britannia",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Big",
+    "link": "https://1dd.web.app/?item=1dd-britannia-nutrichoice-digestive-high-fibre-biscuits-big-r118",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20NutriChoice%20%7C%20Big.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Britannia%20NutriChoice%20%7C%20Big.jpg",
+    "description": "Biscuit | Britannia NutriChoice | Big. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b950."
+  },
+  {
+    "id": "1dd-britannia-nutrichoice-digestive-high-fibre-biscuits-small-r117",
+    "title": "Biscuit | Britannia NutriChoice | Small",
+    "buying_cost": 18.0,
+    "price": 20.0,
+    "profit": 2.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Britannia",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Small",
+    "link": "https://1dd.web.app/?item=1dd-britannia-nutrichoice-digestive-high-fibre-biscuits-small-r117",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20NutriChoice%20%7C%20Small.png",
+    "local_image": "product_images/Biscuit%20%7C%20Britannia%20NutriChoice%20%7C%20Small.png",
+    "description": "Biscuit | Britannia NutriChoice | Small. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-britannia-toastea-premium-crispy-bake-rusk-r121",
+    "title": "Biscuit | Britannia Premium Rusk | Standard",
+    "buying_cost": 36.0,
+    "price": 40.0,
+    "profit": 4.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Britannia",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Standard",
+    "link": "https://1dd.web.app/?item=1dd-britannia-toastea-premium-crispy-bake-rusk-r121",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Premium%20Rusk%20%7C%20Standard.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Britannia%20Premium%20Rusk%20%7C%20Standard.jpg",
+    "description": "Biscuit | Britannia Premium Rusk | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-britannia-top-gold-butter-crackers-standard-r110",
+    "title": "Biscuit | Britannia Top Gold | Standard",
+    "buying_cost": 27.0,
+    "price": 30.0,
+    "profit": 3.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Britannia",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Standard",
+    "link": "https://1dd.web.app/?item=1dd-britannia-top-gold-butter-crackers-standard-r110",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Britannia%20Top%20Gold%20%7C%20Standard.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Britannia%20Top%20Gold%20%7C%20Standard.jpg",
+    "description": "Biscuit | Britannia Top Gold | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b930."
+  },
+  {
+    "id": "1dd-malkist-crunchy-cheese-butter-crackers-r116",
+    "title": "Biscuit | Malkist | Standard",
+    "buying_cost": 50.0,
+    "price": 55.0,
+    "profit": 5.0,
+    "margin_pct": 9.1,
+    "markup_pct": 10.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Malkist",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Standard",
+    "link": "https://1dd.web.app/?item=1dd-malkist-crunchy-cheese-butter-crackers-r116",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Malkist%20%7C%20Standard.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Malkist%20%7C%20Standard.jpg",
+    "description": "Biscuit | Malkist | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b955."
+  },
+  {
+    "id": "1dd-parle-g-original-gluco-biscuits-standard-r120",
+    "title": "Biscuit | Parle-G | Standard",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Parle",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Standard",
+    "link": "https://1dd.web.app/?item=1dd-parle-g-original-gluco-biscuits-standard-r120",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Parle-G%20%7C%20Standard.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Parle-G%20%7C%20Standard.jpg",
+    "description": "Biscuit | Parle-G | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-crispy-sweet-toast-rusk-sweet-r119",
+    "title": "Biscuit | Sweet Toast Rusk | Standard",
+    "buying_cost": 45.0,
+    "price": 50.0,
+    "profit": 5.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Bakery Fresh",
+    "category": "Biscuits & Bakery",
+    "pack_size": "Sweet",
+    "link": "https://1dd.web.app/?item=1dd-crispy-sweet-toast-rusk-sweet-r119",
+    "image_link": "https://1dd.web.app/images/products/Biscuit%20%7C%20Sweet%20Toast%20Rusk%20%7C%20Standard.jpg",
+    "local_image": "product_images/Biscuit%20%7C%20Sweet%20Toast%20Rusk%20%7C%20Standard.jpg",
+    "description": "Biscuit | Sweet Toast Rusk | Standard. Fresh quality biscuits & bakery available for fast 1-day home delivery across town at best price \u20b950."
+  },
+  {
+    "id": "1dd-cycle-fragrant-agarbatti-incense-sticks-1-dozen-r49",
+    "title": "Dhup | Cycle Pure | 1 Dozen",
+    "buying_cost": 90.0,
+    "price": 100.0,
+    "profit": 10.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Cycle",
+    "category": "Incense & Agarbatti",
+    "pack_size": "1 dozen",
+    "link": "https://1dd.web.app/?item=1dd-cycle-fragrant-agarbatti-incense-sticks-1-dozen-r49",
+    "image_link": "https://1dd.web.app/images/products/Dhup%20%7C%20Cycle%20Pure%20%7C%201%20Dozen.jpeg",
+    "local_image": "product_images/Dhup%20%7C%20Cycle%20Pure%20%7C%201%20Dozen.jpeg",
+    "description": "Dhup | Cycle Pure | 1 Dozen. Fresh quality incense & agarbatti available for fast 1-day home delivery across town at best price \u20b9100."
+  },
+  {
+    "id": "1dd-zed-black-premium-agarbatti-incense-sticks-1-packet-r50",
+    "title": "Dhup | Zed Black | 1 Packet",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Zed Black",
+    "category": "Incense & Agarbatti",
+    "pack_size": "1 packet",
+    "link": "https://1dd.web.app/?item=1dd-zed-black-premium-agarbatti-incense-sticks-1-packet-r50",
+    "image_link": "https://1dd.web.app/images/products/Dhup%20%7C%20Zed%20Black%20%7C%201%20Packet.jpeg",
+    "local_image": "product_images/Dhup%20%7C%20Zed%20Black%20%7C%201%20Packet.jpeg",
+    "description": "Dhup | Zed Black | 1 Packet. Fresh quality incense & agarbatti available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-disposable-paper-curry-bowls-bati-25-pieces-r86",
+    "title": "Disposable | Bati | 25 pieces",
+    "buying_cost": 25.0,
+    "price": 30.0,
+    "profit": 5.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Party Choice",
+    "category": "Disposable Tableware",
+    "pack_size": "25 pieces",
+    "link": "https://1dd.web.app/?item=1dd-disposable-paper-curry-bowls-bati-25-pieces-r86",
+    "image_link": "https://1dd.web.app/images/products/Disposable%20%7C%20Bati%20%7C%2025%20pieces.jpg",
+    "local_image": "product_images/Disposable%20%7C%20Bati%20%7C%2025%20pieces.jpg",
+    "description": "Disposable | Bati | 25 pieces. Fresh quality disposable tableware available for fast 1-day home delivery across town at best price \u20b930."
+  },
+  {
+    "id": "1dd-disposable-paper-tea-coffee-cups-50-pieces-r85",
+    "title": "Disposable | Coffee Cup | 50 pieces",
+    "buying_cost": 18.0,
+    "price": 25.0,
+    "profit": 7.0,
+    "margin_pct": 28.0,
+    "markup_pct": 38.9,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Party Choice",
+    "category": "Disposable Tableware",
+    "pack_size": "50 pieces",
+    "link": "https://1dd.web.app/?item=1dd-disposable-paper-tea-coffee-cups-50-pieces-r85",
+    "image_link": "https://1dd.web.app/images/products/Disposable%20%7C%20Coffee%20Cup%20%7C%2050%20pieces.jpg",
+    "local_image": "product_images/Disposable%20%7C%20Coffee%20Cup%20%7C%2050%20pieces.jpg",
+    "description": "Disposable | Coffee Cup | 50 pieces. Fresh quality disposable tableware available for fast 1-day home delivery across town at best price \u20b925."
+  },
+  {
+    "id": "1dd-disposable-paper-party-plates-dishes-16p-r84",
+    "title": "Disposable | Dish | 16p",
+    "buying_cost": 20.0,
+    "price": 25.0,
+    "profit": 5.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Party Choice",
+    "category": "Disposable Tableware",
+    "pack_size": "16p",
+    "link": "https://1dd.web.app/?item=1dd-disposable-paper-party-plates-dishes-16p-r84",
+    "image_link": "https://1dd.web.app/images/products/Disposable%20%7C%20Dish%20%7C%2016p.jpg",
+    "local_image": "product_images/Disposable%20%7C%20Dish%20%7C%2016p.jpg",
+    "description": "Disposable | Dish | 16p. Fresh quality disposable tableware available for fast 1-day home delivery across town at best price \u20b925."
+  },
+  {
+    "id": "1dd-disposable-transparent-drinking-glasses-70p-r83",
+    "title": "Disposable | Glass | 70p",
+    "buying_cost": 30.0,
+    "price": 40.0,
+    "profit": 10.0,
+    "margin_pct": 25.0,
+    "markup_pct": 33.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Party Choice",
+    "category": "Disposable Tableware",
+    "pack_size": "70p",
+    "link": "https://1dd.web.app/?item=1dd-disposable-transparent-drinking-glasses-70p-r83",
+    "image_link": "https://1dd.web.app/images/products/Disposable%20%7C%20Glass%20%7C%2070p.jpg",
+    "local_image": "product_images/Disposable%20%7C%20Glass%20%7C%2070p.jpg",
+    "description": "Disposable | Glass | 70p. Fresh quality disposable tableware available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-pure-distilled-inverter-battery-water-750ml-r98",
+    "title": "Distilled Water | Battery Water | 750ml",
+    "buying_cost": 10.0,
+    "price": 15.0,
+    "profit": 5.0,
+    "margin_pct": 33.3,
+    "markup_pct": 50.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "BatteryCare",
+    "category": "Home & Hygiene",
+    "pack_size": "750ml",
+    "link": "https://1dd.web.app/?item=1dd-pure-distilled-inverter-battery-water-750ml-r98",
+    "image_link": "https://1dd.web.app/images/products/Distilled%20Water%20%7C%20Battery%20Water%20%7C%20750ml.jpg",
+    "local_image": "product_images/Distilled%20Water%20%7C%20Battery%20Water%20%7C%20750ml.jpg",
+    "description": "Distilled Water | Battery Water | 750ml. Fresh quality home & hygiene available for fast 1-day home delivery across town at best price \u20b915."
+  },
+  {
+    "id": "1dd-fresh-farm-chicken-eggs-tray-of-30-eggs-1-plate-r52",
+    "title": "Egg | Farm Fresh | 1Plate",
+    "buying_cost": 200.0,
+    "price": 210.0,
+    "profit": 10.0,
+    "margin_pct": 4.8,
+    "markup_pct": 5.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Farm Fresh",
+    "category": "Dairy & Eggs",
+    "pack_size": "1Plate",
+    "link": "https://1dd.web.app/?item=1dd-fresh-farm-chicken-eggs-tray-of-30-eggs-1-plate-r52",
+    "image_link": "https://1dd.web.app/images/products/Egg%20%7C%20Farm%20Fresh%20%7C%201Plate.jpg",
+    "local_image": "product_images/Egg%20%7C%20Farm%20Fresh%20%7C%201Plate.jpg",
+    "description": "Egg | Farm Fresh | 1Plate. Fresh quality dairy & eggs available for fast 1-day home delivery across town at best price \u20b9210."
+  },
+  {
+    "id": "1dd-fresh-farm-chicken-eggs-pack-of-4-2-pairs-r53",
+    "title": "Egg | Farm Fresh | 4 Pieces (\u09e7 \u09b9\u09be\u09b2)",
+    "buying_cost": 15.0,
+    "price": 15.0,
+    "profit": 0.0,
+    "margin_pct": 0.0,
+    "markup_pct": 0.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Farm Fresh",
+    "category": "Dairy & Eggs",
+    "pack_size": "2 Pairs",
+    "link": "https://1dd.web.app/?item=1dd-fresh-farm-chicken-eggs-pack-of-4-2-pairs-r53",
+    "image_link": "https://1dd.web.app/images/products/Egg%20%7C%20Farm%20Fresh%20%7C%204%20Pieces%20(%E0%A7%A7%20%E0%A6%B9%E0%A6%BE%E0%A6%B2).jpg",
+    "local_image": "product_images/Egg%20%7C%20Farm%20Fresh%20%7C%204%20Pieces%20%28%E0%A7%A7%20%E0%A6%B9%E0%A6%BE%E0%A6%B2%29.jpg",
+    "description": "Egg | Farm Fresh | 4 Pieces (\u09e7 \u09b9\u09be\u09b2). Fresh quality dairy & eggs available for fast 1-day home delivery across town at best price \u20b915."
+  },
+  {
+    "id": "1dd-annapurna-pure-desi-cow-ghee-100g-r93",
+    "title": "Ghee | Annapurna | 100g",
+    "buying_cost": 85.0,
+    "price": 90.0,
+    "profit": 5.0,
+    "margin_pct": 5.6,
+    "markup_pct": 5.9,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Annapurna",
+    "category": "Pure Ghee",
+    "pack_size": "100g",
+    "link": "https://1dd.web.app/?item=1dd-annapurna-pure-desi-cow-ghee-100g-r93",
+    "image_link": "https://1dd.web.app/images/products/Ghee%20%7C%20Annapurna%20%7C%20100g.jpg",
+    "local_image": "product_images/Ghee%20%7C%20Annapurna%20%7C%20100g.jpg",
+    "description": "Ghee | Annapurna | 100g. Fresh quality pure ghee available for fast 1-day home delivery across town at best price \u20b990."
+  },
+  {
+    "id": "1dd-annapurna-pure-desi-cow-ghee-250-g-r94",
+    "title": "Ghee | Annapurna | 250 g",
+    "buying_cost": 190.0,
+    "price": 200.0,
+    "profit": 10.0,
+    "margin_pct": 5.0,
+    "markup_pct": 5.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Annapurna",
+    "category": "Pure Ghee",
+    "pack_size": "250 g",
+    "link": "https://1dd.web.app/?item=1dd-annapurna-pure-desi-cow-ghee-250-g-r94",
+    "image_link": "https://1dd.web.app/images/products/Ghee%20%7C%20Annapurna%20%7C%20250%20g.jpg",
+    "local_image": "product_images/Ghee%20%7C%20Annapurna%20%7C%20250%20g.jpg",
+    "description": "Ghee | Annapurna | 250 g. Fresh quality pure ghee available for fast 1-day home delivery across town at best price \u20b9200."
+  },
+  {
+    "id": "1dd-annapurna-pure-desi-cow-ghee-500g-r95",
+    "title": "Ghee | Annapurna | 500g",
+    "buying_cost": 380.0,
+    "price": 400.0,
+    "profit": 20.0,
+    "margin_pct": 5.0,
+    "markup_pct": 5.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Annapurna",
+    "category": "Pure Ghee",
+    "pack_size": "500g",
+    "link": "https://1dd.web.app/?item=1dd-annapurna-pure-desi-cow-ghee-500g-r95",
+    "image_link": "https://1dd.web.app/images/products/Ghee%20%7C%20Annapurna%20%7C%20500g.jpg",
+    "local_image": "product_images/Ghee%20%7C%20Annapurna%20%7C%20500g.jpg",
+    "description": "Ghee | Annapurna | 500g. Fresh quality pure ghee available for fast 1-day home delivery across town at best price \u20b9400."
+  },
+  {
+    "id": "1dd-annapurna-pure-desi-cow-ghee-50g-r92",
+    "title": "Ghee | Annapurna | 50g",
+    "buying_cost": 45.0,
+    "price": 50.0,
+    "profit": 5.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Annapurna",
+    "category": "Pure Ghee",
+    "pack_size": "50g",
+    "link": "https://1dd.web.app/?item=1dd-annapurna-pure-desi-cow-ghee-50g-r92",
+    "image_link": "https://1dd.web.app/images/products/Ghee%20%7C%20Annapurna%20%7C%2050g.jpg",
+    "local_image": "product_images/Ghee%20%7C%20Annapurna%20%7C%2050g.jpg",
+    "description": "Ghee | Annapurna | 50g. Fresh quality pure ghee available for fast 1-day home delivery across town at best price \u20b950."
+  },
+  {
+    "id": "1dd-kabuli-chana-white-chickpeas-chhole-1-kg-r19",
+    "title": "Grams | Kabuli Chana | 1 kg",
+    "buying_cost": 110.0,
+    "price": 120.0,
+    "profit": 10.0,
+    "margin_pct": 8.3,
+    "markup_pct": 9.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Grams & Whole Pulses",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-kabuli-chana-white-chickpeas-chhole-1-kg-r19",
+    "image_link": "https://1dd.web.app/images/products/Grams%20%7C%20Kabuli%20Chana%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Grams%20%7C%20Kabuli%20Chana%20%7C%201%20kg.jpg",
+    "description": "Grams | Kabuli Chana | 1 kg. Fresh quality grams & whole pulses available for fast 1-day home delivery across town at best price \u20b9120."
+  },
+  {
+    "id": "1dd-kala-chana-boot-brown-chickpeas-1-kg-r17",
+    "title": "Grams | Kala Chana (\u0995\u09b2\u09be \u09ac\u09c1\u099f) | 1 kg",
+    "buying_cost": 80.0,
+    "price": 85.0,
+    "profit": 5.0,
+    "margin_pct": 5.9,
+    "markup_pct": 6.2,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Grams & Whole Pulses",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-kala-chana-boot-brown-chickpeas-1-kg-r17",
+    "image_link": "https://1dd.web.app/images/products/Grams%20%7C%20Kala%20Chana%20(%E0%A6%95%E0%A6%B2%E0%A6%BE%20%E0%A6%AC%E0%A7%81%E0%A6%9F)%20%7C%201%20kg.jpeg",
+    "local_image": "product_images/Grams%20%7C%20Kala%20Chana%20%28%E0%A6%95%E0%A6%B2%E0%A6%BE%20%E0%A6%AC%E0%A7%81%E0%A6%9F%29%20%7C%201%20kg.jpeg",
+    "description": "Grams | Kala Chana (\u0995\u09b2\u09be \u09ac\u09c1\u099f) | 1 kg. Fresh quality grams & whole pulses available for fast 1-day home delivery across town at best price \u20b985."
+  },
+  {
+    "id": "1dd-kashmiri-red-rajma-kidney-beans-1-kg-r20",
+    "title": "Grams | Kashmiri Rajma | 1 kg",
+    "buying_cost": 135.0,
+    "price": 150.0,
+    "profit": 15.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Grams & Whole Pulses",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-kashmiri-red-rajma-kidney-beans-1-kg-r20",
+    "image_link": "https://1dd.web.app/images/products/Grams%20%7C%20Kashmiri%20Rajma%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Grams%20%7C%20Kashmiri%20Rajma%20%7C%201%20kg.jpg",
+    "description": "Grams | Kashmiri Rajma | 1 kg. Fresh quality grams & whole pulses available for fast 1-day home delivery across town at best price \u20b9150."
+  },
+  {
+    "id": "1dd-lobia-chawli-black-eyed-peas-1-kg-r22",
+    "title": "Grams | Lobia (\u09b2\u09ac\u09bf\u09af\u09bc\u09be) | 1 kg",
+    "buying_cost": 110.0,
+    "price": 120.0,
+    "profit": 10.0,
+    "margin_pct": 8.3,
+    "markup_pct": 9.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Grams & Whole Pulses",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-lobia-chawli-black-eyed-peas-1-kg-r22",
+    "image_link": "https://1dd.web.app/images/products/Grams%20%7C%20Lobia%20(%E0%A6%B2%E0%A6%AC%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE)%20%7C%201%20kg.jpeg",
+    "local_image": "product_images/Grams%20%7C%20Lobia%20%28%E0%A6%B2%E0%A6%AC%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE%29%20%7C%201%20kg.jpeg",
+    "description": "Grams | Lobia (\u09b2\u09ac\u09bf\u09af\u09bc\u09be) | 1 kg. Fresh quality grams & whole pulses available for fast 1-day home delivery across town at best price \u20b9120."
+  },
+  {
+    "id": "1dd-sabut-moong-guta-mogu-whole-green-gram-1-kg-r21",
+    "title": "Grams | Sabut Moong (\u0997\u09cb\u099f\u09be \u09ae\u0997\u09c1) | 1 kg",
+    "buying_cost": 110.0,
+    "price": 120.0,
+    "profit": 10.0,
+    "margin_pct": 8.3,
+    "markup_pct": 9.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Grams & Whole Pulses",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-sabut-moong-guta-mogu-whole-green-gram-1-kg-r21",
+    "image_link": "https://1dd.web.app/images/products/Grams%20%7C%20Sabut%20Moong%20(%E0%A6%97%E0%A7%8B%E0%A6%9F%E0%A6%BE%20%E0%A6%AE%E0%A6%97%E0%A7%81)%20%7C%201%20kg.jpeg",
+    "local_image": "product_images/Grams%20%7C%20Sabut%20Moong%20%28%E0%A6%97%E0%A7%8B%E0%A6%9F%E0%A6%BE%20%E0%A6%AE%E0%A6%97%E0%A7%81%29%20%7C%201%20kg.jpeg",
+    "description": "Grams | Sabut Moong (\u0997\u09cb\u099f\u09be \u09ae\u0997\u09c1) | 1 kg. Fresh quality grams & whole pulses available for fast 1-day home delivery across town at best price \u20b9120."
+  },
+  {
+    "id": "1dd-white-peas-motor-safed-matar-1-kg-r18",
+    "title": "Grams | White Peas (\u09ac\u0997\u09be \u09ae\u099f\u09f0) | 1 kg",
+    "buying_cost": 55.0,
+    "price": 60.0,
+    "profit": 5.0,
+    "margin_pct": 8.3,
+    "markup_pct": 9.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Grams & Whole Pulses",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-white-peas-motor-safed-matar-1-kg-r18",
+    "image_link": "https://1dd.web.app/images/products/Grams%20%7C%20White%20Peas%20(%E0%A6%AC%E0%A6%97%E0%A6%BE%20%E0%A6%AE%E0%A6%9F%E0%A7%B0)%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Grams%20%7C%20White%20Peas%20%28%E0%A6%AC%E0%A6%97%E0%A6%BE%20%E0%A6%AE%E0%A6%9F%E0%A7%B0%29%20%7C%201%20kg.jpg",
+    "description": "Grams | White Peas (\u09ac\u0997\u09be \u09ae\u099f\u09f0) | 1 kg. Fresh quality grams & whole pulses available for fast 1-day home delivery across town at best price \u20b960."
+  },
+  {
+    "id": "1dd-whole-carom-seeds-ajwain-100-g-r78",
+    "title": "Guta Masala | Ajwain | 100 g",
+    "buying_cost": 30.0,
+    "price": 40.0,
+    "profit": 10.0,
+    "margin_pct": 25.0,
+    "markup_pct": 33.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Whole Spices (Guta Masala)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-whole-carom-seeds-ajwain-100-g-r78",
+    "image_link": "https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Ajwain%20%7C%20100%20g.jpg",
+    "local_image": "product_images/Guta%20Masala%20%7C%20Ajwain%20%7C%20100%20g.jpg",
+    "description": "Guta Masala | Ajwain | 100 g. Fresh quality whole spices (guta masala) available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-whole-coriander-seeds-sabut-dhania-100-g-r76",
+    "title": "Guta Masala | Dhania | 100 g",
+    "buying_cost": 20.0,
+    "price": 25.0,
+    "profit": 5.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Whole Spices (Guta Masala)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-whole-coriander-seeds-sabut-dhania-100-g-r76",
+    "image_link": "https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Dhania%20%7C%20100%20g.webp",
+    "local_image": "product_images/Guta%20Masala%20%7C%20Dhania%20%7C%20100%20g.webp",
+    "description": "Guta Masala | Dhania | 100 g. Fresh quality whole spices (guta masala) available for fast 1-day home delivery across town at best price \u20b925."
+  },
+  {
+    "id": "1dd-whole-garam-masala-cardamom-cinnamon-cloves-20g-r82",
+    "title": "Guta Masala | Garam Masala | 20g",
+    "buying_cost": 8.0,
+    "price": 10.0,
+    "profit": 2.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Whole Spices (Guta Masala)",
+    "pack_size": "20g",
+    "link": "https://1dd.web.app/?item=1dd-whole-garam-masala-cardamom-cinnamon-cloves-20g-r82",
+    "image_link": "https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Garam%20Masala%20%7C%2020g.jpg",
+    "local_image": "product_images/Guta%20Masala%20%7C%20Garam%20Masala%20%7C%2020g.jpg",
+    "description": "Guta Masala | Garam Masala | 20g. Fresh quality whole spices (guta masala) available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-whole-cumin-seeds-sabut-jeera-100-g-r75",
+    "title": "Guta Masala | Jeera | 100 g",
+    "buying_cost": 35.0,
+    "price": 40.0,
+    "profit": 5.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Whole Spices (Guta Masala)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-whole-cumin-seeds-sabut-jeera-100-g-r75",
+    "image_link": "https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Jeera%20%7C%20100%20g.jpeg",
+    "local_image": "product_images/Guta%20Masala%20%7C%20Jeera%20%7C%20100%20g.jpeg",
+    "description": "Guta Masala | Jeera | 100 g. Fresh quality whole spices (guta masala) available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-whole-cumin-seeds-sabut-jeera-100-g-r79",
+    "title": "Guta Masala | Kala Jeera | 100 g",
+    "buying_cost": 35.0,
+    "price": 40.0,
+    "profit": 5.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Whole Spices (Guta Masala)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-whole-cumin-seeds-sabut-jeera-100-g-r79",
+    "image_link": "https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Kala%20Jeera%20%7C%20100%20g.jpg",
+    "local_image": "product_images/Guta%20Masala%20%7C%20Kala%20Jeera%20%7C%20100%20g.jpg",
+    "description": "Guta Masala | Kala Jeera | 100 g. Fresh quality whole spices (guta masala) available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-whole-fenugreek-seeds-methi-dana-100-g-r80",
+    "title": "Guta Masala | Methi | 100 g",
+    "buying_cost": 15.0,
+    "price": 20.0,
+    "profit": 5.0,
+    "margin_pct": 25.0,
+    "markup_pct": 33.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Whole Spices (Guta Masala)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-whole-fenugreek-seeds-methi-dana-100-g-r80",
+    "image_link": "https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Methi%20%7C%20100%20g.jpg",
+    "local_image": "product_images/Guta%20Masala%20%7C%20Methi%20%7C%20100%20g.jpg",
+    "description": "Guta Masala | Methi | 100 g. Fresh quality whole spices (guta masala) available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-whole-fennel-seeds-saunf-100-g-r77",
+    "title": "Guta Masala | Mouri | 100 g",
+    "buying_cost": 20.0,
+    "price": 25.0,
+    "profit": 5.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Whole Spices (Guta Masala)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-whole-fennel-seeds-saunf-100-g-r77",
+    "image_link": "https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Mouri%20%7C%20100%20g.jpg",
+    "local_image": "product_images/Guta%20Masala%20%7C%20Mouri%20%7C%20100%20g.jpg",
+    "description": "Guta Masala | Mouri | 100 g. Fresh quality whole spices (guta masala) available for fast 1-day home delivery across town at best price \u20b925."
+  },
+  {
+    "id": "1dd-traditional-panch-phoron-5-spice-blend-100-g-r81",
+    "title": "Guta Masala | Panchphoron | 100 g",
+    "buying_cost": 15.0,
+    "price": 20.0,
+    "profit": 5.0,
+    "margin_pct": 25.0,
+    "markup_pct": 33.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Whole Spices (Guta Masala)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-traditional-panch-phoron-5-spice-blend-100-g-r81",
+    "image_link": "https://1dd.web.app/images/products/Guta%20Masala%20%7C%20Panchphoron%20%7C%20100%20g.jpg",
+    "local_image": "product_images/Guta%20Masala%20%7C%20Panchphoron%20%7C%20100%20g.jpg",
+    "description": "Guta Masala | Panchphoron | 100 g. Fresh quality whole spices (guta masala) available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-godrej-expert-rich-cr-me-hair-colour-natural-black-1-pack-r99",
+    "title": "Hair Colour | Godrej | 1 pack",
+    "buying_cost": 18.0,
+    "price": 20.0,
+    "profit": 2.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Godrej",
+    "category": "Hair Colour",
+    "pack_size": "1 pack",
+    "link": "https://1dd.web.app/?item=1dd-godrej-expert-rich-cr-me-hair-colour-natural-black-1-pack-r99",
+    "image_link": "https://1dd.web.app/images/products/Hair%20Colour%20%7C%20Godrej%20%7C%201%20pack.jpg",
+    "local_image": "product_images/Hair%20Colour%20%7C%20Godrej%20%7C%201%20pack.jpg",
+    "description": "Hair Colour | Godrej | 1 pack. Fresh quality hair colour available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-indica-easy-10-minute-shampoo-hair-colour-black-1-pack-r100",
+    "title": "Hair Colour | Indica | 1 pack",
+    "buying_cost": 18.0,
+    "price": 20.0,
+    "profit": 2.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Indica",
+    "category": "Hair Colour",
+    "pack_size": "1 pack",
+    "link": "https://1dd.web.app/?item=1dd-indica-easy-10-minute-shampoo-hair-colour-black-1-pack-r100",
+    "image_link": "https://1dd.web.app/images/products/Hair%20Colour%20%7C%20Indica%20%7C%201%20pack.jpg",
+    "local_image": "product_images/Hair%20Colour%20%7C%20Indica%20%7C%201%20pack.jpg",
+    "description": "Hair Colour | Indica | 1 pack. Fresh quality hair colour available for fast 1-day home delivery across town at best price \u20b920."
+  },
+  {
+    "id": "1dd-nihar-shanti-amla-badam-hair-oil-100-ml-r48",
+    "title": "Hair Oil | Nihar | 100 ml",
+    "buying_cost": 70.0,
+    "price": 80.0,
+    "profit": 10.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Nihar",
+    "category": "Hair Care",
+    "pack_size": "100 ml",
+    "link": "https://1dd.web.app/?item=1dd-nihar-shanti-amla-badam-hair-oil-100-ml-r48",
+    "image_link": "https://1dd.web.app/images/products/Hair%20Oil%20%7C%20Nihar%20%7C%20100%20ml.jpg",
+    "local_image": "product_images/Hair%20Oil%20%7C%20Nihar%20%7C%20100%20ml.jpg",
+    "description": "Hair Oil | Nihar | 100 ml. Fresh quality hair care available for fast 1-day home delivery across town at best price \u20b980."
+  },
+  {
+    "id": "1dd-parachute-100-pure-coconut-hair-oil-200-ml-r47",
+    "title": "Hair Oil | Parachute Coconut | 200 ml",
+    "buying_cost": 85.0,
+    "price": 100.0,
+    "profit": 15.0,
+    "margin_pct": 15.0,
+    "markup_pct": 17.6,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Parachute",
+    "category": "Hair Care",
+    "pack_size": "200 ml",
+    "link": "https://1dd.web.app/?item=1dd-parachute-100-pure-coconut-hair-oil-200-ml-r47",
+    "image_link": "https://1dd.web.app/images/products/Hair%20Oil%20%7C%20Parachute%20Coconut%20%7C%20200%20ml.jpg",
+    "local_image": "product_images/Hair%20Oil%20%7C%20Parachute%20Coconut%20%7C%20200%20ml.jpg",
+    "description": "Hair Oil | Parachute Coconut | 200 ml. Fresh quality hair care available for fast 1-day home delivery across town at best price \u20b9100."
+  },
+  {
+    "id": "1dd-harpic-power-plus-original-disinfectant-toilet-cleaner-250ml-r97",
+    "title": "Harpic | Harpic Original | 250ml",
+    "buying_cost": 35.0,
+    "price": 40.0,
+    "profit": 5.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Harpic",
+    "category": "Home & Hygiene",
+    "pack_size": "250ml",
+    "link": "https://1dd.web.app/?item=1dd-harpic-power-plus-original-disinfectant-toilet-cleaner-250ml-r97",
+    "image_link": "https://1dd.web.app/images/products/Harpic%20%7C%20Harpic%20Original%20%7C%20250ml.jpg",
+    "local_image": "product_images/Harpic%20%7C%20Harpic%20Original%20%7C%20250ml.jpg",
+    "description": "Harpic | Harpic Original | 250ml. Fresh quality home & hygiene available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-everest-chicken-curry-masala-10g-r66",
+    "title": "Masala | Everest Chicken Masala | 10g",
+    "buying_cost": 4.0,
+    "price": 5.0,
+    "profit": 1.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "10g",
+    "link": "https://1dd.web.app/?item=1dd-everest-chicken-curry-masala-10g-r66",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Chicken%20Masala%20%7C%2010g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Chicken%20Masala%20%7C%2010g.jpg",
+    "description": "Masala | Everest Chicken Masala | 10g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-everest-coriander-dhania-powder-100-g-r58",
+    "title": "Masala | Everest Dhania | 100 g",
+    "buying_cost": 30.0,
+    "price": 35.0,
+    "profit": 5.0,
+    "margin_pct": 14.3,
+    "markup_pct": 16.7,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-everest-coriander-dhania-powder-100-g-r58",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Dhania%20%7C%20100%20g.png",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Dhania%20%7C%20100%20g.png",
+    "description": "Masala | Everest Dhania | 100 g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b935."
+  },
+  {
+    "id": "1dd-everest-coriander-dhania-powder-10g-r59",
+    "title": "Masala | Everest Dhania | 10g",
+    "buying_cost": 4.0,
+    "price": 5.0,
+    "profit": 1.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "10g",
+    "link": "https://1dd.web.app/?item=1dd-everest-coriander-dhania-powder-10g-r59",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Dhania%20%7C%2010g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Dhania%20%7C%2010g.jpg",
+    "description": "Masala | Everest Dhania | 10g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-everest-garam-masala-powder-10g-r63",
+    "title": "Masala | Everest Garam Masala | 10g",
+    "buying_cost": 4.0,
+    "price": 5.0,
+    "profit": 1.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "10g",
+    "link": "https://1dd.web.app/?item=1dd-everest-garam-masala-powder-10g-r63",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Garam%20Masala%20%7C%2010g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Garam%20Masala%20%7C%2010g.jpg",
+    "description": "Masala | Everest Garam Masala | 10g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-everest-garam-masala-powder-50-g-r62",
+    "title": "Masala | Everest Garam Masala | 50 g",
+    "buying_cost": 45.0,
+    "price": 50.0,
+    "profit": 5.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "50 g",
+    "link": "https://1dd.web.app/?item=1dd-everest-garam-masala-powder-50-g-r62",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Garam%20Masala%20%7C%2050%20g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Garam%20Masala%20%7C%2050%20g.jpg",
+    "description": "Masala | Everest Garam Masala | 50 g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b950."
+  },
+  {
+    "id": "1dd-everest-pure-turmeric-haldi-powder-100-g-r73",
+    "title": "Masala | Everest Haldi | 100 g",
+    "buying_cost": 25.0,
+    "price": 30.0,
+    "profit": 5.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-everest-pure-turmeric-haldi-powder-100-g-r73",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Haldi%20%7C%20100%20g.webp",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Haldi%20%7C%20100%20g.webp",
+    "description": "Masala | Everest Haldi | 100 g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b930."
+  },
+  {
+    "id": "1dd-everest-pure-turmeric-haldi-powder-10g-r74",
+    "title": "Masala | Everest Haldi | 10g",
+    "buying_cost": 4.0,
+    "price": 5.0,
+    "profit": 1.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "10g",
+    "link": "https://1dd.web.app/?item=1dd-everest-pure-turmeric-haldi-powder-10g-r74",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Haldi%20%7C%2010g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Haldi%20%7C%2010g.jpg",
+    "description": "Masala | Everest Haldi | 10g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-everest-cumin-jeera-powder-10-g-r57",
+    "title": "Masala | Everest Jeera | 10 g",
+    "buying_cost": 4.0,
+    "price": 5.0,
+    "profit": 1.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "10 g",
+    "link": "https://1dd.web.app/?item=1dd-everest-cumin-jeera-powder-10-g-r57",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Jeera%20%7C%2010%20g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Jeera%20%7C%2010%20g.jpg",
+    "description": "Masala | Everest Jeera | 10 g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-everest-cumin-jeera-powder-100-g-r56",
+    "title": "Masala | Everest Jeera | 100 g",
+    "buying_cost": 60.0,
+    "price": 80.0,
+    "profit": 20.0,
+    "margin_pct": 25.0,
+    "markup_pct": 33.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-everest-cumin-jeera-powder-100-g-r56",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Jeera%20%7C%20100%20g.png",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Jeera%20%7C%20100%20g.png",
+    "description": "Masala | Everest Jeera | 100 g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b980."
+  },
+  {
+    "id": "1dd-everest-kashmiri-lal-chilli-powder-20g-r69",
+    "title": "Masala | Everest Kashmiri Mirch | 20g",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "20g",
+    "link": "https://1dd.web.app/?item=1dd-everest-kashmiri-lal-chilli-powder-20g-r69",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Kashmiri%20Mirch%20%7C%2020g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Kashmiri%20Mirch%20%7C%2020g.jpg",
+    "description": "Masala | Everest Kashmiri Mirch | 20g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-everest-kashmiri-lal-chilli-powder-50g-r68",
+    "title": "Masala | Everest Kashmiri Mirch | 50g",
+    "buying_cost": 50.0,
+    "price": 55.0,
+    "profit": 5.0,
+    "margin_pct": 9.1,
+    "markup_pct": 10.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "50g",
+    "link": "https://1dd.web.app/?item=1dd-everest-kashmiri-lal-chilli-powder-50g-r68",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Kashmiri%20Mirch%20%7C%2050g.png",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Kashmiri%20Mirch%20%7C%2050g.png",
+    "description": "Masala | Everest Kashmiri Mirch | 50g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b955."
+  },
+  {
+    "id": "1dd-everest-kitchen-king-all-in-one-masala-20g-r71",
+    "title": "Masala | Everest Kitchen King | 20g",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "20g",
+    "link": "https://1dd.web.app/?item=1dd-everest-kitchen-king-all-in-one-masala-20g-r71",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Kitchen%20King%20%7C%2020g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Kitchen%20King%20%7C%2020g.jpg",
+    "description": "Masala | Everest Kitchen King | 20g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-everest-kitchen-king-all-in-one-masala-50g-r70",
+    "title": "Masala | Everest Kitchen King | 50g",
+    "buying_cost": 50.0,
+    "price": 55.0,
+    "profit": 5.0,
+    "margin_pct": 9.1,
+    "markup_pct": 10.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "50g",
+    "link": "https://1dd.web.app/?item=1dd-everest-kitchen-king-all-in-one-masala-50g-r70",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Kitchen%20King%20%7C%2050g.png",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Kitchen%20King%20%7C%2050g.png",
+    "description": "Masala | Everest Kitchen King | 50g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b955."
+  },
+  {
+    "id": "1dd-everest-tikhalal-red-chilli-powder-100-g-r60",
+    "title": "Masala | Everest Lal Mirch | 100 g",
+    "buying_cost": 45.0,
+    "price": 55.0,
+    "profit": 10.0,
+    "margin_pct": 18.2,
+    "markup_pct": 22.2,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-everest-tikhalal-red-chilli-powder-100-g-r60",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Lal%20Mirch%20%7C%20100%20g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Lal%20Mirch%20%7C%20100%20g.jpg",
+    "description": "Masala | Everest Lal Mirch | 100 g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b955."
+  },
+  {
+    "id": "1dd-everest-tikhalal-red-chilli-powder-10g-r61",
+    "title": "Masala | Everest Lal Mirch | 10g",
+    "buying_cost": 4.0,
+    "price": 5.0,
+    "profit": 1.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "10g",
+    "link": "https://1dd.web.app/?item=1dd-everest-tikhalal-red-chilli-powder-10g-r61",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Lal%20Mirch%20%7C%2010g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Lal%20Mirch%20%7C%2010g.jpg",
+    "description": "Masala | Everest Lal Mirch | 10g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-everest-meat-curry-masala-10g-r65",
+    "title": "Masala | Everest Meat Masala | 10g",
+    "buying_cost": 4.0,
+    "price": 5.0,
+    "profit": 1.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "10g",
+    "link": "https://1dd.web.app/?item=1dd-everest-meat-curry-masala-10g-r65",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Meat%20Masala%20%7C%2010g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Meat%20Masala%20%7C%2010g.jpg",
+    "description": "Masala | Everest Meat Masala | 10g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-everest-meat-curry-masala-50g-r64",
+    "title": "Masala | Everest Meat Masala | 50g",
+    "buying_cost": 50.0,
+    "price": 55.0,
+    "profit": 5.0,
+    "margin_pct": 9.1,
+    "markup_pct": 10.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "50g",
+    "link": "https://1dd.web.app/?item=1dd-everest-meat-curry-masala-50g-r64",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Meat%20Masala%20%7C%2050g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Meat%20Masala%20%7C%2050g.jpg",
+    "description": "Masala | Everest Meat Masala | 50g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b955."
+  },
+  {
+    "id": "1dd-everest-shahi-paneer-masala-20g-r67",
+    "title": "Masala | Everest Shahi Paneer | 20g",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everest",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "20g",
+    "link": "https://1dd.web.app/?item=1dd-everest-shahi-paneer-masala-20g-r67",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Everest%20Shahi%20Paneer%20%7C%2020g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Everest%20Shahi%20Paneer%20%7C%2020g.jpg",
+    "description": "Masala | Everest Shahi Paneer | 20g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-maggi-masala-ae-magic-cooking-seasoning-10g-r72",
+    "title": "Masala | Maggi Masala-e-Magic | 10g",
+    "buying_cost": 4.5,
+    "price": 5.0,
+    "profit": 0.5,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Maggi",
+    "category": "Spices & Masala (Powder)",
+    "pack_size": "10g",
+    "link": "https://1dd.web.app/?item=1dd-maggi-masala-ae-magic-cooking-seasoning-10g-r72",
+    "image_link": "https://1dd.web.app/images/products/Masala%20%7C%20Maggi%20Masala-e-Magic%20%7C%2010g.jpg",
+    "local_image": "product_images/Masala%20%7C%20Maggi%20Masala-e-Magic%20%7C%2010g.jpg",
+    "description": "Masala | Maggi Masala-e-Magic | 10g. Fresh quality spices & masala (powder) available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-safety-matchboxes-bundle-solai-pack-of-10-r103",
+    "title": "Matches | Aim Safety Matches | Bundle",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Aim",
+    "category": "Matches & Household",
+    "pack_size": "Standard",
+    "link": "https://1dd.web.app/?item=1dd-safety-matchboxes-bundle-solai-pack-of-10-r103",
+    "image_link": "https://1dd.web.app/images/products/Matches%20%7C%20Aim%20Safety%20Matches%20%7C%20Bundle.jpg",
+    "local_image": "product_images/Matches%20%7C%20Aim%20Safety%20Matches%20%7C%20Bundle.jpg",
+    "description": "Matches | Aim Safety Matches | Bundle. Fresh quality matches & household available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-namaste-india-pure-toned-milk-1-l-r55",
+    "title": "Milk | Namaste India | 1 L",
+    "buying_cost": 70.0,
+    "price": 75.0,
+    "profit": 5.0,
+    "margin_pct": 6.7,
+    "markup_pct": 7.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Namaste India",
+    "category": "Fresh Milk",
+    "pack_size": "1 L",
+    "link": "https://1dd.web.app/?item=1dd-namaste-india-pure-toned-milk-1-l-r55",
+    "image_link": "https://1dd.web.app/images/products/Milk%20%7C%20Namaste%20India%20%7C%201%20L.png",
+    "local_image": "product_images/Milk%20%7C%20Namaste%20India%20%7C%201%20L.png",
+    "description": "Milk | Namaste India | 1 L. Fresh quality fresh milk available for fast 1-day home delivery across town at best price \u20b975."
+  },
+  {
+    "id": "1dd-namaste-india-pure-toned-milk-200ml-r54",
+    "title": "Milk | Namaste India | 200ml",
+    "buying_cost": 14.0,
+    "price": 15.0,
+    "profit": 1.0,
+    "margin_pct": 6.7,
+    "markup_pct": 7.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Namaste India",
+    "category": "Fresh Milk",
+    "pack_size": "200ml",
+    "link": "https://1dd.web.app/?item=1dd-namaste-india-pure-toned-milk-200ml-r54",
+    "image_link": "https://1dd.web.app/images/products/Milk%20%7C%20Namaste%20India%20%7C%20200ml.jpg",
+    "local_image": "product_images/Milk%20%7C%20Namaste%20India%20%7C%20200ml.jpg",
+    "description": "Milk | Namaste India | 200ml. Fresh quality fresh milk available for fast 1-day home delivery across town at best price \u20b915."
+  },
+  {
+    "id": "1dd-puffed-rice-muri-murmura-500g-r28",
+    "title": "Muri | Daily Fresh | 500g",
+    "buying_cost": 25.0,
+    "price": 30.0,
+    "profit": 5.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Breakfast & Staples",
+    "pack_size": "500g",
+    "link": "https://1dd.web.app/?item=1dd-puffed-rice-muri-murmura-500g-r28",
+    "image_link": "https://1dd.web.app/images/products/Muri%20%7C%20Daily%20Fresh%20%7C%20500g.jpg",
+    "local_image": "product_images/Muri%20%7C%20Daily%20Fresh%20%7C%20500g.jpg",
+    "description": "Muri | Daily Fresh | 500g. Fresh quality breakfast & staples available for fast 1-day home delivery across town at best price \u20b930."
+  },
+  {
+    "id": "1dd-korean-spicy-veg-ramen-instant-noodles-r123",
+    "title": "Noodles | Korean Spicy Shin Ramyun | Standard",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Nongshim",
+    "category": "Noodles & Instant Food",
+    "pack_size": "Standard",
+    "link": "https://1dd.web.app/?item=1dd-korean-spicy-veg-ramen-instant-noodles-r123",
+    "image_link": "https://1dd.web.app/images/products/Noodles%20%7C%20Korean%20Spicy%20Shin%20Ramyun%20%7C%20Standard.jpg",
+    "local_image": "product_images/Noodles%20%7C%20Korean%20Spicy%20Shin%20Ramyun%20%7C%20Standard.jpg",
+    "description": "Noodles | Korean Spicy Shin Ramyun | Standard. Fresh quality noodles & instant food available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-maggi-2-minute-masala-instant-noodles-r122",
+    "title": "Noodles | Maggi 2-Minute | Standard",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Maggi",
+    "category": "Noodles & Instant Food",
+    "pack_size": "Standard",
+    "link": "https://1dd.web.app/?item=1dd-maggi-2-minute-masala-instant-noodles-r122",
+    "image_link": "https://1dd.web.app/images/products/Noodles%20%7C%20Maggi%202-Minute%20%7C%20Standard.jpg",
+    "local_image": "product_images/Noodles%20%7C%20Maggi%202-Minute%20%7C%20Standard.jpg",
+    "description": "Noodles | Maggi 2-Minute | Standard. Fresh quality noodles & instant food available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-mimi-ready-to-eat-crunchy-instant-noodles-r124",
+    "title": "Noodles | Mimi Ready-to-Eat | Standard",
+    "buying_cost": 4.5,
+    "price": 5.0,
+    "profit": 0.5,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Mimi",
+    "category": "Noodles & Instant Food",
+    "pack_size": "Standard",
+    "link": "https://1dd.web.app/?item=1dd-mimi-ready-to-eat-crunchy-instant-noodles-r124",
+    "image_link": "https://1dd.web.app/images/products/Noodles%20%7C%20Mimi%20Ready-to-Eat%20%7C%20Standard.png",
+    "local_image": "product_images/Noodles%20%7C%20Mimi%20Ready-to-Eat%20%7C%20Standard.png",
+    "description": "Noodles | Mimi Ready-to-Eat | Standard. Fresh quality noodles & instant food available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-dhara-kachi-ghani-mustard-oil-1-l-r2",
+    "title": "Oil | Dhara | 1 L",
+    "buying_cost": 196.0,
+    "price": 200.0,
+    "profit": 4.0,
+    "margin_pct": 2.0,
+    "markup_pct": 2.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Dhara",
+    "category": "Cooking Oil",
+    "pack_size": "1 L",
+    "link": "https://1dd.web.app/?item=1dd-dhara-kachi-ghani-mustard-oil-1-l-r2",
+    "image_link": "https://1dd.web.app/images/products/Oil%20%7C%20Dhara%20%7C%201%20L.jpg",
+    "local_image": "product_images/Oil%20%7C%20Dhara%20%7C%201%20L.jpg",
+    "description": "Oil | Dhara | 1 L. Fresh quality cooking oil available for fast 1-day home delivery across town at best price \u20b9200."
+  },
+  {
+    "id": "1dd-fortune-refined-soyabean-cooking-oil-1-l-r4",
+    "title": "Oil | Fortune Refined | 1 L",
+    "buying_cost": 135.0,
+    "price": 140.0,
+    "profit": 5.0,
+    "margin_pct": 3.6,
+    "markup_pct": 3.7,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Fortune",
+    "category": "Cooking Oil",
+    "pack_size": "1 L",
+    "link": "https://1dd.web.app/?item=1dd-fortune-refined-soyabean-cooking-oil-1-l-r4",
+    "image_link": "https://1dd.web.app/images/products/Oil%20%7C%20Fortune%20Refined%20%7C%201%20L.png",
+    "local_image": "product_images/Oil%20%7C%20Fortune%20Refined%20%7C%201%20L.png",
+    "description": "Oil | Fortune Refined | 1 L. Fresh quality cooking oil available for fast 1-day home delivery across town at best price \u20b9140."
+  },
+  {
+    "id": "1dd-fortune-sunlite-refined-sunflower-oil-1-l-r3",
+    "title": "Oil | Fortune | 1 L",
+    "buying_cost": 196.0,
+    "price": 200.0,
+    "profit": 4.0,
+    "margin_pct": 2.0,
+    "markup_pct": 2.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Fortune",
+    "category": "Cooking Oil",
+    "pack_size": "1 L",
+    "link": "https://1dd.web.app/?item=1dd-fortune-sunlite-refined-sunflower-oil-1-l-r3",
+    "image_link": "https://1dd.web.app/images/products/Oil%20%7C%20Fortune%20%7C%201%20L.jpg",
+    "local_image": "product_images/Oil%20%7C%20Fortune%20%7C%201%20L.jpg",
+    "description": "Oil | Fortune | 1 L. Fresh quality cooking oil available for fast 1-day home delivery across town at best price \u20b9200."
+  },
+  {
+    "id": "1dd-hanuman-mustard-cooking-oil-1-2l-r5",
+    "title": "Oil | Hanuman Mustard | 1/2L",
+    "buying_cost": 65.0,
+    "price": 70.0,
+    "profit": 5.0,
+    "margin_pct": 7.1,
+    "markup_pct": 7.7,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Hanuman",
+    "category": "Cooking Oil",
+    "pack_size": "1/2L",
+    "link": "https://1dd.web.app/?item=1dd-hanuman-mustard-cooking-oil-1-2l-r5",
+    "image_link": "https://1dd.web.app/images/products/Oil%20%7C%20Hanuman%20Mustard%20%7C%201-2L.jpg",
+    "local_image": "product_images/Oil%20%7C%20Hanuman%20Mustard%20%7C%201-2L.jpg",
+    "description": "Oil | Hanuman Mustard | 1/2L. Fresh quality cooking oil available for fast 1-day home delivery across town at best price \u20b970."
+  },
+  {
+    "id": "1dd-fresh-red-onion-piyaj-1kg",
+    "title": "Onion | Fresh Red (\u09aa\u09bf\u09af\u09bc\u09be\u0981\u099c) | 1 kg",
+    "buying_cost": 50.0,
+    "price": 60.0,
+    "profit": 10.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Fresh Vegetables",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-fresh-red-onion-piyaj-1kg",
+    "image_link": "https://1dd.web.app/images/products/Onion%20%7C%20Fresh%20Red%20%28%E0%A6%AA%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE%E0%A6%81%E0%A6%9C%29%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Onion%20%7C%20Fresh%20Red%20%28%E0%A6%AA%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE%E0%A6%81%E0%A6%9C%29%20%7C%201%20kg.jpg",
+    "description": "Onion | Fresh Red (\u09aa\u09bf\u09af\u09bc\u09be\u0981\u099c) | 1 kg. Fresh quality vegetables available for fast 1-day home delivery across town at best price \u20b960."
+  },
+  {
+    "id": "1dd-fresh-red-onion-piyaj-500g",
+    "title": "Onion | Fresh Red (\u09aa\u09bf\u09af\u09bc\u09be\u0981\u099c) | 500g",
+    "buying_cost": 25.0,
+    "price": 30.0,
+    "profit": 5.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Fresh Vegetables",
+    "pack_size": "500g",
+    "link": "https://1dd.web.app/?item=1dd-fresh-red-onion-piyaj-500g",
+    "image_link": "https://1dd.web.app/images/products/Onion%20%7C%20Fresh%20Red%20%28%E0%A6%AA%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE%E0%A6%81%E0%A6%9C%29%20%7C%20500g.jpg",
+    "local_image": "product_images/Onion%20%7C%20Fresh%20Red%20%28%E0%A6%AA%E0%A6%BF%E0%A6%AF%E0%A6%BC%E0%A6%BE%E0%A6%81%E0%A6%9C%29%20%7C%20500g.jpg",
+    "description": "Onion | Fresh Red (\u09aa\u09bf\u09af\u09bc\u09be\u0981\u099c) | 500g. Fresh quality vegetables available for fast 1-day home delivery across town at best price \u20b930."
+  },
+  {
+    "id": "1dd-white-disinfectant-phenyle-floor-cleaner-250ml-r96",
+    "title": "Phenyle | White Phenyle | 250ml",
+    "buying_cost": 35.0,
+    "price": 40.0,
+    "profit": 5.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "CleanHome",
+    "category": "Home & Hygiene",
+    "pack_size": "250ml",
+    "link": "https://1dd.web.app/?item=1dd-white-disinfectant-phenyle-floor-cleaner-250ml-r96",
+    "image_link": "https://1dd.web.app/images/products/Phenyle%20%7C%20White%20Phenyle%20%7C%20250ml.png",
+    "local_image": "product_images/Phenyle%20%7C%20White%20Phenyle%20%7C%20250ml.png",
+    "description": "Phenyle | White Phenyle | 250ml. Fresh quality home & hygiene available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-fresh-local-potato-aloo-1kg",
+    "title": "Potato | Fresh Local (\u0986\u09b2\u09c1) | 1 kg",
+    "buying_cost": 12.0,
+    "price": 15.0,
+    "profit": 3.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Fresh Vegetables",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-fresh-local-potato-aloo-1kg",
+    "image_link": "https://1dd.web.app/images/products/Potato%20%7C%20Fresh%20Local%20%28%E0%A6%86%E0%A6%B2%E0%A7%81%29%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Potato%20%7C%20Fresh%20Local%20%28%E0%A6%86%E0%A6%B2%E0%A7%81%29%20%7C%201%20kg.jpg",
+    "description": "Potato | Fresh Local (\u0986\u09b2\u09c1) | 1 kg. Fresh farm-picked quality vegetables available for fast 1-day home delivery across town at best price \u20b915."
+  },
+  {
+    "id": "1dd-fresh-local-potato-aloo-500g",
+    "title": "Potato | Fresh Local (\u0986\u09b2\u09c1) | 500g",
+    "buying_cost": 6.0,
+    "price": 8.0,
+    "profit": 2.0,
+    "margin_pct": 25.0,
+    "markup_pct": 33.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Fresh Vegetables",
+    "pack_size": "500g",
+    "link": "https://1dd.web.app/?item=1dd-fresh-local-potato-aloo-500g",
+    "image_link": "https://1dd.web.app/images/products/Potato%20%7C%20Fresh%20Local%20%28%E0%A6%86%E0%A6%B2%E0%A7%81%29%20%7C%20500g.jpg",
+    "local_image": "product_images/Potato%20%7C%20Fresh%20Local%20%28%E0%A6%86%E0%A6%B2%E0%A7%81%29%20%7C%20500g.jpg",
+    "description": "Potato | Fresh Local (\u0986\u09b2\u09c1) | 500g. Fresh farm-picked quality vegetables available for fast 1-day home delivery across town at best price \u20b98."
+  },
+  {
+    "id": "1dd-tur-arhar-dal-toor-dal-1-kg-r8",
+    "title": "Pulses | Arhar (\u09f0\u09b9\u09f0 \u09a6\u09be\u0987\u09b2) | 1 kg",
+    "buying_cost": 125.0,
+    "price": 130.0,
+    "profit": 5.0,
+    "margin_pct": 3.8,
+    "markup_pct": 4.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Pulses & Dals",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-tur-arhar-dal-toor-dal-1-kg-r8",
+    "image_link": "https://1dd.web.app/images/products/Pulses%20%7C%20Arhar%20(%E0%A7%B0%E0%A6%B9%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2)%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Pulses%20%7C%20Arhar%20%28%E0%A7%B0%E0%A6%B9%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%29%20%7C%201%20kg.jpg",
+    "description": "Pulses | Arhar (\u09f0\u09b9\u09f0 \u09a6\u09be\u0987\u09b2) | 1 kg. Fresh quality pulses & dals available for fast 1-day home delivery across town at best price \u20b9130."
+  },
+  {
+    "id": "1dd-chana-dal-but-dal-split-bengal-gram-1-kg-r9",
+    "title": "Pulses | But Dal (\u09ac\u09c1\u099f\u09f0 \u09a6\u09be\u0987\u09b2) | 1 kg",
+    "buying_cost": 85.0,
+    "price": 90.0,
+    "profit": 5.0,
+    "margin_pct": 5.6,
+    "markup_pct": 5.9,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Pulses & Dals",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-chana-dal-but-dal-split-bengal-gram-1-kg-r9",
+    "image_link": "https://1dd.web.app/images/products/Pulses%20%7C%20But%20Dal%20(%E0%A6%AC%E0%A7%81%E0%A6%9F%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2)%20%7C%201%20kg.jpeg",
+    "local_image": "product_images/Pulses%20%7C%20But%20Dal%20%28%E0%A6%AC%E0%A7%81%E0%A6%9F%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%29%20%7C%201%20kg.jpeg",
+    "description": "Pulses | But Dal (\u09ac\u09c1\u099f\u09f0 \u09a6\u09be\u0987\u09b2) | 1 kg. Fresh quality pulses & dals available for fast 1-day home delivery across town at best price \u20b990."
+  },
+  {
+    "id": "1dd-fola-mogu-dal-green-split-moong-chilka-1kg-r12",
+    "title": "Pulses | Fola Mogu (\u09ab\u09b2\u09be \u09ae\u0997\u09c1) | 1kg",
+    "buying_cost": 85.0,
+    "price": 90.0,
+    "profit": 5.0,
+    "margin_pct": 5.6,
+    "markup_pct": 5.9,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Pulses & Dals",
+    "pack_size": "1kg",
+    "link": "https://1dd.web.app/?item=1dd-fola-mogu-dal-green-split-moong-chilka-1kg-r12",
+    "image_link": "https://1dd.web.app/images/products/Pulses%20%7C%20Fola%20Mogu%20(%E0%A6%AB%E0%A6%B2%E0%A6%BE%20%E0%A6%AE%E0%A6%97%E0%A7%81)%20%7C%201kg.jpg",
+    "local_image": "product_images/Pulses%20%7C%20Fola%20Mogu%20%28%E0%A6%AB%E0%A6%B2%E0%A6%BE%20%E0%A6%AE%E0%A6%97%E0%A7%81%29%20%7C%201kg.jpg",
+    "description": "Pulses | Fola Mogu (\u09ab\u09b2\u09be \u09ae\u0997\u09c1) | 1kg. Fresh quality pulses & dals available for fast 1-day home delivery across town at best price \u20b990."
+  },
+  {
+    "id": "1dd-premium-red-masoor-dal-1-kg-r6",
+    "title": "Pulses | Masoor (\u09ae\u099a\u09c1\u09f0 \u09a6\u09be\u0987\u09b2 - Premium) | 1 kg",
+    "buying_cost": 95.0,
+    "price": 100.0,
+    "profit": 5.0,
+    "margin_pct": 5.0,
+    "markup_pct": 5.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Pulses & Dals",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-premium-red-masoor-dal-1-kg-r6",
+    "image_link": "https://1dd.web.app/images/products/Pulses%20%7C%20Masoor%20(%E0%A6%AE%E0%A6%9A%E0%A7%81%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%20-%20Premium)%20%7C%201%20kg.jpeg",
+    "local_image": "product_images/Pulses%20%7C%20Masoor%20%28%E0%A6%AE%E0%A6%9A%E0%A7%81%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%20-%20Premium%29%20%7C%201%20kg.jpeg",
+    "description": "Pulses | Masoor (\u09ae\u099a\u09c1\u09f0 \u09a6\u09be\u0987\u09b2 - Premium) | 1 kg. Fresh quality pulses & dals available for fast 1-day home delivery across town at best price \u20b9100."
+  },
+  {
+    "id": "1dd-standard-red-masoor-dal-1-kg-r7",
+    "title": "Pulses | Masoor (\u09ae\u099a\u09c1\u09f0 \u09a6\u09be\u0987\u09b2 - Standard) | 1 kg",
+    "buying_cost": 85.0,
+    "price": 90.0,
+    "profit": 5.0,
+    "margin_pct": 5.6,
+    "markup_pct": 5.9,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Pulses & Dals",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-standard-red-masoor-dal-1-kg-r7",
+    "image_link": "https://1dd.web.app/images/products/Pulses%20%7C%20Masoor%20(%E0%A6%AE%E0%A6%9A%E0%A7%81%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%20-%20Standard)%20%7C%201%20kg.jpeg",
+    "local_image": "product_images/Pulses%20%7C%20Masoor%20%28%E0%A6%AE%E0%A6%9A%E0%A7%81%E0%A7%B0%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%20-%20Standard%29%20%7C%201%20kg.jpeg",
+    "description": "Pulses | Masoor (\u09ae\u099a\u09c1\u09f0 \u09a6\u09be\u0987\u09b2 - Standard) | 1 kg. Fresh quality pulses & dals available for fast 1-day home delivery across town at best price \u20b990."
+  },
+  {
+    "id": "1dd-yellow-moong-dal-split-1-kg-r10",
+    "title": "Pulses | Moong Dal (\u09ae\u0997\u09c1 \u09a6\u09be\u0987\u09b2) | 1 kg",
+    "buying_cost": 110.0,
+    "price": 120.0,
+    "profit": 10.0,
+    "margin_pct": 8.3,
+    "markup_pct": 9.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Pulses & Dals",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-yellow-moong-dal-split-1-kg-r10",
+    "image_link": "https://1dd.web.app/images/products/Pulses%20%7C%20Moong%20Dal%20(%E0%A6%AE%E0%A6%97%E0%A7%81%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2)%20%7C%201%20kg.jpeg",
+    "local_image": "product_images/Pulses%20%7C%20Moong%20Dal%20%28%E0%A6%AE%E0%A6%97%E0%A7%81%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%29%20%7C%201%20kg.jpeg",
+    "description": "Pulses | Moong Dal (\u09ae\u0997\u09c1 \u09a6\u09be\u0987\u09b2) | 1 kg. Fresh quality pulses & dals available for fast 1-day home delivery across town at best price \u20b9120."
+  },
+  {
+    "id": "1dd-yellow-moong-dal-split-500-g-r11",
+    "title": "Pulses | Moong Dal (\u09ae\u0997\u09c1 \u09a6\u09be\u0987\u09b2) | 500 g",
+    "buying_cost": 55.0,
+    "price": 60.0,
+    "profit": 5.0,
+    "margin_pct": 8.3,
+    "markup_pct": 9.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Pulses & Dals",
+    "pack_size": "500 g",
+    "link": "https://1dd.web.app/?item=1dd-yellow-moong-dal-split-500-g-r11",
+    "image_link": "https://1dd.web.app/images/products/Pulses%20%7C%20Moong%20Dal%20(%E0%A6%AE%E0%A6%97%E0%A7%81%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2)%20%7C%20500%20g.jpg",
+    "local_image": "product_images/Pulses%20%7C%20Moong%20Dal%20%28%E0%A6%AE%E0%A6%97%E0%A7%81%20%E0%A6%A6%E0%A6%BE%E0%A6%87%E0%A6%B2%29%20%7C%20500%20g.jpg",
+    "description": "Pulses | Moong Dal (\u09ae\u0997\u09c1 \u09a6\u09be\u0987\u09b2) | 500 g. Fresh quality pulses & dals available for fast 1-day home delivery across town at best price \u20b960."
+  },
+  {
+    "id": "1dd-everyday-crystal-iodised-salt-1-kg-r105",
+    "title": "Salt | Everyday | 1 kg",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Everyday",
+    "category": "Iodised Salt",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-everyday-crystal-iodised-salt-1-kg-r105",
+    "image_link": "https://1dd.web.app/images/products/Salt%20%7C%20Everyday%20%7C%201%20kg.jpeg",
+    "local_image": "product_images/Salt%20%7C%20Everyday%20%7C%201%20kg.jpeg",
+    "description": "Salt | Everyday | 1 kg. Fresh quality iodised salt available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-taza-refined-iodised-table-salt-1kg-r104",
+    "title": "Salt | Taza | 1kg",
+    "buying_cost": 8.0,
+    "price": 10.0,
+    "profit": 2.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Taza",
+    "category": "Iodised Salt",
+    "pack_size": "1kg",
+    "link": "https://1dd.web.app/?item=1dd-taza-refined-iodised-table-salt-1kg-r104",
+    "image_link": "https://1dd.web.app/images/products/Salt%20%7C%20Taza%20%7C%201kg.jpg",
+    "local_image": "product_images/Salt%20%7C%20Taza%20%7C%201kg.jpg",
+    "description": "Salt | Taza | 1kg. Fresh quality iodised salt available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-z-premium-pure-iodised-salt-1-kg-r106",
+    "title": "Salt | Z + | 1 kg",
+    "buying_cost": 10.0,
+    "price": 15.0,
+    "profit": 5.0,
+    "margin_pct": 33.3,
+    "markup_pct": 50.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Z+",
+    "category": "Iodised Salt",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-z-premium-pure-iodised-salt-1-kg-r106",
+    "image_link": "https://1dd.web.app/images/products/Salt%20%7C%20Z%20%2B%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Salt%20%7C%20Z%20%2B%20%7C%201%20kg.jpg",
+    "description": "Salt | Z + | 1 kg. Fresh quality iodised salt available for fast 1-day home delivery across town at best price \u20b915."
+  },
+  {
+    "id": "1dd-crispy-sira-chira-flattened-rice-poha-1kg-r27",
+    "title": "Sira (\u099a\u09bf\u09f0\u09be) | Daily Fresh | 1kg",
+    "buying_cost": 40.0,
+    "price": 45.0,
+    "profit": 5.0,
+    "margin_pct": 11.1,
+    "markup_pct": 12.5,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Daily Fresh",
+    "category": "Breakfast & Staples",
+    "pack_size": "1kg",
+    "link": "https://1dd.web.app/?item=1dd-crispy-sira-chira-flattened-rice-poha-1kg-r27",
+    "image_link": "https://1dd.web.app/images/products/Sira%20(%E0%A6%9A%E0%A6%BF%E0%A7%B0%E0%A6%BE)%20%7C%20Daily%20Fresh%20%7C%201kg.jpg",
+    "local_image": "product_images/Sira%20%28%E0%A6%9A%E0%A6%BF%E0%A7%B0%E0%A6%BE%29%20%7C%20Daily%20Fresh%20%7C%201kg.jpg",
+    "description": "Sira (\u099a\u09bf\u09f0\u09be) | Daily Fresh | 1kg. Fresh quality breakfast & staples available for fast 1-day home delivery across town at best price \u20b945."
+  },
+  {
+    "id": "1dd-astha-herbal-bath-soap-1-pc-r32",
+    "title": "Soap | Astha | 1 pc",
+    "buying_cost": 35.0,
+    "price": 40.0,
+    "profit": 5.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Astha",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-astha-herbal-bath-soap-1-pc-r32",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Astha%20%7C%201%20pc.jpg",
+    "local_image": "product_images/Soap%20%7C%20Astha%20%7C%201%20pc.jpg",
+    "description": "Soap | Astha | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-dettol-original-germ-protection-bath-soap-1-pc-r35",
+    "title": "Soap | Detol | 1 pc",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Dettol",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-dettol-original-germ-protection-bath-soap-1-pc-r35",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Detol%20%7C%201%20pc.jpg",
+    "local_image": "product_images/Soap%20%7C%20Detol%20%7C%201%20pc.jpg",
+    "description": "Soap | Detol | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-exo-anti-bacterial-dishwash-bar-1-pc-r34",
+    "title": "Soap | Exo | 1 pc",
+    "buying_cost": 4.5,
+    "price": 5.0,
+    "profit": 0.5,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Exo",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-exo-anti-bacterial-dishwash-bar-1-pc-r34",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Exo%20%7C%201%20pc.jpg",
+    "local_image": "product_images/Soap%20%7C%20Exo%20%7C%201%20pc.jpg",
+    "description": "Soap | Exo | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b95."
+  },
+  {
+    "id": "1dd-goodluck-laundry-washing-soap-bar-1-pc-r39",
+    "title": "Soap | Goodluck | 1 pc",
+    "buying_cost": 25.0,
+    "price": 30.0,
+    "profit": 5.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Goodluck",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-goodluck-laundry-washing-soap-bar-1-pc-r39",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Goodluck%20%7C%201%20pc.jpg",
+    "local_image": "product_images/Soap%20%7C%20Goodluck%20%7C%201%20pc.jpg",
+    "description": "Soap | Goodluck | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b930."
+  },
+  {
+    "id": "1dd-lifebuoy-total-germ-protection-soap-bar-1-pc-r38",
+    "title": "Soap | Lifebuoy | 1 pc",
+    "buying_cost": 25.0,
+    "price": 30.0,
+    "profit": 5.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Lifebuoy",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-lifebuoy-total-germ-protection-soap-bar-1-pc-r38",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Lifebuoy%20%7C%201%20pc.png",
+    "local_image": "product_images/Soap%20%7C%20Lifebuoy%20%7C%201%20pc.png",
+    "description": "Soap | Lifebuoy | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b930."
+  },
+  {
+    "id": "1dd-lux-international-creamy-perfection-soap-1-pc-r40",
+    "title": "Soap | Lux International | 1 pc",
+    "buying_cost": 35.0,
+    "price": 40.0,
+    "profit": 5.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Lux",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-lux-international-creamy-perfection-soap-1-pc-r40",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Lux%20International%20%7C%201%20pc.jpg",
+    "local_image": "product_images/Soap%20%7C%20Lux%20International%20%7C%201%20pc.jpg",
+    "description": "Soap | Lux International | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-lux-rose-vitamin-e-beauty-bath-soap-1-pc-r37",
+    "title": "Soap | Lux | 1 pc",
+    "buying_cost": 25.0,
+    "price": 30.0,
+    "profit": 5.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Lux",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-lux-rose-vitamin-e-beauty-bath-soap-1-pc-r37",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Lux%20%7C%201%20pc.jpg",
+    "local_image": "product_images/Soap%20%7C%20Lux%20%7C%201%20pc.jpg",
+    "description": "Soap | Lux | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b930."
+  },
+  {
+    "id": "1dd-pari-detergent-laundry-washing-bar-1-pc-r41",
+    "title": "Soap | Pari | 1 pc",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Pari",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-pari-detergent-laundry-washing-bar-1-pc-r41",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Pari%20%7C%201%20pc.jpg",
+    "local_image": "product_images/Soap%20%7C%20Pari%20%7C%201%20pc.jpg",
+    "description": "Soap | Pari | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-patanjali-herbal-dishwash-bath-bar-1-pc-r33",
+    "title": "Soap | Patanjali Bar | 1 pc",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Patanjali",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-patanjali-herbal-dishwash-bath-bar-1-pc-r33",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Patanjali%20Bar%20%7C%201%20pc.jpg",
+    "local_image": "product_images/Soap%20%7C%20Patanjali%20Bar%20%7C%201%20pc.jpg",
+    "description": "Soap | Patanjali Bar | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-snowball-laundry-soap-bar-1-pc-r31",
+    "title": "Soap | SnowBall | 1 pc",
+    "buying_cost": 35.0,
+    "price": 40.0,
+    "profit": 5.0,
+    "margin_pct": 12.5,
+    "markup_pct": 14.3,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Snowball",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-snowball-laundry-soap-bar-1-pc-r31",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20SnowBall%20%7C%201%20pc.jpg",
+    "local_image": "product_images/Soap%20%7C%20SnowBall%20%7C%201%20pc.jpg",
+    "description": "Soap | SnowBall | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b940."
+  },
+  {
+    "id": "1dd-vivel-aloe-vera-vitamin-e-bath-soap-1-pc-r36",
+    "title": "Soap | Vivel | 1 pc",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Vivel",
+    "category": "Soaps & Cleansing",
+    "pack_size": "1",
+    "link": "https://1dd.web.app/?item=1dd-vivel-aloe-vera-vitamin-e-bath-soap-1-pc-r36",
+    "image_link": "https://1dd.web.app/images/products/Soap%20%7C%20Vivel%20%7C%201%20pc.png",
+    "local_image": "product_images/Soap%20%7C%20Vivel%20%7C%201%20pc.png",
+    "description": "Soap | Vivel | 1 pc. Fresh quality soaps & cleansing available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-pure-refined-white-sugar-cheeni-1-kg-r23",
+    "title": "Sugar | Madhur | 1 kg",
+    "buying_cost": 62.0,
+    "price": 65.0,
+    "profit": 3.0,
+    "margin_pct": 4.6,
+    "markup_pct": 4.8,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Madhur",
+    "category": "Sugar",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-pure-refined-white-sugar-cheeni-1-kg-r23",
+    "image_link": "https://1dd.web.app/images/products/Sugar%20%7C%20Madhur%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Sugar%20%7C%20Madhur%20%7C%201%20kg.jpg",
+    "description": "Sugar | Madhur | 1 kg. Fresh quality sugar available for fast 1-day home delivery across town at best price \u20b965."
+  },
+  {
+    "id": "1dd-fine-suji-rava-semolina-500g-r30",
+    "title": "Suji | Normal | 500g",
+    "buying_cost": 25.0,
+    "price": 30.0,
+    "profit": 5.0,
+    "margin_pct": 16.7,
+    "markup_pct": 20.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Normal",
+    "category": "Breakfast & Staples",
+    "pack_size": "500g",
+    "link": "https://1dd.web.app/?item=1dd-fine-suji-rava-semolina-500g-r30",
+    "image_link": "https://1dd.web.app/images/products/Suji%20%7C%20Normal%20%7C%20500g.jpeg",
+    "local_image": "product_images/Suji%20%7C%20Normal%20%7C%20500g.jpeg",
+    "description": "Suji | Normal | 500g. Fresh quality breakfast & staples available for fast 1-day home delivery across town at best price \u20b930."
+  },
+  {
+    "id": "1dd-surf-excel-easy-wash-detergent-powder-1-kg-r44",
+    "title": "Surf | Surf Excel | 1 kg",
+    "buying_cost": 130.0,
+    "price": 140.0,
+    "profit": 10.0,
+    "margin_pct": 7.1,
+    "markup_pct": 7.7,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Surf Excel",
+    "category": "Laundry & Detergents",
+    "pack_size": "1 kg",
+    "link": "https://1dd.web.app/?item=1dd-surf-excel-easy-wash-detergent-powder-1-kg-r44",
+    "image_link": "https://1dd.web.app/images/products/Surf%20%7C%20Surf%20Excel%20%7C%201%20kg.jpg",
+    "local_image": "product_images/Surf%20%7C%20Surf%20Excel%20%7C%201%20kg.jpg",
+    "description": "Surf | Surf Excel | 1 kg. Fresh quality laundry & detergents available for fast 1-day home delivery across town at best price \u20b9140."
+  },
+  {
+    "id": "1dd-surf-excel-easy-wash-detergent-powder-500-g-r43",
+    "title": "Surf | Surf Excel | 500 g",
+    "buying_cost": 65.0,
+    "price": 70.0,
+    "profit": 5.0,
+    "margin_pct": 7.1,
+    "markup_pct": 7.7,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Surf Excel",
+    "category": "Laundry & Detergents",
+    "pack_size": "500 g",
+    "link": "https://1dd.web.app/?item=1dd-surf-excel-easy-wash-detergent-powder-500-g-r43",
+    "image_link": "https://1dd.web.app/images/products/Surf%20%7C%20Surf%20Excel%20%7C%20500%20g.png",
+    "local_image": "product_images/Surf%20%7C%20Surf%20Excel%20%7C%20500%20g.png",
+    "description": "Surf | Surf Excel | 500 g. Fresh quality laundry & detergents available for fast 1-day home delivery across town at best price \u20b970."
+  },
+  {
+    "id": "1dd-surf-excel-easy-wash-detergent-powder-10-packet-r42",
+    "title": "Surf | Surf Excel | \u20b910 packet",
+    "buying_cost": 9.0,
+    "price": 10.0,
+    "profit": 1.0,
+    "margin_pct": 10.0,
+    "markup_pct": 11.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Surf Excel",
+    "category": "Laundry & Detergents",
+    "pack_size": "\u20b910 packet",
+    "link": "https://1dd.web.app/?item=1dd-surf-excel-easy-wash-detergent-powder-10-packet-r42",
+    "image_link": "https://1dd.web.app/images/products/Surf%20%7C%20Surf%20Excel%20%7C%20%E2%82%B910%20packet.jpg",
+    "local_image": "product_images/Surf%20%7C%20Surf%20Excel%20%7C%20%E2%82%B910%20packet.jpg",
+    "description": "Surf | Surf Excel | \u20b910 packet. Fresh quality laundry & detergents available for fast 1-day home delivery across town at best price \u20b910."
+  },
+  {
+    "id": "1dd-tide-plus-jasmine-rose-extra-power-chandan-500-r46",
+    "title": "Surf | Tide (Chandan) | 500 g",
+    "buying_cost": 75.0,
+    "price": 80.0,
+    "profit": 5.0,
+    "margin_pct": 6.2,
+    "markup_pct": 6.7,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Tide",
+    "category": "Laundry & Detergents",
+    "pack_size": "Chandan/500",
+    "link": "https://1dd.web.app/?item=1dd-tide-plus-jasmine-rose-extra-power-chandan-500-r46",
+    "image_link": "https://1dd.web.app/images/products/Surf%20%7C%20Tide%20(Chandan)%20%7C%20500%20g.jpg",
+    "local_image": "product_images/Surf%20%7C%20Tide%20%28Chandan%29%20%7C%20500%20g.jpg",
+    "description": "Surf | Tide (Chandan) | 500 g. Fresh quality laundry & detergents available for fast 1-day home delivery across town at best price \u20b980."
+  },
+  {
+    "id": "1dd-tide-plus-extra-power-lemon-mint-lemon-500-r45",
+    "title": "Surf | Tide (Lemon) | 500 g",
+    "buying_cost": 65.0,
+    "price": 70.0,
+    "profit": 5.0,
+    "margin_pct": 7.1,
+    "markup_pct": 7.7,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Tide",
+    "category": "Laundry & Detergents",
+    "pack_size": "Lemon/500",
+    "link": "https://1dd.web.app/?item=1dd-tide-plus-extra-power-lemon-mint-lemon-500-r45",
+    "image_link": "https://1dd.web.app/images/products/Surf%20%7C%20Tide%20(Lemon)%20%7C%20500%20g.jpg",
+    "local_image": "product_images/Surf%20%7C%20Tide%20%28Lemon%29%20%7C%20500%20g.jpg",
+    "description": "Surf | Tide (Lemon) | 500 g. Fresh quality laundry & detergents available for fast 1-day home delivery across town at best price \u20b970."
+  },
+  {
+    "id": "1dd-archana-assam-ctc-strong-tea-250-g-r24",
+    "title": "Tea (\u099a\u09be\u09b9) | Archana | 250 g",
+    "buying_cost": 55.0,
+    "price": 60.0,
+    "profit": 5.0,
+    "margin_pct": 8.3,
+    "markup_pct": 9.1,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Archana",
+    "category": "Tea & Beverages",
+    "pack_size": "250 g",
+    "link": "https://1dd.web.app/?item=1dd-archana-assam-ctc-strong-tea-250-g-r24",
+    "image_link": "https://1dd.web.app/images/products/Tea%20(%E0%A6%9A%E0%A6%BE%E0%A6%B9)%20%7C%20Archana%20%7C%20250%20g.jpg",
+    "local_image": "product_images/Tea%20%28%E0%A6%9A%E0%A6%BE%E0%A6%B9%29%20%7C%20Archana%20%7C%20250%20g.jpg",
+    "description": "Tea (\u099a\u09be\u09b9) | Archana | 250 g. Fresh quality tea & beverages available for fast 1-day home delivery across town at best price \u20b960."
+  },
+  {
+    "id": "1dd-nameri-premium-assam-ctc-tea-250-g-r25",
+    "title": "Tea (\u099a\u09be\u09b9) | Nameri | 250 g",
+    "buying_cost": 75.0,
+    "price": 80.0,
+    "profit": 5.0,
+    "margin_pct": 6.2,
+    "markup_pct": 6.7,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Nameri",
+    "category": "Tea & Beverages",
+    "pack_size": "250 g",
+    "link": "https://1dd.web.app/?item=1dd-nameri-premium-assam-ctc-tea-250-g-r25",
+    "image_link": "https://1dd.web.app/images/products/Tea%20(%E0%A6%9A%E0%A6%BE%E0%A6%B9)%20%7C%20Nameri%20%7C%20250%20g.jpg",
+    "local_image": "product_images/Tea%20%28%E0%A6%9A%E0%A6%BE%E0%A6%B9%29%20%7C%20Nameri%20%7C%20250%20g.jpg",
+    "description": "Tea (\u099a\u09be\u09b9) | Nameri | 250 g. Fresh quality tea & beverages available for fast 1-day home delivery across town at best price \u20b980."
+  },
+  {
+    "id": "1dd-sonitpur-gold-ctc-assam-tea-500g-r26",
+    "title": "Tea (\u099a\u09be\u09b9) | Sonitpur | 500g",
+    "buying_cost": 100.0,
+    "price": 110.0,
+    "profit": 10.0,
+    "margin_pct": 9.1,
+    "markup_pct": 10.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Sonitpur",
+    "category": "Tea & Beverages",
+    "pack_size": "500g",
+    "link": "https://1dd.web.app/?item=1dd-sonitpur-gold-ctc-assam-tea-500g-r26",
+    "image_link": "https://1dd.web.app/images/products/Tea%20(%E0%A6%9A%E0%A6%BE%E0%A6%B9)%20%7C%20Sonitpur%20%7C%20500g.jpg",
+    "local_image": "product_images/Tea%20%28%E0%A6%9A%E0%A6%BE%E0%A6%B9%29%20%7C%20Sonitpur%20%7C%20500g.jpg",
+    "description": "Tea (\u099a\u09be\u09b9) | Sonitpur | 500g. Fresh quality tea & beverages available for fast 1-day home delivery across town at best price \u20b9110."
+  },
+  {
+    "id": "1dd-colgate-strong-teeth-anticavity-toothpaste-100-g-r87",
+    "title": "Tooth Paste | Colgate | 100 g",
+    "buying_cost": 60.0,
+    "price": 75.0,
+    "profit": 15.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Colgate",
+    "category": "Oral Care & Toothpaste",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-colgate-strong-teeth-anticavity-toothpaste-100-g-r87",
+    "image_link": "https://1dd.web.app/images/products/Tooth%20Paste%20%7C%20Colgate%20%7C%20100%20g.jpg",
+    "local_image": "product_images/Tooth%20Paste%20%7C%20Colgate%20%7C%20100%20g.jpg",
+    "description": "Tooth Paste | Colgate | 100 g. Fresh quality oral care & toothpaste available for fast 1-day home delivery across town at best price \u20b975."
+  },
+  {
+    "id": "1dd-dabur-red-ayurvedic-toothpaste-100-g-r89",
+    "title": "Tooth Paste | Dabur Red | 100 g",
+    "buying_cost": 56.0,
+    "price": 70.0,
+    "profit": 14.0,
+    "margin_pct": 20.0,
+    "markup_pct": 25.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Dabur",
+    "category": "Oral Care & Toothpaste",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-dabur-red-ayurvedic-toothpaste-100-g-r89",
+    "image_link": "https://1dd.web.app/images/products/Tooth%20Paste%20%7C%20Dabur%20Red%20%7C%20100%20g.webp",
+    "local_image": "product_images/Tooth%20Paste%20%7C%20Dabur%20Red%20%7C%20100%20g.webp",
+    "description": "Tooth Paste | Dabur Red | 100 g. Fresh quality oral care & toothpaste available for fast 1-day home delivery across town at best price \u20b970."
+  },
+  {
+    "id": "1dd-patanjali-dant-kanti-natural-toothpaste-100-g-r88",
+    "title": "Tooth Paste | Patanjali | 100 g",
+    "buying_cost": 42.0,
+    "price": 55.0,
+    "profit": 13.0,
+    "margin_pct": 23.6,
+    "markup_pct": 31.0,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Patanjali",
+    "category": "Oral Care & Toothpaste",
+    "pack_size": "100 g",
+    "link": "https://1dd.web.app/?item=1dd-patanjali-dant-kanti-natural-toothpaste-100-g-r88",
+    "image_link": "https://1dd.web.app/images/products/Tooth%20Paste%20%7C%20Patanjali%20%7C%20100%20g.webp",
+    "local_image": "product_images/Tooth%20Paste%20%7C%20Patanjali%20%7C%20100%20g.webp",
+    "description": "Tooth Paste | Patanjali | 100 g. Fresh quality oral care & toothpaste available for fast 1-day home delivery across town at best price \u20b955."
+  },
+  {
+    "id": "1dd-sensodyne-fresh-mint-sensitivity-toothpaste-70-g-r90",
+    "title": "Tooth Paste | Sensodyne | 70 g",
+    "buying_cost": 140.0,
+    "price": 170.0,
+    "profit": 30.0,
+    "margin_pct": 17.6,
+    "markup_pct": 21.4,
+    "availability": "in stock",
+    "condition": "new",
+    "brand": "Sensodyne",
+    "category": "Oral Care & Toothpaste",
+    "pack_size": "70 g",
+    "link": "https://1dd.web.app/?item=1dd-sensodyne-fresh-mint-sensitivity-toothpaste-70-g-r90",
+    "image_link": "https://1dd.web.app/images/products/Tooth%20Paste%20%7C%20Sensodyne%20%7C%2070%20g.jpg",
+    "local_image": "product_images/Tooth%20Paste%20%7C%20Sensodyne%20%7C%2070%20g.jpg",
+    "description": "Tooth Paste | Sensodyne | 70 g. Fresh quality oral care & toothpaste available for fast 1-day home delivery across town at best price \u20b9170."
+  }
+];
+
+  let currentSort = { field: null, asc: true };
+  let activeCategory = "";
+  let activeBrand = "";
+  let activeMargin = "";
+  let searchQuery = "";
+
+  // Elements
+  const tableBody = document.getElementById("tableBody");
+  const emptyState = document.getElementById("emptyState");
+  const searchInput = document.getElementById("searchInput");
+  const categoryFilter = document.getElementById("categoryFilter");
+  const brandFilter = document.getElementById("brandFilter");
+  const marginFilter = document.getElementById("marginFilter");
+  const categoryChips = document.getElementById("categoryChips");
+  const resultsCount = document.getElementById("resultsCount");
+  const resetFiltersBtn = document.getElementById("resetFiltersBtn");
+  const themeToggle = document.getElementById("themeToggle");
+  const exportCsvBtn = document.getElementById("exportCsvBtn");
+
+  // Stats elements
+  const statTotalCount = document.getElementById("statTotalCount");
+  const statFilteredMeta = document.getElementById("statFilteredMeta");
+  const statTotalSelling = document.getElementById("statTotalSelling");
+  const statTotalCost = document.getElementById("statTotalCost");
+  const statTotalProfit = document.getElementById("statTotalProfit");
+  const statAvgMargin = document.getElementById("statAvgMargin");
+
+  // Modal elements
+  const modal = document.getElementById("productModal");
+  const modalCloseBtn = document.getElementById("modalCloseBtn");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalImg = document.getElementById("modalImg");
+  const modalId = document.getElementById("modalId");
+  const modalCategory = document.getElementById("modalCategory");
+  const modalBrand = document.getElementById("modalBrand");
+  const modalPack = document.getElementById("modalPack");
+  const modalCost = document.getElementById("modalCost");
+  const modalPrice = document.getElementById("modalPrice");
+  const modalProfit = document.getElementById("modalProfit");
+  const modalMargin = document.getElementById("modalMargin");
+  const modalDesc = document.getElementById("modalDesc");
+  const modalStoreLink = document.getElementById("modalStoreLink");
+
+  // Initialize
+  function init() {
+    populateFilters();
+    renderCategoryChips();
+    applyFiltersAndRender();
+    setupEventListeners();
+  }
+
+  // Populate Dropdowns
+  function populateFilters() {
+    const categories = [...new Set(PRODUCTS_DATA.map(p => p.category))].sort();
+    const brands = [...new Set(PRODUCTS_DATA.map(p => p.brand))].sort();
+
+    categories.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      categoryFilter.appendChild(opt);
+    });
+
+    brands.forEach(br => {
+      const opt = document.createElement("option");
+      opt.value = br;
+      opt.textContent = br;
+      brandFilter.appendChild(opt);
+    });
+  }
+
+  // Render Horizontal Category Chips
+  function renderCategoryChips() {
+    const categories = [...new Set(PRODUCTS_DATA.map(p => p.category))].sort();
+    categories.forEach(cat => {
+      const btn = document.createElement("button");
+      btn.className = "chip";
+      btn.dataset.cat = cat;
+      btn.textContent = cat;
+      categoryChips.appendChild(btn);
+    });
+  }
+
+  // Filter & Sort Logic
+  function getFilteredData() {
+    return PRODUCTS_DATA.filter(p => {
+      // Search
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        const match = 
+          p.title.toLowerCase().includes(q) ||
+          p.brand.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.pack_size.toLowerCase().includes(q) ||
+          p.id.toLowerCase().includes(q);
+        if (!match) return false;
+      }
+
+      // Category
+      if (activeCategory && p.category !== activeCategory) {
+        return false;
+      }
+
+      // Brand
+      if (activeBrand && p.brand !== activeBrand) {
+        return false;
+      }
+
+      // Margin
+      if (activeMargin === "high" && p.margin_pct < 20) return false;
+      if (activeMargin === "mid" && (p.margin_pct < 10 || p.margin_pct >= 20)) return false;
+      if (activeMargin === "low" && p.margin_pct >= 10) return false;
+
+      return true;
+    });
+  }
+
+  function getSortedData(data) {
+    if (!currentSort.field) return data;
+    const { field, asc } = currentSort;
+    return [...data].sort((a, b) => {
+      let vA = a[field];
+      let vB = b[field];
+
+      if (typeof vA === "string") {
+        vA = vA.toLowerCase();
+        vB = vB.toLowerCase();
+      }
+
+      if (vA < vB) return asc ? -1 : 1;
+      if (vA > vB) return asc ? 1 : -1;
+      return 0;
+    });
+  }
+
+  // Render Table & Update Statistics
+  function applyFiltersAndRender() {
+    const filtered = getFilteredData();
+    const sorted = getSortedData(filtered);
+
+    // Update Stats
+    updateStats(filtered);
+
+    // Render Table
+    tableBody.innerHTML = "";
+
+    if (sorted.length === 0) {
+      emptyState.style.display = "block";
+    } else {
+      emptyState.style.display = "none";
+      const fragment = document.createDocumentFragment();
+
+      sorted.forEach((p, idx) => {
+        const tr = document.createElement("tr");
+
+        let marginClass = "margin-mid";
+        if (p.margin_pct >= 20) marginClass = "margin-high";
+        else if (p.margin_pct < 10) marginClass = "margin-low";
+
+        tr.innerHTML = `
+          <td style="text-align: center; color: var(--text-dim); font-size: 12px;">${idx + 1}</td>
+          <td style="text-align: center;">
+            <div class="thumb-wrapper" onclick="openModal('${p.id}')" title="Click to enlarge">
+              <img class="thumb-img" src="${p.local_image}" alt="${p.title}" loading="lazy" onerror="this.onerror=null; this.src='${p.image_link}';" />
+            </div>
+          </td>
+          <td>
+            <div class="prod-cell">
+              <div>
+                <div class="prod-title" onclick="openModal('${p.id}')">${p.title}</div>
+                <span class="pack-badge">${p.pack_size}</span>
+              </div>
+            </div>
+          </td>
+          <td><span class="category-badge">${p.category}</span></td>
+          <td class="brand-cell">${p.brand}</td>
+          <td style="color: var(--text-muted);">${p.pack_size}</td>
+          <td class="num-cell buying-cost" style="text-align: right;">₹${p.buying_cost.toFixed(2)}</td>
+          <td class="num-cell selling-price" style="text-align: right;">₹${p.price.toFixed(2)}</td>
+          <td class="num-cell profit-cell" style="text-align: right;">+₹${p.profit.toFixed(2)}</td>
+          <td style="text-align: center;">
+            <span class="margin-pill ${marginClass}">${p.margin_pct}%</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="stock-badge"><span class="stock-dot"></span> In Stock</span>
+          </td>
+          <td style="text-align: center;">
+            <a href="${p.link}" target="_blank" class="link-icon-btn" title="View in 1DD Store">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+          </td>
+        `;
+        fragment.appendChild(tr);
+      });
+      tableBody.appendChild(fragment);
+    }
+
+    // Update Counts & Filter bar
+    const isFiltered = searchQuery || activeCategory || activeBrand || activeMargin;
+    resultsCount.textContent = `Showing ${sorted.length} of ${PRODUCTS_DATA.length} products`;
+    resetFiltersBtn.style.display = isFiltered ? "inline-block" : "none";
+  }
+
+  function updateStats(data) {
+    statTotalCount.textContent = data.length;
+    statFilteredMeta.textContent = data.length === PRODUCTS_DATA.length ? "All catalog items" : `Filtered from ${PRODUCTS_DATA.length}`;
+
+    const totalSelling = data.reduce((sum, p) => sum + p.price, 0);
+    const totalCost = data.reduce((sum, p) => sum + p.buying_cost, 0);
+    const totalProfit = totalSelling - totalCost;
+    const avgMargin = totalSelling > 0 ? ((totalProfit / totalSelling) * 100).toFixed(1) : 0;
+
+    statTotalSelling.textContent = "₹" + totalSelling.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    statTotalCost.textContent = "₹" + totalCost.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    statTotalProfit.textContent = "₹" + totalProfit.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    statAvgMargin.textContent = `Avg Gross Margin: ${avgMargin}%`;
+  }
+
+  // Modal Functionality
+  function openModal(id) {
+    const p = PRODUCTS_DATA.find(item => item.id === id);
+    if (!p) return;
+
+    modalTitle.textContent = p.title;
+    modalImg.src = p.local_image;
+    modalImg.onerror = () => { modalImg.src = p.image_link; };
+    modalId.textContent = p.id;
+    modalCategory.textContent = p.category;
+    modalBrand.textContent = p.brand;
+    modalPack.textContent = p.pack_size;
+    modalCost.textContent = "₹" + p.buying_cost.toFixed(2);
+    modalPrice.textContent = "₹" + p.price.toFixed(2);
+    modalProfit.textContent = "+₹" + p.profit.toFixed(2) + ` (${p.markup_pct}% markup)`;
+    modalMargin.textContent = p.margin_pct + "%";
+    modalDesc.textContent = p.description;
+    modalStoreLink.href = p.link;
+
+    modal.classList.add("open");
+  }
+
+  function closeModal() {
+    modal.classList.remove("open");
+  }
+
+  // Event Listeners Setup
+  function setupEventListeners() {
+    // Search input
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value.trim();
+      applyFiltersAndRender();
+    });
+
+    // Category Select
+    categoryFilter.addEventListener("change", (e) => {
+      activeCategory = e.target.value;
+      updateChipActive(activeCategory);
+      applyFiltersAndRender();
+    });
+
+    // Category Chips
+    categoryChips.addEventListener("click", (e) => {
+      if (e.target.classList.contains("chip")) {
+        activeCategory = e.target.dataset.cat || "";
+        categoryFilter.value = activeCategory;
+        updateChipActive(activeCategory);
+        applyFiltersAndRender();
+      }
+    });
+
+    function updateChipActive(cat) {
+      document.querySelectorAll(".chip").forEach(c => {
+        if ((c.dataset.cat || "") === cat) {
+          c.classList.add("active");
+          c.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        } else {
+          c.classList.remove("active");
+        }
+      });
+    }
+
+    // Brand Select
+    brandFilter.addEventListener("change", (e) => {
+      activeBrand = e.target.value;
+      applyFiltersAndRender();
+    });
+
+    // Margin Select
+    marginFilter.addEventListener("change", (e) => {
+      activeMargin = e.target.value;
+      applyFiltersAndRender();
+    });
+
+    // Reset All Filters
+    resetFiltersBtn.addEventListener("click", () => {
+      searchQuery = "";
+      activeCategory = "";
+      activeBrand = "";
+      activeMargin = "";
+      searchInput.value = "";
+      categoryFilter.value = "";
+      brandFilter.value = "";
+      marginFilter.value = "";
+      updateChipActive("");
+      applyFiltersAndRender();
+    });
+
+    // Sorting on Column Click
+    document.querySelectorAll("th.sortable").forEach(th => {
+      th.addEventListener("click", () => {
+        const field = th.dataset.sort;
+        if (currentSort.field === field) {
+          currentSort.asc = !currentSort.asc;
+        } else {
+          currentSort.field = field;
+          currentSort.asc = true;
+        }
+
+        // Update headers visual state
+        document.querySelectorAll("th.sortable").forEach(h => {
+          h.classList.remove("active-sort");
+          h.querySelector(".sort-icon").innerHTML = "&uarr;&darr;";
+        });
+        th.classList.add("active-sort");
+        th.querySelector(".sort-icon").innerHTML = currentSort.asc ? "&uarr;" : "&darr;";
+
+        applyFiltersAndRender();
+      });
+    });
+
+    // Density Buttons
+    document.querySelectorAll(".segment-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".segment-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const density = btn.dataset.density;
+        document.body.className = document.body.className.replace(/density-\w+/g, "");
+        if (density !== "normal") {
+          document.body.classList.add(`density-${density}`);
+        }
+      });
+    });
+
+    // Theme Toggle
+    themeToggle.addEventListener("click", () => {
+      const isLight = document.documentElement.getAttribute("data-theme") === "light";
+      if (isLight) {
+        document.documentElement.removeAttribute("data-theme");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.setAttribute("data-theme", "light");
+        localStorage.setItem("theme", "light");
+      }
+    });
+
+    // Restore Theme Preference
+    if (localStorage.getItem("theme") === "light") {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+
+    // Modal Close
+    modalCloseBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+    });
+
+    // CSV Export
+    exportCsvBtn.addEventListener("click", () => {
+      const data = getFilteredData();
+      if (data.length === 0) return;
+
+      const headers = ["ID", "Title", "Brand", "Category", "Pack Size", "Buying Cost (INR)", "Selling Price (INR)", "Profit (INR)", "Margin %", "Store Link"];
+      const csvRows = [headers.join(",")];
+
+      data.forEach(p => {
+        const row = [
+          `"${p.id}"`,
+          `"${p.title.replace(/"/g, '""')}"`,
+          `"${p.brand.replace(/"/g, '""')}"`,
+          `"${p.category.replace(/"/g, '""')}"`,
+          `"${p.pack_size.replace(/"/g, '""')}"`,
+          p.buying_cost.toFixed(2),
+          p.price.toFixed(2),
+          p.profit.toFixed(2),
+          p.margin_pct,
+          `"${p.link}"`
+        ];
+        csvRows.push(row.join(","));
+      });
+
+      const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `1DD_Product_Catalog_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // Start app
+  document.addEventListener("DOMContentLoaded", init);
+</script>
+
+</body>
+</html>
