@@ -528,8 +528,8 @@
 
       <div class="filter-tabs">
         <button class="tab-btn active" data-tab="all" id="tabAll">All (28)</button>
-        <button class="tab-btn" data-tab="ready" id="tabReady">📍 GPS Ready (16)</button>
-        <button class="tab-btn" data-tab="pending" id="tabPending">⏳ Pending Info (12)</button>
+        <button class="tab-btn" data-tab="ready" id="tabReady">📍 GPS Ready (27)</button>
+        <button class="tab-btn" data-tab="pending" id="tabPending">⏳ Pending Info (1)</button>
       </div>
     </header>
 
@@ -604,23 +604,23 @@
       {
         houseNo: "01",
         houseNum: 1,
-        name: "",
-        phone: "",
-        mapUrl: ""
+        name: "Durga Upadhyaya",
+        phone: "9101839946",
+        mapUrl: "https://maps.app.goo.gl/PP9aczgcPF7vDay5A"
       },
       {
         houseNo: "02",
         houseNum: 2,
-        name: "",
-        phone: "",
-        mapUrl: ""
+        name: "Dimbeshwar Upadhyaya (Dibya)",
+        phone: "7896497822",
+        mapUrl: "https://maps.app.goo.gl/nTCxhZ7RrRodV2RS7"
       },
       {
         houseNo: "03",
         houseNum: 3,
-        name: "",
-        phone: "",
-        mapUrl: ""
+        name: "Dibya ghoror fornt",
+        phone: "6900259979",
+        mapUrl: "https://maps.app.goo.gl/XYfG4WgnYfALiz7CA"
       },
       {
         houseNo: "04",
@@ -632,58 +632,58 @@
       {
         houseNo: "05",
         houseNum: 5,
-        name: "",
-        phone: "",
-        mapUrl: ""
+        name: "Dish pat bonua ghor",
+        phone: "8876175372",
+        mapUrl: "https://maps.app.goo.gl/8S8Di7PoZebhyqe79?g_st=ac"
       },
       {
         houseNo: "06",
         houseNum: 6,
-        name: "",
-        phone: "",
-        mapUrl: ""
+        name: "Dishant Gautam",
+        phone: "9365910126",
+        mapUrl: "https://maps.app.goo.gl/tuE8Jng7WxpPKszTA"
       },
       {
         houseNo: "07",
         houseNum: 7,
         name: "",
         phone: "",
-        mapUrl: ""
+        mapUrl: "https://maps.app.goo.gl/27LDn7eTr2KWs8g98"
       },
       {
         houseNo: "08",
         houseNum: 8,
-        name: "",
-        phone: "",
-        mapUrl: ""
+        name: "Kula Prasad",
+        phone: "6000583396",
+        mapUrl: "https://maps.app.goo.gl/PmZuAyALrvuus8NU9?g_st=ac"
       },
       {
         houseNo: "09",
         houseNum: 9,
         name: "",
-        phone: "",
-        mapUrl: ""
+        phone: "9395468311",
+        mapUrl: "https://maps.app.goo.gl/83i3HHYHNFXgtqFU6?g_st=ac"
       },
       {
         houseNo: "10",
         houseNum: 10,
-        name: "",
+        name: "Pushkar da fornt,, (America)",
         phone: "",
-        mapUrl: ""
+        mapUrl: "https://maps.app.goo.gl/Areg6QjUXV3DtQeH6?g_st=ac"
       },
       {
         houseNo: "11",
         houseNum: 11,
-        name: "",
-        phone: "",
-        mapUrl: ""
+        name: "Nitish/Niraj",
+        phone: "6002149971",
+        mapUrl: "https://maps.app.goo.gl/aQ5wAbo3zzE8o9DU6?g_st=ac"
       },
       {
         houseNo: "12",
         houseNum: 12,
-        name: "",
-        phone: "",
-        mapUrl: ""
+        name: "Mukhesh Gautam",
+        phone: "8453373207",
+        mapUrl: "https://maps.app.goo.gl/6u578yntRguJEykGA"
       },
       {
         houseNo: "13",
@@ -799,9 +799,9 @@
       }
     ];
 
-    // Load from localStorage or use defaults
+    // Load from localStorage or use defaults (version 4 for latest Dipankar list)
     function loadLocations() {
-      const saved = localStorage.getItem("rider_locations_v2");
+      const saved = localStorage.getItem("rider_locations_v4");
       if (saved) {
         try {
           return JSON.parse(saved);
@@ -837,7 +837,7 @@
     const resetBtn = document.getElementById("resetBtn");
 
     function saveLocations() {
-      localStorage.setItem("rider_locations_v2", JSON.stringify(locationsData));
+      localStorage.setItem("rider_locations_v4", JSON.stringify(locationsData));
     }
 
     function renderChips() {
@@ -871,7 +871,7 @@
     }
 
     function cleanPhoneNumber(phone) {
-      // If multiple phones comma separated, take first for primary dial
+      if (!phone) return "";
       const firstPhone = phone.split(",")[0].trim();
       return firstPhone.replace(/[^\d+]/g, "");
     }
@@ -916,7 +916,6 @@
 
           card.className = `card ${hasMap ? '' : 'pending-loc'}`;
 
-          // Format multiple phones if present
           let phoneMarkup = '';
           if (item.phone) {
             const phones = item.phone.split(',').map(p => p.trim()).filter(Boolean);
@@ -1033,7 +1032,7 @@
 
     resetBtn.onclick = () => {
       if (confirm("Reset all house records back to official defaults?")) {
-        localStorage.removeItem("rider_locations_v2");
+        localStorage.removeItem("rider_locations_v4");
         locationsData = JSON.parse(JSON.stringify(defaultLocationsData));
         renderChips();
         render();
