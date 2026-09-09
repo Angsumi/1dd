@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Rider Delivery Navigator</title>
+  <title>Rider Delivery Navigator (Houses 1-28)</title>
   <style>
     :root {
-      --bg: #0f172a;
+      --bg: #0b1329;
       --card-bg: #1e293b;
       --card-border: #334155;
       --text-main: #f8fafc;
@@ -15,10 +15,9 @@
       --primary-hover: #2563eb;
       --success: #10b981;
       --success-hover: #059669;
-      --accent: #f59e0b;
+      --warning: #f59e0b;
       --badge-bg: #3b82f620;
       --badge-border: #3b82f650;
-      --badge-text: #60a5fa;
     }
 
     * {
@@ -33,7 +32,7 @@
       background-color: var(--bg);
       color: var(--text-main);
       padding: 12px;
-      padding-bottom: 60px;
+      padding-bottom: 70px;
       min-height: 100vh;
     }
 
@@ -44,12 +43,12 @@
 
     /* Header */
     header {
-      padding: 12px 4px 16px 4px;
+      padding: 12px 4px 14px 4px;
       text-align: center;
     }
 
     h1 {
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: #ffffff;
       display: flex;
@@ -64,14 +63,38 @@
       margin-top: 4px;
     }
 
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      justify-content: center;
+    }
+    .tab-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
     /* Sticky Search Bar */
     .sticky-bar {
       position: sticky;
       top: 8px;
       z-index: 100;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 6px 0 12px 0;
+      background: rgba(11, 19, 41, 0.96);
+      backdrop-filter: blur(12px);
+      padding: 6px 0 10px 0;
     }
 
     .search-wrapper {
@@ -126,13 +149,49 @@
       cursor: pointer;
     }
 
+    /* Quick jump chips */
+    .quick-chips {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 2px 8px 2px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .quick-chips::-webkit-scrollbar {
+      display: none;
+    }
+    .chip {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 5px 11px;
+      border-radius: 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .chip.has-loc {
+      color: #60a5fa;
+      border-color: #1e3a8a;
+    }
+    .chip.active {
+      background: var(--primary) !important;
+      color: #fff !important;
+      border-color: var(--primary) !important;
+    }
+
     /* Stats Bar */
     .stats-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 4px 4px 12px 4px;
-      font-size: 0.85rem;
+      padding: 4px 4px 8px 4px;
+      font-size: 0.82rem;
       color: var(--text-muted);
     }
 
@@ -141,7 +200,7 @@
       border: 1px solid #334155;
       padding: 4px 10px;
       border-radius: 20px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       cursor: pointer;
       color: #cbd5e1;
       user-select: none;
@@ -166,6 +225,12 @@
       transition: transform 0.1s ease, border-color 0.2s ease;
     }
 
+    .card.pending-loc {
+      border-style: dashed;
+      border-color: #475569;
+      background: #162032;
+    }
+
     .card:active {
       transform: scale(0.99);
     }
@@ -187,6 +252,12 @@
       letter-spacing: 0.5px;
       white-space: nowrap;
       box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+    }
+
+    .house-badge.pending {
+      background: #334155;
+      color: #94a3b8;
+      box-shadow: none;
     }
 
     .person-info {
@@ -219,6 +290,25 @@
       color: #38bdf8;
       text-decoration: none;
       font-weight: 600;
+    }
+
+    .status-tag {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .status-tag.ready {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-tag.missing {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
     }
 
     /* Action Buttons */
@@ -268,6 +358,13 @@
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
     }
 
+    .btn-pending {
+      background: #334155;
+      color: #94a3b8;
+      cursor: not-allowed;
+      border: 1px dashed #475569;
+    }
+
     .no-results {
       text-align: center;
       padding: 48px 16px;
@@ -278,42 +375,18 @@
       font-size: 2.5rem;
       margin-bottom: 8px;
     }
-
-    /* Quick jump chips */
-    .quick-chips {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 4px 0 10px 0;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .quick-chips::-webkit-scrollbar {
-      display: none;
-    }
-    .chip {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #94a3b8;
-      padding: 5px 12px;
-      border-radius: 16px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-    .chip.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>🛵 Rider Navigator</h1>
-      <p class="subtitle">Quick search house & start GPS navigation</p>
+      <p class="subtitle">Quick search house & start GPS navigation (Houses 1 to 28)</p>
+      <div class="filter-tabs">
+        <button class="tab-btn active" data-tab="all" id="tabAll">All (28)</button>
+        <button class="tab-btn" data-tab="ready" id="tabReady">📍 GPS Ready (16)</button>
+        <button class="tab-btn" data-tab="pending" id="tabPending">⏳ Pending Info (12)</button>
+      </div>
     </header>
 
     <div class="sticky-bar">
@@ -335,7 +408,7 @@
       </div>
 
       <div class="stats-bar">
-        <span id="resultCount">Showing 16 locations</span>
+        <span id="resultCount">Showing 28 locations</span>
         <span class="sort-badge" id="sortToggle">Sort: House # ⬆️</span>
       </div>
     </div>
@@ -352,13 +425,91 @@
   </div>
 
   <script>
+    // Complete list of houses from 1 to 28
     const locationsData = [
+      {
+        houseNo: "01",
+        houseNum: 1,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
+        houseNo: "02",
+        houseNum: 2,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
+        houseNo: "03",
+        houseNum: 3,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
       {
         houseNo: "04",
         houseNum: 4,
         name: "Dibya ghoror fornt",
         phone: "7086754681",
         mapUrl: "https://maps.app.goo.gl/s744NJdENe5uVMacA?g_st=ac"
+      },
+      {
+        houseNo: "05",
+        houseNum: 5,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
+        houseNo: "06",
+        houseNum: 6,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
+        houseNo: "07",
+        houseNum: 7,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
+        houseNo: "08",
+        houseNum: 8,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
+        houseNo: "09",
+        houseNum: 9,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
+        houseNo: "10",
+        houseNum: 10,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
+        houseNo: "11",
+        houseNum: 11,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
+        houseNo: "12",
+        houseNum: 12,
+        name: "",
+        phone: "",
+        mapUrl: ""
       },
       {
         houseNo: "13",
@@ -424,6 +575,13 @@
         mapUrl: "https://maps.app.goo.gl/8wKukvSmjoGjwEcj6"
       },
       {
+        houseNo: "22",
+        houseNum: 22,
+        name: "",
+        phone: "",
+        mapUrl: ""
+      },
+      {
         houseNo: "23",
         houseNum: 23,
         name: "Minute gharae front",
@@ -468,7 +626,7 @@
     ];
 
     let sortAsc = true;
-    let currentFilter = "";
+    let activeTab = "all"; // "all" | "ready" | "pending"
 
     const searchInput = document.getElementById("searchInput");
     const clearBtn = document.getElementById("clearBtn");
@@ -480,25 +638,23 @@
 
     // Build quick filter chips
     function renderChips() {
+      quickChips.innerHTML = "";
       const allChip = document.createElement("div");
       allChip.className = "chip active";
       allChip.textContent = "All Houses";
       allChip.onclick = () => {
         searchInput.value = "";
-        currentFilter = "";
         updateChipsActive(allChip);
         render();
       };
       quickChips.appendChild(allChip);
 
-      // Unique house numbers
       locationsData.forEach(item => {
         const chip = document.createElement("div");
-        chip.className = "chip";
-        chip.textContent = `#${item.houseNo}`;
+        chip.className = `chip ${item.mapUrl ? 'has-loc' : ''}`;
+        chip.textContent = `#${item.houseNo}${item.mapUrl ? ' 📍' : ''}`;
         chip.onclick = () => {
           searchInput.value = item.houseNo;
-          currentFilter = item.houseNo;
           updateChipsActive(chip);
           render();
         };
@@ -520,6 +676,12 @@
       clearBtn.style.display = query.length > 0 ? "flex" : "none";
 
       let filtered = locationsData.filter(item => {
+        // Tab filter
+        if (activeTab === "ready" && !item.mapUrl) return false;
+        if (activeTab === "pending" && item.mapUrl) return false;
+
+        // Search query filter
+        if (!query) return true;
         const matchHouse = item.houseNo.toLowerCase().includes(query) || item.houseNum.toString() === query;
         const matchName = item.name.toLowerCase().includes(query);
         const matchPhone = item.phone.toLowerCase().replace(/\s+/g, "").includes(query.replace(/\s+/g, ""));
@@ -532,31 +694,43 @@
 
       if (filtered.length === 0) {
         noResults.style.display = "block";
-        resultCount.textContent = "0 locations";
+        resultCount.textContent = "0 locations found";
       } else {
         noResults.style.display = "none";
-        resultCount.textContent = `Showing ${filtered.length} of ${locationsData.length} locations`;
+        resultCount.textContent = `Showing ${filtered.length} of ${locationsData.length} houses`;
 
         filtered.forEach(item => {
           const card = document.createElement("div");
-          card.className = "card";
-
+          const hasMap = Boolean(item.mapUrl);
           const cleanPhone = item.phone ? cleanPhoneNumber(item.phone) : "";
           const hasPhone = Boolean(cleanPhone);
+
+          card.className = `card ${hasMap ? '' : 'pending-loc'}`;
 
           card.innerHTML = `
             <div class="card-top">
               <div class="person-info">
-                <div class="person-name ${!item.name ? 'empty' : ''}">${item.name || 'Unnamed Location / Customer'}</div>
+                <div class="person-name ${!item.name ? 'empty' : ''}">${item.name || 'House #' + item.houseNo + ' (Name not provided)'}</div>
                 ${item.phone ? `<div class="person-phone">📞 <a href="tel:${cleanPhone}">${item.phone}</a></div>` : ''}
+                <div>
+                  ${hasMap 
+                    ? `<span class="status-tag ready">📍 GPS Location Linked</span>` 
+                    : `<span class="status-tag missing">⏳ Location Link Pending</span>`}
+                </div>
               </div>
-              <div class="house-badge"># ${item.houseNo}</div>
+              <div class="house-badge ${hasMap ? '' : 'pending'}"># ${item.houseNo}</div>
             </div>
 
             <div class="actions-grid ${hasPhone ? 'has-phone' : ''}">
-              <a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-maps">
-                <span>📍 Start Navigation</span>
-              </a>
+              ${hasMap ? `
+                <a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-maps">
+                  <span>📍 Start Navigation</span>
+                </a>
+              ` : `
+                <div class="btn btn-pending">
+                  <span>⏳ Location Not Linked</span>
+                </div>
+              `}
               ${hasPhone ? `
                 <a href="tel:${cleanPhone}" class="btn btn-call">
                   <span>📞 Call</span>
@@ -568,6 +742,16 @@
         });
       }
     }
+
+    // Tabs filter listeners
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeTab = btn.dataset.tab;
+        render();
+      });
+    });
 
     // Event Listeners
     searchInput.addEventListener("input", () => {
