@@ -1,4 +1,4 @@
-# 1DD Marketplace (Rangachakua Store) 🚀
+# 1DD Marketplace (Rangachakua Stor) 🚀
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Angsumi%2F1dd-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Angsumi/1dd)
 [![Live Web](https://img.shields.io/badge/Live%20Store-1dd.web.app-15803D?style=for-the-badge&logo=google-chrome&logoColor=white)](https://1dd.web.app)
